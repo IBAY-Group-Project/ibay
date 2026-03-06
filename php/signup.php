@@ -1,7 +1,5 @@
 <?php
 $password = $_POST['password'];
-$username = $_POST['username'];
-$email = $_POST['email'];
 $confirm_password = $_POST['confirm-password'];
 
 
