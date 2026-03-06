@@ -1,0 +1,316 @@
+.header {
+    display:flex;
+    background-color: #e0dece;
+    color: rgb(192, 84, 84);
+    padding: 10px;
+    align-items: center;
+    position:relative;
+    gap: 20px;
+}
+
+#menu {
+    display:flex;
+    cursor: pointer;
+}
+
+.sell-button {
+    text-decoration-line: none;
+    background-color: #761f1f;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color:#fff;
+    width: 150px;
+    margin-left: 60px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.sell-button:hover {
+    background-color: #761f1f;
+    transform: translateY(-5px);
+}
+
+
+
+#logo {
+    position:absolute;
+    display:flex;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#login {
+    margin-left: auto;
+    display:flex;
+    cursor: pointer;
+}
+
+#search {
+    display:flex;
+    padding: 0px 0px;
+    margin-top: 10px;
+    gap: 10px;
+    margin-left:2px;
+}
+
+#search input {
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 1370px;
+    height: 50px;
+    font-size: larger;
+    border: 1px solid #761f1f;
+}
+
+#search button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 180px;
+    border: none;
+    background-color: #761f1f;
+    color: white;
+    cursor: pointer;
+}
+
+#search button:hover {
+    background-color: #e0dece;
+}
+
+#carousel {
+    position: relative; 
+}
+
+.carousel-content{
+    position: relative;
+    justify-content: center;
+    background-color: #761f1f;
+    padding: 95px ;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.carousel-arrow {
+
+    position: absolute;
+    line-height: 1;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 60px;
+}
+
+.carousel-arrow:hover {
+    color: #ccc;
+}
+
+.carousel-arrow.left {
+    left: 10px;
+}
+
+.carousel-arrow.right {
+    right: 10px;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left:50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+
+.dot { 
+    display: inline-block; 
+    width: 10px; 
+    height: 10px; 
+    margin: 0 10px; 
+    cursor: pointer; 
+    border-radius: 50%; 
+    background-color: #333; /* Default dot color */
+    z-index: 1; 
+}
+
+.dot.active { 
+    background-color: #ccc; /* Active dot color */ 
+} 
+
+
+.categories {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background-color: #cb272774;
+    padding: 40px 20px;
+    margin-bottom: 10px;
+}
+.category {
+    background-color: #761f1f;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    width: 150px;
+    transition: all 0.3s ease;
+}
+
+.category:hover {
+    background-color: #e0dece;
+    transform: translateY(-5px);
+
+}
+
+.footer {
+    background-color: #333;
+    padding: 50px;
+    text-align: center;
+    position:relative;
+    color: rgb(192, 84, 84);
+    gap: 20px;
+}
+
+
+/* ======== AUTH BUTTONS ======== */
+
+#login{
+    
+    width:250px;
+    height:60px;
+    border:2px solid #eee;
+    background-color:#b6bdc9;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:7px;
+    padding:7px;
+}
+
+.signup-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex:1;
+    height:55px;
+    margin-right:7px;
+    border:none;
+    border-radius:5px;
+    background-color:#e9ecf0;
+    text-decoration-line: none;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.login-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex:1;
+    height:55px;
+    border:none;
+    border-radius:5px;
+    text-decoration-line: none;
+    font-size:17px;
+    font-weight:600;
+    color:#fff;
+    background-color:#1859c9;
+    cursor:pointer;
+}
+
+
+.login-button:hover{
+    
+    background-color:#1859c9db;
+}
+
+
+.signup-button:hover{
+    
+    background-color:#e9ecf0d1;
+}
+
+/* ======== END OF AUTH BUTTONS ======== */
+
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fffbd4;
+    padding: 20px;
+    height: 65vh;
+    width: 100%;
+}
+
+.login-form h1{
+    display:flex;
+    justify-content:center;
+    color: #ccc;
+    margin-top: 80px;
+
+}
+
+.login-form h5{
+    display :flex;
+    justify-content:center;
+    margin-top: 30px;
+}
+
+
+.login-form , .signup-form  {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 450px;
+    background-color: #fff;
+    padding: 0px 80px 60px 80px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+    height: 450px;
+}
+
+#user , #pass , #confirm-pass , #email-label{
+    font-size: 1.2em;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+
+
+#username , #password , #email , #confirm-password{
+    width:auto;
+    padding: 10px;
+}
+
+.signup-form h1{
+    display:flex;
+    justify-content:center;
+    color: #ccc;
+    margin-top: 20px;
+    margin-bottom: -10px;
+
+}
+
+.signup-form h5{
+    display :flex;
+    justify-content:center;
+    margin-top: 15px;
+}
+
+
+
+
+
+
+
+
+

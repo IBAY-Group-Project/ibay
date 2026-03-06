@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iBay - Online Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+
+
+<body> 
+
+    <header class="header"> 
+
+        <div id = 'menu'>
+            <img src='images/menu.svg' width='30' alt='Menu Icon' />
+        </div>
+
+        <a class ="sell-button" href="sell.html"> Sell </a>
+
+
+
+        <div id="logo">
+            <a href="index.html"> 
+            <img src="images/ebay.svg" width="200" alt=" Ebay Logo" />
+            </a>
+        </div>
+
+        <div id="login">
+            <a href="signup.html" class="signup-button">Signup</a>
+            <a href="login.html" class="login-button">Login</a>
+        </div> 
+  
+    </header>
+
+    <main>
+        <div class="auth-container">
+
+            <form action="signup.php" method="post" class="signup-form" id="signup-form"> 
+                <h1> Sign Up </h1>
+                <label id="user" for="username" class="login-label">Username:</label>
+                <input type="text" id="username" name="username" class="login-input" placeholder="Enter Username" required> 
+
+                <label id="pass" for="password" class="login-label">Password:</label>
+                <input type="password" id="password" name="password" class="login-input" placeholder="Enter Password" required>
+
+                <label id="confirm-pass" for="confirm-password" class="login-label">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" class="login-input" placeholder="Confirm Password" required>
+
+                <label id="email-label" for="email" class="login-label">Email:</label>
+                <input type="email" id="email" name="email" class="login-input" placeholder="Enter Email" required>
+
+                <button type="submit" class="login-submit">Sign Up</button>
+
+
+                <h5> Already have an account? <a href="login.html"> Log In</a></h5>
+
+    
+            </form>
+
+            <!-- JavaScript for client-side password confirmation -->
+
+            <script>
+                document.getElementById('signup-form').addEventListener('submit', function(e) {
+                const password = document.getElementById('password').value;
+                const confirm = document.getElementById('confirm-password').value;
+                
+                if (password !== confirm) {
+                    e.preventDefault();  
+                    alert('Passwords do not match!');
+                }
+                });
+            </script>
+            
+            <!-- End of JavaScript -->
+
+        
+
+        </div>
+
+
+    </main>
+
+    <footer>
+
+        <div id="footer", class="footer" >
+             &copy; 2026 iBay Marketplace. All rights reserved.
+        </div>
+    </footer>
+    
+</body> 
+
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iBay — Sign up</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Header (kept) -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="#">
+        <span class="brand__mark">i</span><span class="brand__name">Bay</span>
+      </a>
+
+      <nav class="topbar__links">
+        <a href="#">Browse</a>
+        <a href="#">Sell</a>
+        <a href="#">Help</a>
+      </nav>
+
+      <div class="topbar__auth">
+        <a class="link-muted" href="#">Sign in</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main: only the form -->
+  <main class="auth-page">
+    <form class="card auth-card" action="#" method="post">
+      <h1 class="auth-card__title">Sign up</h1>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="firstName">First name</label>
+          <input class="input" id="firstName" name="firstName" type="text" autocomplete="given-name" required />
+        </div>
+
+        <div class="field">
+          <label for="lastName">Last name</label>
+          <input class="input" id="lastName" name="lastName" type="text" autocomplete="family-name" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input class="input" id="email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required />
+        <p class="help">We’ll never share your email.</p>
+      </div>
+
+      <div class="field">
+        <label for="username">Username</label>
+        <input class="input" id="username" name="username" type="text" autocomplete="username" placeholder="e.g., michael23" required />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input class="input" id="password" name="password" type="password" autocomplete="new-password" required />
+        <div class="pw-row">
+          <span class="badge-muted">Use 8+ chars</span>
+          <button class="link-btn" type="button" id="togglePw">Show</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="confirmPassword">Confirm password</label>
+        <input class="input" id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required />
+      </div>
+
+      <div class="check">
+        <input id="terms" name="terms" type="checkbox" required />
+        <label for="terms">
+          I agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+        </label>
+      </div>
+
+      <button class="btn-primary btn-full" type="submit">Create account</button>
+
+      <p class="muted small auth-footer">
+        Already have an account? <a href="#">Sign in</a>
+      </p>
+    </form>
+  </main>
+
+  <script>
+    const toggle = document.getElementById("togglePw");
+    const pw = document.getElementById("password");
+    toggle.addEventListener("click", () => {
+      const isHidden = pw.type === "password";
+      pw.type = isHidden ? "text" : "password";
+      toggle.textContent = isHidden ? "Hide" : "Show";
+    });
+  </script>
+</body>
+</html>

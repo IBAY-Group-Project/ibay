@@ -1,0 +1,223 @@
+/* ========== THEME: Option B (Modern Minimal / Light) ========== */
+:root{
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f6f7f9;
+  --border: #e6e8ee;
+
+  --text: #111827;
+  --text-muted: #6b7280;
+
+  --primary: #1d4ed8;
+  --primary-hover: #1e40af;
+
+  --shadow: 0 6px 18px rgba(17, 24, 39, 0.08);
+  --radius: 14px;
+
+  --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+*{ box-sizing: border-box; }
+body{
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+}
+
+a{ color: var(--primary); text-decoration: none; }
+a:hover{ text-decoration: underline; }
+
+.muted{ color: var(--text-muted); }
+.small{ font-size: 14px; }
+
+/* Shared container used by header */
+.container{
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+/* Header */
+.topbar{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255,255,255,0.86);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.topbar__inner{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  gap: 16px;
+}
+.brand{
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.brand__mark{
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: white;
+  font-weight: 900;
+}
+.brand__name{ font-size: 18px; }
+
+.topbar__links{
+  display: flex;
+  gap: 16px;
+}
+.topbar__links a{
+  color: var(--text);
+  opacity: 0.85;
+}
+.topbar__links a:hover{ opacity: 1; }
+
+.link-muted{ color: var(--text-muted); }
+
+/* ========== Page layout: header + centered form ========== */
+.auth-page{
+  min-height: calc(100vh - 63px); /* header height-ish */
+  display: grid;
+  place-items: center;
+  padding: 40px 16px;
+}
+
+/* Card */
+.card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* Form card sizing matches the screenshot feel */
+.auth-card{
+  width: min(560px, 100%);
+  padding: 28px;
+}
+
+.auth-card__title{
+  margin: 0 0 18px;
+  font-size: 34px;
+  letter-spacing: -0.03em;
+}
+
+/* Fields */
+.field{
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.field-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 560px){
+  .field-grid{ grid-template-columns: 1fr; }
+  .auth-card{ padding: 22px; }
+  .auth-card__title{ font-size: 30px; }
+}
+
+label{
+  font-size: 14px;
+  color: var(--text);
+  opacity: 0.9;
+}
+
+.input{
+  width: 100%;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 14px;
+  outline: none;
+  font-size: 16px;
+}
+
+.input:focus{
+  border-color: rgba(29,78,216,0.45);
+  box-shadow: 0 0 0 4px rgba(29,78,216,0.12);
+}
+
+.help{
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Password row */
+.pw-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 12px;
+}
+
+.badge-muted{
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.link-btn{
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--primary);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 16px;
+}
+.link-btn:hover{ text-decoration: underline; }
+
+/* Checkbox */
+.check{
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 12px 0 18px;
+}
+
+.check input{
+  margin-top: 4px;
+}
+
+/* Button */
+.btn-primary{
+  background: var(--primary);
+  color: white;
+  border: 1px solid var(--primary);
+  border-radius: 16px;
+  padding: 14px 16px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 16px;
+}
+.btn-primary:hover{
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+.btn-full{ width: 100%; }
+
+.auth-footer{
+  margin: 18px 0 0;
+}
