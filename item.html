@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iBay - Online Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="js/main.js" defer></script>
+    
+</head>
+
+
+<body> 
+
+    <header class="header"> 
+
+        <div id = 'menu'>
+            <img src='images/menu.svg' width='30' alt='Menu Icon' />
+        </div>
+
+        <a class ="button" href="sell.html"> Sell </a>
+
+
+
+        <div id="logo">
+            <a href="index.html"> 
+            <img src="images/ibay.svg" width="200" alt=" Ebay Logo" />
+            </a>
+        </div>
+
+        <div id="login">
+            <a href="signup.html" class="signup-button">Signup</a>
+            <a href="login.html" class="login-button">Login</a>
+        </div> 
+  
+    </header>
+
+    <main>
+        <section class="item">  
+
+            <div class="item-image">
+                <img src="images/products/product1.webp" alt="Product Image">
+            </div>
+
+            <div class="item-details">
+                <h3 class="item-title">Product 1</h3>  
+                <h1 id="item-price">£24.99</h1>
+ 
+                <p id="item-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor 
+                    incididunt ut labore et dolore magna aliqua.</p>
+                
+                <div class="item-buttons">
+                    <a href="checkout.html" class="button" id="buy-button">Buy Now</a>
+                    <a href="basket.html" class="button" id="cart-button">Add to Cart</a>
+                </div>
+            </div>
+
+
+        </section>
+
+        <section class="item-description">
+            <div class="tabs">
+                <button class="button tab-button active" data-tab="description">Description</button>
+                <button class="button tab-button" data-tab="specifications">Specifications</button>
+                <button class="button tab-button" data-tab="reviews">Reviews</button>
+                
+            </div>
+
+            <div class="tab-panels">
+                <div class="tab-panel active" id="description">
+                    <p> 
+                        "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum 
+                        deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident,
+                         similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum 
+                         quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio
+                         cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, 
+                         omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus 
+                         saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic t
+                         enetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis 
+                         doloribus asperiores repellat."
+                    </p>
+                </div>
+                
+                <div class="tab-panel" id="specifications">
+                    <ul>
+                        <li>Specification 1: Value</li>
+                        <li>Specification 2: Value</li>
+                        <li>Specification 3: Value</li>
+                    </ul>
+                </div>
+
+                <div class="tab-panel" id="reviews">
+                    <p><strong>John Doe:</strong> Great product! Highly recommend.</p>
+                    <p><strong>Jane Smith:</strong> Good value for the price.</p>
+                    <p><strong>Bob Johnson:</strong> Not what I expected, but still decent.</p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        <div id="footer", class="footer" >
+             &copy; 2026 iBay Marketplace. All rights reserved.
+        </div>
+    </footer>
+    
+</body> 
+
+</html>
