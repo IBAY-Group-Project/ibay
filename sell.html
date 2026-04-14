@@ -3,51 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBay - Online Marketplace</title>
+    <title>iBay - Sell an Item</title>
     <link rel="stylesheet" href="style.css">
     <script src="js/main.js" defer></script>
-    
 </head>
 
+<body>
 
-<body> 
-
-    <header class="header"> 
-
-        <div id = 'menu'>
-            <img src='images/menu.svg' width='30' alt='Menu Icon' />
+    <header class="header">
+        <div id="menu">
+            <img src="images/menu.svg" width="30" alt="Menu Icon" />
         </div>
 
-        <a class ="button" href="sell.html"> Sell </a>
-
-
+        <a class="button" href="sell.html">Sell</a>
 
         <div id="logo">
-            <a href="index.html"> 
-            <img src="images/ibay.svg" width="200" alt=" Ebay Logo" />
+            <a href="index.html">
+                <img src="images/ibay.svg" width="200" alt="iBay Logo" />
             </a>
         </div>
 
         <div id="login">
             <a href="signup.html" class="signup-button">Signup</a>
             <a href="login.html" class="login-button">Login</a>
-        </div> 
-  
+        </div>
     </header>
 
-    <main>
-  
+    <main class="sell-page">
+        <section class="sell-card">
+            <div class="sell-header">
+                <div>
+                    <h1>List an Item</h1>
+                    <p>Create or edit a listing quickly without leaving the page.</p>
+                </div>
 
+                <div class="sell-status">
+                    <span class="status-pill active">Draft</span>
+                    <span class="status-pill">Preview Ready</span>
+                </div>
+            </div>
 
+            <form class="sell-form" action="#" method="post" enctype="multipart/form-data">
+                <div class="sell-form-left">
+                    <div class="form-grid">
+                        <div class="form-group form-group-wide">
+                            <label for="title">Item Title</label>
+                            <input type="text" id="title" name="title" placeholder="e.g. Apple AirPods Pro 2nd Gen" maxlength="40">
+                            <small class="field-hint">Keep it short and searchable.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" name="category">
+                                <option value="">Choose category</option>
+                                <option>Electronics</option>
+                                <option>Fashion</option>
+                                <option>Books</option>
+                                <option>Home & Garden</option>
+                                <option>Sports</option>
+                                <option>Toys</option>
+                                <option>Collectables</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="condition">Condition</label>
+                            <select id="condition" name="condition">
+                                <option value="">Choose condition</option>
+                                <option>New</option>
+                                <option>Like New</option>
+                                <option>Used - Good</option>
+                                <option>Used - Acceptable</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price">Starting Price (£)</label>
+                            <input type="number" id="price" name="price" min="0" step="0.01" placeholder="0.00">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="postage">Postage</label>
+                            <select id="postage" name="postage">
+                                <option value="">Select postage</option>
+                                <option>Free Postage</option>
+                                <option>£1.99</option>
+                                <option>£2.99</option>
+                                <option>£4.99</option>
+                                <option>Collection Only</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="finish">Auction End Date</label>
+                            <input type="datetime-local" id="finish" name="finish">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="postcode">Postcode Area</label>
+                            <input type="text" id="postcode" name="postcode" placeholder="e.g. LE11">
+                        </div>
+
+                        <div class="form-group form-group-wide">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" rows="6" placeholder="Describe the item, condition, included accessories, postage details, and anything the buyer should know."></textarea>
+                            <div class="description-footer">
+                                <small class="field-hint">Give enough detail to help the buyer trust the listing.</small>
+                                <small id="charCount">0 / 500</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sell-form-right">
+                    <div class="image-panel">
+                        <h2>Item Photos</h2>
+                        <p>Upload up to two images as required by the brief.</p>
+
+                        <div class="upload-grid">
+                            <label class="upload-box" for="image1">
+                                <input type="file" id="image1" name="image1" accept="image/*" hidden>
+                                <img id="preview1" src="" alt="Preview 1" class="upload-preview hidden">
+                                <div class="upload-placeholder" id="placeholder1">
+                                    <span class="upload-icon">+</span>
+                                    <span>Main image</span>
+                                </div>
+                            </label>
+
+                            <label class="upload-box" for="image2">
+                                <input type="file" id="image2" name="image2" accept="image/*" hidden>
+                                <img id="preview2" src="" alt="Preview 2" class="upload-preview hidden">
+                                <div class="upload-placeholder" id="placeholder2">
+                                    <span class="upload-icon">+</span>
+                                    <span>Second image</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="listing-tips">
+                            <h3>Quick checklist</h3>
+                            <ul>
+                                <li>Use a clear title</li>
+                                <li>Add a realistic price</li>
+                                <li>Choose the right category</li>
+                                <li>Upload both images</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="preview-panel">
+                        <h2>Listing Snapshot</h2>
+                        <div class="mini-preview-card">
+                            <div class="mini-preview-image">Image Preview</div>
+                            <div class="mini-preview-content">
+                                <h3 id="previewTitle">Your item title</h3>
+                                <p id="previewCategory">Category will appear here</p>
+                                <strong id="previewPrice">£0.00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sell-actions">
+                    <button type="button" class="secondary-action">Save Draft</button>
+                    <button type="reset" class="secondary-action">Clear</button>
+                    <button type="submit" class="primary-action">Publish Listing</button>
+                </div>
+            </form>
+        </section>
     </main>
 
     <footer>
-
-        <div id="footer", class="footer" >
-             &copy; 2026 iBay Marketplace. All rights reserved.
+        <div id="footer" class="footer">
+            &copy; 2026 iBay Marketplace. All rights reserved.
         </div>
     </footer>
-    
-</body> 
 
+    <script>
+        const titleInput = document.getElementById("title");
+        const categoryInput = document.getElementById("category");
+        const priceInput = document.getElementById("price");
+        const descriptionInput = document.getElementById("description");
+
+        const previewTitle = document.getElementById("previewTitle");
+        const previewCategory = document.getElementById("previewCategory");
+        const previewPrice = document.getElementById("previewPrice");
+        const charCount = document.getElementById("charCount");
+
+        function updatePreview() {
+            previewTitle.textContent = titleInput.value.trim() || "Your item title";
+            previewCategory.textContent = categoryInput.value || "Category will appear here";
+            previewPrice.textContent = "£" + (priceInput.value ? Number(priceInput.value).toFixed(2) : "0.00");
+            charCount.textContent = `${descriptionInput.value.length} / 500`;
+        }
+
+        [titleInput, categoryInput, priceInput, descriptionInput].forEach(input => {
+            input.addEventListener("input", updatePreview);
+        });
+
+        function setupImagePreview(fileInputId, previewId, placeholderId) {
+            const fileInput = document.getElementById(fileInputId);
+            const preview = document.getElementById(previewId);
+            const placeholder = document.getElementById(placeholderId);
+
+            fileInput.addEventListener("change", function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.src = e.target.result;
+                        preview.classList.remove("hidden");
+                        placeholder.classList.add("hidden");
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        setupImagePreview("image1", "preview1", "placeholder1");
+        setupImagePreview("image2", "preview2", "placeholder2");
+        updatePreview();
+    </script>
+
+</body>
 </html>
