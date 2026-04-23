@@ -1,10 +1,32 @@
 <?php
-$password = $_POST['password'];
-$confirm_password = $_POST['confirm-password'];
+include("connection.php");
 
+if (isset($_POST['signup'])) {
 
-if ($password !== $confirm_password) {
-    echo "Passwords do not match. Please try again.";
-    exit;
+    $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
+    $surname   = mysqli_real_escape_string($conn, $_POST['surname']);
+    $email     = mysqli_real_escape_string($conn, $_POST['email']);
+    $password  = $_POST['password'];
+    $confirm   = $_POST['confirmPassword'];
+
+    // 1. Check passwords match
+    if ($password !== $confirm) {
+        die("Passwords do not match");
+    }
+
+    // 2. Password hashing (IMPORTANT)
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    // 3. Insert into database
+    $sql = "INSERT INTO ibayMembers (firstName, surname, email, password)
+            VALUES ('$firstName', '$surname', '$email', '$hashedPassword')";
+
+    if (mysqli_query($conn, $sql)) {
+        echo "Account created successfully";
+        header("Location: login.php");
+        exit();
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
 }
 ?>
