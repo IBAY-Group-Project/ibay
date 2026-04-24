@@ -1,13 +1,13 @@
 .header {
     display:flex;
-    background-color: #e0dece;
+    background-color: #f1ebeb;
     color: rgb(192, 84, 84);
     padding: 10px;
     align-items: center;
     position:relative;
     gap: 20px;
+    border: solid 1px lightblue;
 }
-
 
 
 .button {
