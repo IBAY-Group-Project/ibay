@@ -9,6 +9,26 @@
     border: solid 1px lightblue;
 }
 
+#menu {
+    display:flex;
+    cursor: pointer;
+}
+
+.sell-button {
+    display: inline-block;
+}
+
+#account {
+    display:flex;
+    margin-left: auto;
+    margin-right: 20px;
+    border: 2px solid red;
+}
+
+.account-icon {
+    width: 50px;
+    cursor:pointer
+}
 
 .button {
     text-decoration-line: none;
@@ -22,7 +42,7 @@
     width: 150px;
     margin-left: 60px;
     transition: all 0.3s ease;
-    cursor: pointer;
+    cursor:pointer;
 }
 
 .button:hover {
