@@ -936,7 +936,8 @@
     text-decoration: underline;
 }
 
-#user,
+#first-name,
+#sur-name,
 #pass,
 #confirm-pass,
 #email-label {
@@ -946,7 +947,8 @@
     font-weight: 600;
  }
 
-#username,
+#firstname,
+#surname,
 #password,
 #email,
 #confirm-password {
