@@ -36,10 +36,7 @@ quantity button in the checkout needs + - functions
 
 
 
-#menu {
-    display:flex;
-    cursor: pointer;
-}
+
 
 
 
