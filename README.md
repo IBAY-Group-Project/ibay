@@ -41,7 +41,6 @@ quantity button in the checkout needs + - functions
     cursor: pointer;
 }
 
-bgx
 
 
 
