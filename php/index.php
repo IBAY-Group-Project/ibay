@@ -69,3 +69,5 @@ if (isset($_POST["submit"])) {
                 echo "<script> alert('Failed to upload image. Error: " . error_get_last()['message'] . "'); </script>";
             }
         }
+    }
+}
