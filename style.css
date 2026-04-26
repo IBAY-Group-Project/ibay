@@ -1,14 +1,34 @@
 .header {
     display:flex;
-    background-color: #e0dece;
+    background-color: #f1ebeb;
     color: rgb(192, 84, 84);
     padding: 10px;
     align-items: center;
     position:relative;
     gap: 20px;
+    border: solid 1px lightblue;
 }
 
+#menu {
+    display:flex;
+    cursor: pointer;
+}
 
+.sell-button {
+    display: inline-block;
+}
+
+#account {
+    display:flex;
+    margin-left: auto;
+    margin-right: 20px;
+    border: 2px solid red;
+}
+
+.account-icon {
+    width: 50px;
+    cursor:pointer
+}
 
 .button {
     text-decoration-line: none;
@@ -22,7 +42,7 @@
     width: 150px;
     margin-left: 60px;
     transition: all 0.3s ease;
-    cursor: pointer;
+    cursor:pointer;
 }
 
 .button:hover {
@@ -936,7 +956,8 @@
     text-decoration: underline;
 }
 
-#user,
+#first-name,
+#sur-name,
 #pass,
 #confirm-pass,
 #email-label {
@@ -946,7 +967,8 @@
     font-weight: 600;
  }
 
-#username,
+#firstname,
+#surname,
 #password,
 #email,
 #confirm-password {
@@ -1329,10 +1351,3 @@ a[style*="color: blue"]:hover {
         flex: 1;
     }
 }
-
-
-
-
-
-
-
