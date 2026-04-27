@@ -36,32 +36,30 @@
     </header>
 
     <main>
-        <div class="auth-container">
+    <div class="auth-container">
 
-            <form action="signup.php" method="post" class="signup-form" id="signup-form"> 
-                <h1> Sign Up </h1>
+        <form action="signup.php" method="post" class="signup-form" id="signup-form"> 
+            <h1>Sign Up</h1>
 
-                <label id="first-name" for="first-name" class="login-label">First Name:</label>
-                <input type="text" id="firstname" name="first-name" class="login-input" placeholder="Enter First Name" required>   
+            <label for="firstName" class="login-label">First Name:</label>
+            <input type="text" id="firstName" name="firstName" class="login-input" placeholder="Enter First Name" required>   
 
-                <label id="sur-name" for="surname" class="login-label">Last Name:</label>
-                <input type="text" id="surname" name="surname" class="login-input" placeholder="Enter Last Name" required>
+            <label for="surname" class="login-label">Last Name:</label>
+            <input type="text" id="surname" name="surname" class="login-input" placeholder="Enter Last Name" required>
 
-                <label id="email-label" for="email" class="login-label">Email:</label>
-                <input type="email" id="email" name="email" class="login-input" placeholder="Enter Email" required>
+            <label for="email" class="login-label">Email:</label>
+            <input type="email" id="email" name="email" class="login-input" placeholder="Enter Email" required>
 
-                <label id="pass" for="password" class="login-label">Password:</label>
-                <input type="password" id="password" name="password" class="login-input" placeholder="Enter Password" required>
+            <label for="password" class="login-label">Password:</label>
+            <input type="password" id="password" name="password" class="login-input" placeholder="Enter Password" required>
 
-                <label id="confirm-pass" for="confirm-password" class="login-label">Confirm Password:</label>
-                <input type="password" id="confirm-password" name="confirm-password" class="login-input" placeholder="Confirm Password" required>
+            <label for="confirmPassword" class="login-label">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" class="login-input" placeholder="Confirm Password" required>
 
-                <button type="submit" class="login-submit">Sign Up</button>
+            <button type="submit" name="signup" class="login-submit">Sign Up</button>
 
+            <h5>Already have an account? <a href="login.html">Log In</a></h5>
 
-                <h5> Already have an account? <a href="login.html"> Log In</a></h5>
-
-    
             </form>
 
             <!-- JavaScript for client-side password confirmation -->
