@@ -32,3 +32,5 @@ checkout.html include the subtotal ( price x quantity) and maybe exclude the pri
 checkout is again hardcoded with product1 and might need a layout change when actual items are used to keep everything in one screen
 
 quantity button in the checkout needs + - functions
+
+test

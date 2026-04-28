@@ -21,7 +21,7 @@ if (isset($_POST['signup'])) {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // 3. Insert into database
-    $sql = "INSERT INTO ibayMembers (firstName, surname, email, password)
+    $sql = "INSERT INTO iBayMembers (firstName, surname, email, password)
             VALUES ('$firstName', '$surname', '$email', '$hashedPassword')";
 
     if (mysqli_query($conn, $sql)) {
