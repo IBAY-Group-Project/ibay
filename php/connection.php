@@ -1,5 +1,5 @@
 <?php
-$conn = mysqli_connect("localhost", "root", "", "ibay");
+$conn = mysqli_connect("localhost", "group01", "Juvwusorn7rhFvEEdMaX", "group01");
 
 // Check connection
 if (!$conn) {
@@ -7,4 +7,4 @@ if (!$conn) {
 } else {
     echo "Successful Connection to MySQL";
 }
-?>
+?>php
