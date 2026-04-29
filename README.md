@@ -33,4 +33,4 @@ checkout is again hardcoded with product1 and might need a layout change when ac
 
 quantity button in the checkout needs + - functions
 
-test
+
