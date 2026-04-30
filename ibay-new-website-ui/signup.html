@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iBay - Signup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="top-header">
+            <div class="logo">
+                <a href="index.html">iBay</a>
+            </div>
+
+            <nav class="top-nav">
+                <a href="sell.html">Sell</a>
+                <a href="signup.html">Signup</a>
+                <a href="login.html">Login</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for items...">
+                </div>
+                <a href="login.html" class="icon-button">👤</a>
+                <a href="basket.html" class="icon-button">🛒</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <section class="auth-card">
+            <h1>Create your iBay account</h1>
+            <p class="auth-subtitle">Register to buy, sell, and manage listings.</p>
+
+            <form class="auth-form" id="signup-form" action="php/signup.php" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="surname">Surname</label>
+                        <input type="text" id="surname" name="surname" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <button type="submit" name="signup" class="primary-button">Create Account</button>
+
+                <p class="auth-switch">
+                    Already have an account?
+                    <a href="login.html">Login</a>
+                </p>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
+    </footer>
+
+    <script src="js/signup.js"></script>
+</body>
+</html>

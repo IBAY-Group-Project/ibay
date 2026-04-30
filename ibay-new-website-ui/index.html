@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iBay - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="top-header">
+            <div class="logo">
+                <a href="index.html">iBay</a>
+            </div>
+
+            <nav class="top-nav">
+                <a href="sell.html">Sell</a>
+                <a href="signup.html">Signup</a>
+                <a href="login.html">Login</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for items...">
+                </div>
+                <a href="login.html" class="icon-button">👤</a>
+                <a href="basket.html" class="icon-button">🛒</a>
+            </div>
+        </div>
+
+        <nav class="category-nav" id="categoryNav">
+            <a href="#" class="active" data-category="Technology">Technology</a>
+            <a href="#" data-category="Clothing">Clothing</a>
+            <a href="#" data-category="Trading Cards">Trading Cards</a>
+            <a href="#" data-category="Gardening">Gardening</a>
+            <a href="#" data-category="Home">Home</a>
+            <a href="#" data-category="Collectables">Collectables</a>
+            <a href="#" data-category="Sports">Sports</a>
+            <a href="#" data-category="Books">Books</a>
+        </nav>
+    </header>
+
+    <main class="homepage">
+        <section class="featured-section">
+            <div class="section-header">
+                <h2 id="featuredTitle">Best Selling in Technology</h2>
+            </div>
+
+            <div class="featured-carousel">
+                <button class="carousel-arrow" id="prevCategory">&#10094;</button>
+
+                <div class="carousel-track" id="featuredProducts">
+                    <!-- Filled by JS -->
+                </div>
+
+                <button class="carousel-arrow" id="nextCategory">&#10095;</button>
+            </div>
+        </section>
+
+        <section class="category-grid-section">
+            <div class="section-header">
+                <h2>Shop by Category</h2>
+            </div>
+
+            <div class="category-grid">
+                <a href="#" class="category-card">
+                    <div class="category-image">💻</div>
+                    <h3>Technology</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">👕</div>
+                    <h3>Clothing</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">🃏</div>
+                    <h3>Trading Cards</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">🪴</div>
+                    <h3>Gardening</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">🏠</div>
+                    <h3>Home</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">🎁</div>
+                    <h3>Collectables</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">⚽</div>
+                    <h3>Sports</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">📚</div>
+                    <h3>Books</h3>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iBay - Item</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="top-header">
+            <div class="logo">
+                <a href="index.html">iBay</a>
+            </div>
+
+            <nav class="top-nav">
+                <a href="sell.html">Sell</a>
+                <a href="signup.html">Signup</a>
+                <a href="login.html">Login</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for items...">
+                </div>
+                <a href="login.html" class="icon-button">👤</a>
+                <a href="basket.html" class="icon-button">🛒</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="product-page">
+        <section class="product-top">
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img id="productMainImage" src="images/placeholder-product.jpg" alt="Product image">
+                </div>
+
+                <div class="thumbnail-row">
+                    <img src="images/placeholder-product.jpg" alt="Thumbnail 1" class="thumbnail active">
+                    <img src="images/placeholder-product.jpg" alt="Thumbnail 2" class="thumbnail">
+                    <img src="images/placeholder-product.jpg" alt="Thumbnail 3" class="thumbnail">
+                </div>
+            </div>
+
+            <div class="product-info">
+                <p class="product-category" id="productCategory">Category Placeholder</p>
+                <h1 id="productTitle">Item Title Placeholder</h1>
+
+                <div class="seller-meta">
+                    <p><strong>Seller:</strong> <span id="sellerName">Seller Name</span></p>
+                    <p><strong>Seller Rating:</strong> <span id="sellerRating">0</span></p>
+                    <p><strong>Postcode Area:</strong> <span id="sellerPostcode">N/A</span></p>
+                </div>
+
+                <div class="price-box">
+                    <p class="label">Current Price</p>
+                    <p class="product-price" id="productPrice">£0.00</p>
+                </div>
+
+                <div class="auction-meta">
+                    <p><strong>Postage:</strong> <span id="productPostage">N/A</span></p>
+                    <p><strong>Listed:</strong> <span id="productStart">N/A</span></p>
+                    <p><strong>Ends:</strong> <span id="productFinish">N/A</span></p>
+                </div>
+
+                <div class="product-actions">
+                    <button class="primary-button">Add to Basket</button>
+                    <button class="secondary-button">Watch Item</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="product-details">
+            <div class="details-card">
+                <h2>Description</h2>
+                <p id="productDescription">
+                    Product description will be loaded here from the database.
+                </p>
+            </div>
+
+            <div class="details-card">
+                <h2>Database Mapping Reference</h2>
+                <ul class="mapping-list">
+                    <li><strong>itemId</strong> → iBayItems.itemId</li>
+                    <li><strong>title</strong> → iBayItems.title</li>
+                    <li><strong>category</strong> → iBayItems.category</li>
+                    <li><strong>description</strong> → iBayItems.description</li>
+                    <li><strong>price</strong> → iBayItems.price</li>
+                    <li><strong>postage</strong> → iBayItems.postage</li>
+                    <li><strong>start</strong> → iBayItems.start</li>
+                    <li><strong>finish</strong> → iBayItems.finish</li>
+                    <li><strong>seller userId</strong> → iBayItems.userId</li>
+                    <li><strong>seller name</strong> → iBayMembers.name</li>
+                    <li><strong>seller rating</strong> → iBayMembers.rating</li>
+                    <li><strong>seller postcode</strong> → iBayMembers.postcode</li>
+                    <li><strong>images</strong> → iBayImages linked by itemId</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
