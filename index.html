@@ -3,80 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBay - Online Marketplace</title>
+    <title>iBay - Home</title>
     <link rel="stylesheet" href="style.css">
     <script src="js/main.js" defer></script>
-    
 </head>
+<body>
 
+    <header class="site-header">
+        <div class="top-header">
+            <div class="logo">
+                <a href="index.html">iBay</a>
+            </div>
 
-<body> 
+            <nav class="top-nav">
+                <a href="sell.html">Sell</a>
+                <a href="signup.html">Signup</a>
+                <a href="login.html">Login</a>
+            </nav>
 
-    <header class="header"> 
-
-        <div id = 'menu'>
-            <img src='images/menu.svg' width='30' alt='Menu Icon' />        
+            <div class="header-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for items...">
+                </div>
+                <a href="login.html" class="icon-button">??</a>
+                <a href="basket.html" class="icon-button">??</a>
+            </div>
         </div>
 
-        <a class ="button" href="sell.html"> Sell </a>
-
-
-
-        <div id="logo">
-            <a href="index.html">                                                   <!-- clicking the logo takes you back to home -->
-            <img src="images/ibay.svg" width="200" alt=" Ebay Logo" />              <!-- its the ebay logo but we'll change it to ibay later, just a placeholder for now -->
-    
-            </a>
-        </div>
-
-        <div id="login">
-            <a href="signup.html" class="signup-button">Signup</a>
-            <a href="login.html" class="login-button">Login</a>
-        </div> 
-  
+        <nav class="category-nav" id="categoryNav">
+            <a href="#" class="active" data-category="Technology">Technology</a>
+            <a href="#" data-category="Clothing">Clothing</a>
+            <a href="#" data-category="Trading Cards">Trading Cards</a>
+            <a href="#" data-category="Gardening">Gardening</a>
+            <a href="#" data-category="Home">Home</a>
+            <a href="#" data-category="Collectables">Collectables</a>
+            <a href="#" data-category="Sports">Sports</a>
+            <a href="#" data-category="Books">Books</a>
+        </nav>
     </header>
 
-    <main>
-
-        <search id="search" class="search" aria-label="Site-wide Search"> 
-            <input type="text" placeholder="Search for products, brands and more" class="search-bar">
-            <a class ="button" id="search-button" href="search.html"> Search </a>
-
-        </search>  
-
-        <section id="carousel">
-
-            
-            <div class="carousel-content">
-                <span class="carousel-arrow left">&lt;</span>
-                <span class="carousel-arrow right">&gt;</span>
-                Featured Items Here (PLACEHOLDER)
+    <main class="homepage">
+        <section class="featured-section">
+            <div class="section-header">
+                <h2 id="featuredTitle">Best Selling in Technology</h2>
             </div>
-            
-            <div class="carousel-dots">
-                <span class="dot active"></span>                     <!-- Active dot for the first slide -->
-                <span class="dot"></span>                            <!-- Dot for the second slide -->
-                <span class="dot"></span>                            <!-- Dot for the third slide -->
+
+            <div class="featured-carousel">
+                <button class="carousel-arrow" id="prevCategory">&#10094;</button>
+
+                <div class="carousel-track" id="featuredProducts">
+                    <!-- Filled by JS -->
+                </div>
+
+                <button class="carousel-arrow" id="nextCategory">&#10095;</button>
             </div>
         </section>
 
+        <section class="category-grid-section">
+            <div class="section-header">
+                <h2>Shop by Category</h2>
+            </div>
 
-        <section class="categories">  
-            <div class="category" id="Machines">Machines </div> 
-            <div class="category" id="Clothing">Clothing </div>
-            <div class="category" id="Devices">Devices </div>
-            <div class="category" id="Gardening">Gardening </div>
+            <div class="category-grid">
+                <a href="#" class="category-card">
+                    <div class="category-image">??</div>
+                    <h3>Technology</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">??</div>
+                    <h3>Clothing</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">??</div>
+                    <h3>Trading Cards</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">??</div>
+                    <h3>Gardening</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">??</div>
+                    <h3>Home</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">??</div>
+                    <h3>Collectables</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">?</div>
+                    <h3>Sports</h3>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="category-image">??</div>
+                    <h3>Books</h3>
+                </a>
+            </div>
         </section>
-
     </main>
 
-    <footer>
-
-        <div id="footer", class="footer" >
-             &copy; 2026 iBay Marketplace. All rights reserved.
-        </div>
+    <footer class="site-footer">
+        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
     </footer>
-    
-</body> 
 
+</body>
 </html>

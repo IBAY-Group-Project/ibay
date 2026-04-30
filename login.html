@@ -3,68 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBay - Online Marketplace</title>
+    <title>iBay - Login</title>
     <link rel="stylesheet" href="style.css">
-    <script src="js/main.js" defer></script>
-    
 </head>
+<body>
 
+    <header class="site-header">
+        <div class="top-header">
+            <div class="logo">
+                <a href="index.html">iBay</a>
+            </div>
 
-<body> 
+            <nav class="top-nav">
+                <a href="sell.html">Sell</a>
+                <a href="signup.html">Signup</a>
+                <a href="login.html">Login</a>
+            </nav>
 
-    <header class="header"> 
-
-        <div id = 'menu'>
-            <img src='images/menu.svg' width='30' alt='Menu Icon' />
+            <div class="header-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for items...">
+                </div>
+                <a href="login.html" class="icon-button">??</a>
+                <a href="basket.html" class="icon-button">??</a>
+            </div>
         </div>
-
-        <a class ="button" href="sell.html"> Sell </a>
-
-
-
-        <div id="logo">
-            <a href="index.html"> 
-            <img src="images/ibay.svg" width="200" alt=" Ebay Logo" />
-            </a>
-        </div>
-
-        <div id="login">
-            <a href="signup.html" class="signup-button">Signup</a>
-            <a href="login.html" class="login-button">Login</a>
-        </div> 
-  
     </header>
 
-    <main>
-        <div class="auth-container">
+    <main class="auth-page">
+        <section class="auth-card">
+            <h1>Login to iBay</h1>
+            <p class="auth-subtitle">Access your account to manage listings, saved items, and purchases.</p>
 
-            <form action="login.php" method="post" class="login-form">
-                <h1> Log In </h1>
-                <label id="user" for="username" class="login-label">Username:</label>
-                <input type="text" id="username" name="username" class="login-input" placeholder="Enter Username" required> 
-                <label id="pass" for="password" class="login-label">Password:</label>
-                <input type="password" id="password" name="password" class="login-input" placeholder="Enter Password" required>
-                <button type="submit" class="login-submit">Log In</button>
-                <a href="index2.html" class="guest-link">Continue as Guest</a>
+            <form class="auth-form" action="php/login.php" method="post">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
 
-                <h5> Don't have an account? <a href="signup.html">Sign Up</a></h5>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
 
-    
+                <div class="login-row">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember">
+                        <span>Remember me</span>
+                    </label>
+
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="primary-button">Login</button>
+
+                <p class="auth-switch">
+                    New to iBay?
+                    <a href="signup.html">Create an account</a>
+                </p>
             </form>
-        
-
-        </div>
-
-
+        </section>
     </main>
 
-    <footer>
-
-        <div id="footer", class="footer" >
-             &copy; 2026 iBay Marketplace. All rights reserved.
-        </div>
+    <footer class="site-footer">
+        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
     </footer>
-    
-</body> 
 
+</body>
 </html>

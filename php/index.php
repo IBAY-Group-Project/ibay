@@ -1,73 +1,76 @@
-<?php
-require 'connection.php';
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iBay - Online Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="js/main.js" defer></script>
+</head>
 
-if (isset($_POST["submit"])) {
-    $name = $_POST["name"];
+<body> 
 
-    // Check if image is uploaded
-    if ($_FILES["image"]["error"] === 4) {
-        echo "<script> alert('Image Does Not Exist'); </script>";
-    } else {
-        $fileName  = $_FILES["image"]["name"];
-        $fileSize  = $_FILES["image"]["size"];
-        $tempName  = $_FILES["image"]["tmp_name"];
+    <header class="header"> 
 
-        // Debugging: Print file details
-        echo "Temporary file: $tempName<br>";
-        echo "File name: $fileName<br>";
-        echo "File size: $fileSize bytes<br>";
+        <div id="menu">
+            <img src='images/menu.svg' width='30' alt='Menu Icon' />        
+        </div>
 
-        // Check file extension
-        $validImageExtension = ['jpg', 'jpeg', 'png'];
-        $imageExtension      = explode('.', $fileName);
-        $imageExtension      = strtolower(end($imageExtension));
+        <a class="button" href="sell.html">Sell</a>
 
-        // Validate image extension
-        if (!in_array($imageExtension, $validImageExtension)) {
-            echo "<script> alert('Invalid Image Extension'); </script>";
-        // Check file size
-        } else if ($fileSize > 1000000) {
-            echo "<script> alert('Image Size Too Large'); </script>";
-        } else {
-            // Generate new image name
-            $newImageName = uniqid() . '_' . bin2hex(random_bytes(5)) . '.' . $imageExtension;
+        <div id="logo">
+            <a href="index.php"> 
+                <img src="images/ibay.svg" width="200" alt="iBay Logo" />
+            </a>
+        </div>
 
-            // Ensure the img/ directory exists
-            if (!is_dir('img')) {
-                mkdir('img', 0755, true);
-            }
+        <div id="login">
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <span>Hi, <?php echo $_SESSION['firstName']; ?>!</span>
+                <a href="logout.php" class="login-button">Logout</a>
+            <?php else: ?>
+                <a href="signup.html" class="signup-button">Signup</a>
+                <a href="login.html" class="login-button">Login</a>
+            <?php endif; ?>
+        </div>
 
-            // Move the uploaded file
-            $destination = __DIR__ . '/img/' . $newImageName;
-            echo "Destination: $destination<br>";
+    </header>
 
-            if (move_uploaded_file($tempName, $destination)) {
-                // Prepare SQL query
-                $query = "INSERT INTO tb_upload (name, image) VALUES (?, ?)";
-                $stmt  = mysqli_prepare($conn, $query);
+    <main>
 
-                if ($stmt) {
-                    // Bind parameters to the query
-                    mysqli_stmt_bind_param($stmt, "ss", $name, $newImageName);
+        <search id="search" class="search" aria-label="Site-wide Search"> 
+            <input type="text" placeholder="Search for products, brands and more" class="search-bar">
+            <a class="button" id="search-button" href="search.html">Search</a>
+        </search>  
 
-                    // Execute the query
-                    if (mysqli_stmt_execute($stmt)) {
-                        echo "<script>
-                            alert('Successfully Added');
-                            document.location.href = 'data.php';
-                        </script>";
-                    } else {
-                        echo "<script> alert('Database Error: " . mysqli_error($conn) . "'); </script>";
-                    }
+        <section id="carousel">
+            <div class="carousel-content">
+                <span class="carousel-arrow left">&lt;</span>
+                <span class="carousel-arrow right">&gt;</span>
+                Featured Items Here (PLACEHOLDER)
+            </div>
+            <div class="carousel-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </section>
 
-                    // Close the statement
-                    mysqli_stmt_close($stmt);
-                } else {
-                    echo "<script> alert('Failed to Prepare Statement'); </script>";
-                }
-            } else {
-                echo "<script> alert('Failed to upload image. Error: " . error_get_last()['message'] . "'); </script>";
-            }
-        }
-    }
-}
+        <section class="categories">  
+            <div class="category" id="Machines">Machines</div> 
+            <div class="category" id="Clothing">Clothing</div>
+            <div class="category" id="Devices">Devices</div>
+            <div class="category" id="Gardening">Gardening</div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div id="footer" class="footer">
+            &copy; 2026 iBay Marketplace. All rights reserved.
+        </div>
+    </footer>
+    
+</body> 
+</html>

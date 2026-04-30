@@ -7,4 +7,4 @@ if (!$conn) {
 } else {
     echo "Successful Connection to MySQL";
 }
-?>php
+?>

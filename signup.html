@@ -3,94 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBay - Online Marketplace</title>
+    <title>iBay - Signup</title>
     <link rel="stylesheet" href="style.css">
-    <script src="js/main.js" defer></script>
-    
 </head>
+<body>
 
+    <header class="site-header">
+        <div class="top-header">
+            <div class="logo">
+                <a href="index.html">iBay</a>
+            </div>
 
-<body> 
+            <nav class="top-nav">
+                <a href="sell.html">Sell</a>
+                <a href="signup.html">Signup</a>
+                <a href="login.html">Login</a>
+            </nav>
 
-    <header class="header"> 
-
-        <div id = 'menu'>
-            <img src='images/menu.svg' width='30' alt='Menu Icon' />
+            <div class="header-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for items...">
+                </div>
+                <a href="login.html" class="icon-button">??</a>
+                <a href="basket.html" class="icon-button">??</a>
+            </div>
         </div>
-
-        <a class ="button" href="sell.html"> Sell </a>
-
-
-
-        <div id="logo">
-            <a href="index.html"> 
-            <img src="images/ibay.svg" width="200" alt=" Ebay Logo" />
-            </a>
-        </div>
-
-        <div id="login">
-            <a href="signup.html" class="signup-button">Signup</a>
-            <a href="login.html" class="login-button">Login</a>
-        </div> 
-  
     </header>
 
-    <main>
-    <div class="auth-container">
+    <main class="auth-page">
+        <section class="auth-card">
+            <h1>Create your iBay account</h1>
+            <p class="auth-subtitle">Register to buy, sell, and manage listings.</p>
 
-        <form action="php/signup.php" method="post" class="signup-form" id="signup-form"> 
-            <h1>Sign Up</h1>
+            <form class="auth-form" id="signup-form" action="php/signup.php" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
 
-            <label for="firstName" class="login-label">First Name:</label>
-            <input type="text" id="firstName" name="firstName" class="login-input" placeholder="Enter First Name" required>   
+                    <div class="form-group">
+                        <label for="surname">Surname</label>
+                        <input type="text" id="surname" name="surname" required>
+                    </div>
+                </div>
 
-            <label for="surname" class="login-label">Last Name:</label>
-            <input type="text" id="surname" name="surname" class="login-input" placeholder="Enter Last Name" required>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
 
-            <label for="email" class="login-label">Email:</label>
-            <input type="email" id="email" name="email" class="login-input" placeholder="Enter Email" required>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
 
-            <label for="password" class="login-label">Password:</label>
-            <input type="password" id="password" name="password" class="login-input" placeholder="Enter Password" required>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
 
-            <label for="confirmPassword" class="login-label">Confirm Password:</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" class="login-input" placeholder="Confirm Password" required>
+                <button type="submit" name="signup" class="primary-button">Create Account</button>
 
-            <button type="submit" name="signup" class="login-submit">Sign Up</button>
-
-            <h5>Already have an account? <a href="login.html">Log In</a></h5>
-
+                <p class="auth-switch">
+                    Already have an account?
+                    <a href="login.html">Login</a>
+                </p>
             </form>
-
-            <!-- JavaScript for client-side password confirmation -->
-
-            <script>
-                document.getElementById('signup-form').addEventListener('submit', function(e) {
-                const password = document.getElementById('password').value;
-                const confirm = document.getElementById('confirm-password').value;
-                
-                if (password !== confirm) {
-                    e.preventDefault();  
-                    alert('Passwords do not match!');
-                }
-                });
-            </script>
-            
-            <!-- End of JavaScript -->
-
-        </div>
-
-
+        </section>
     </main>
 
-    <footer>
-
-        <div id="footer", class="footer" >
-             &copy; 2026 iBay Marketplace. All rights reserved.
-        </div>
+    <footer class="site-footer">
+        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
     </footer>
 
-<script src="js/signup.js"></script>
-</body> 
-
+    <script src="js/signup.js"></script>
+</body>
 </html>
