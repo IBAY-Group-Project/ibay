@@ -28,9 +28,12 @@ include("php/connection.php");
                 <?php endif; ?>
             </nav>
             <div class="header-actions">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search for items...">
-                </div>
+                <form action="search.php" method="GET" style="display: flex; align-items: center; gap: 8px;">
+                    <div class="search-bar">
+                        <input type="text" name="q" placeholder="Search for items...">
+                    </div>
+                    <button type="submit" class="primary-button" style="width: auto; padding: 12px 20px;">Search</button>
+                </form>
                 <?php if (isset($_SESSION['userId'])): ?>
                     <a href="basket.html" class="icon-button">??</a>
                 <?php else: ?>
@@ -40,14 +43,14 @@ include("php/connection.php");
             </div>
         </div>
         <nav class="category-nav" id="categoryNav">
-            <a href="#" class="active" data-category="Technology">Technology</a>
-            <a href="#" data-category="Clothing">Clothing</a>
-            <a href="#" data-category="Trading Cards">Trading Cards</a>
-            <a href="#" data-category="Gardening">Gardening</a>
-            <a href="#" data-category="Home">Home</a>
-            <a href="#" data-category="Collectables">Collectables</a>
-            <a href="#" data-category="Sports">Sports</a>
-            <a href="#" data-category="Books">Books</a>
+            <a href="search.php?category=Technology" data-category="Technology">Technology</a>
+            <a href="search.php?category=Clothing" data-category="Clothing">Clothing</a>
+            <a href="search.php?category=Trading Cards" data-category="Trading Cards">Trading Cards</a>
+            <a href="search.php?category=Gardening" data-category="Gardening">Gardening</a>
+            <a href="search.php?category=Home" data-category="Home">Home</a>
+            <a href="search.php?category=Collectables" data-category="Collectables">Collectables</a>
+            <a href="search.php?category=Sports" data-category="Sports">Sports</a>
+            <a href="search.php?category=Books" data-category="Books">Books</a>
         </nav>
     </header>
     <main class="homepage">
@@ -65,9 +68,9 @@ include("php/connection.php");
                             GROUP BY i.itemId
                             ORDER BY i.start DESC
                             LIMIT 10";
-
+ 
                     $result = mysqli_query($conn, $sql);
-
+ 
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) {
                             $imageSrc  = $row['image'] ? 'images/products/' . htmlspecialchars($row['image']) : 'images/placeholder.jpg';
@@ -100,35 +103,35 @@ include("php/connection.php");
                 <h2>Shop by Category</h2>
             </div>
             <div class="category-grid">
-                <a href="#" class="category-card">
+                <a href="search.php?category=Technology" class="category-card">
                     <div class="category-image">??</div>
                     <h3>Technology</h3>
                 </a>
-                <a href="#" class="category-card">
+                <a href="search.php?category=Clothing" class="category-card">
                     <div class="category-image">??</div>
                     <h3>Clothing</h3>
                 </a>
-                <a href="#" class="category-card">
+                <a href="search.php?category=Trading Cards" class="category-card">
                     <div class="category-image">??</div>
                     <h3>Trading Cards</h3>
                 </a>
-                <a href="#" class="category-card">
+                <a href="search.php?category=Gardening" class="category-card">
                     <div class="category-image">??</div>
                     <h3>Gardening</h3>
                 </a>
-                <a href="#" class="category-card">
+                <a href="search.php?category=Home" class="category-card">
                     <div class="category-image">??</div>
                     <h3>Home</h3>
                 </a>
-                <a href="#" class="category-card">
+                <a href="search.php?category=Collectables" class="category-card">
                     <div class="category-image">??</div>
                     <h3>Collectables</h3>
                 </a>
-                <a href="#" class="category-card">
+                <a href="search.php?category=Sports" class="category-card">
                     <div class="category-image">?</div>
                     <h3>Sports</h3>
                 </a>
-                <a href="#" class="category-card">
+                <a href="search.php?category=Books" class="category-card">
                     <div class="category-image">??</div>
                     <h3>Books</h3>
                 </a>

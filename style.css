@@ -824,3 +824,11 @@ a {
         width: 100%;
     }
 }
+
+/* -- Search results grid -- */
+.search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 8px 0;
+}
