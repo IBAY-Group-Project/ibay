@@ -39,7 +39,15 @@ if (isset($_POST['signup'])) {
 	
    	// 2. Password hashing (IMPORTANT)
 	$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
+	
+	$check = mysqli_query($conn, "SELECT * FROM iBayMembers WHERE email='$email'");
+	if (mysqli_num_rows($check) > 0) {
+    		echo "<script> 
+        		alert('An account with that email already exists. You may want to log in instead!'); 
+        		window.history.back();
+    	</script>";
+    	exit();
+}
 	// 3. Insert into database
 	$sql = "INSERT INTO iBayMembers (firstName, surname, email, password)
 		VALUES ('$firstName', '$surname', '$email', '$hashedPassword')";

@@ -17,12 +17,12 @@ if (isset($_POST['login'])) {
 
         if (password_verify($password, $row['password'])) {
             // Store user info in session
-            $_SESSION['user_id']   = $row['id'];
-            $_SESSION['firstName'] = $row['firstName'];
+            $_SESSION['userId']   = $row['userId'];
+            $_SESSION['firstname'] = $row['firstname'];
             $_SESSION['email']     = $row['email'];
 
             // Redirect to homepage
-            header("Location: index.php");
+            header("Location: ../index.php");
             exit();
         } else {
             echo "<script> alert('Incorrect password!'); window.history.back(); </script>";
