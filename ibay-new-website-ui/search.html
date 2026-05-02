@@ -3,133 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBay - Online Marketplace</title>
+    <title>iBay - Search</title>
     <link rel="stylesheet" href="style.css">
     <script src="js/main.js" defer></script>
-    
 </head>
+<body>
 
+    <header class="site-header">
+        <div class="top-header">
+            <div class="logo">
+                <a href="index.html">iBay</a>
+            </div>
 
-<body> 
+            <nav class="top-nav">
+                <a href="sell.html">Sell</a>
+                <a href="signup.html">Signup</a>
+                <a href="login.html">Login</a>
+            </nav>
 
-    <header class="header"> 
-
-        <div id = 'menu'>
-            <img src='images/menu.svg' width='30' alt='Menu Icon' />
+            <div class="header-actions">
+                <form action="search.html" method="get" class="search-form">
+                    <input type="text" name="q" placeholder="Search for items...">
+                    <button type="submit" class="search-submit-button">Search</button>
+                </form>
+                <a href="account.html" class="icon-button">👤</a>
+                <a href="basket.html" class="icon-button">🛒</a>
+            </div>
         </div>
-
-        <a class ="button" href="sell.html"> Sell </a>
-
-
-
-        <div id="logo">
-            <a href="index.html"> 
-            <img src="images/ibay.svg" width="200" alt=" Ebay Logo" />
-            </a>
-        </div>
-
-        <div id="login">
-            <a href="signup.html" class="signup-button">Signup</a>
-            <a href="login.html" class="login-button">Login</a>
-        </div> 
-  
     </header>
 
-    <main>
-
-        <search class="search-results">
-
-            <div class="product-card">
-                <img src="images/products/product1.webp" alt="Product 1">
-                <h3>Product 1</h3>
-                <p class="price">£24.99</p>
-                <a href="item.html">View</a>
+    <main class="search-page">
+        <section class="search-topbar">
+            <div>
+                <h1>Search Results</h1>
+                <p class="search-subtitle">Browse matching items and refine your search with filters.</p>
             </div>
 
-            <div class="product-card">
-                <img src="images/products/product2.webp" alt="Product 2">
-                <h3>Product 2</h3>
-                <p class="price">£569.99</p>
-                <a href="item.html">View</a>
-            </div>
+            <form action="search.html" method="get" class="search-page-form">
+                <input type="text" name="q" placeholder="Search for items...">
+                <button type="submit" class="primary-button search-page-button">Search</button>
+            </form>
+        </section>
 
-            <div class="product-card">
-                <img src="images/products/product3.webp" alt="Product 3">
-                <h3>Product 3</h3>
-                <p class="price">£27.99</p>
-                <a href="item.html">View</a>
-            </div>
+        <section class="search-layout">
+            <aside class="search-filters-card">
+                <h2>Advanced Search</h2>
 
-            <div class="product-card">
-                <img src="images/products/product4.webp" alt="Product 4">
-                <h3>Product 4</h3>
-                <p class="price">£669.99</p>
-                <a href="item.html">View</a>
-            </div>
+                <form class="advanced-search-form" action="search.html" method="get">
+                    <div class="form-group">
+                        <label for="searchKeyword">Keyword</label>
+                        <input type="text" id="searchKeyword" name="q" placeholder="e.g. headphones">
+                    </div>
 
-            <div class="product-card">
-                <img src="images/products/product5.webp" alt="Product 5">
-                <h3>Product 5</h3>
-                <p class="price">£12.99</p>
-                <a href="item.html">View</a>
-            </div>
+                    <div class="form-group">
+                        <label for="searchCategory">Category</label>
+                        <select id="searchCategory" name="category">
+                            <option value="">All categories</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Trading Cards">Trading Cards</option>
+                            <option value="Gardening">Gardening</option>
+                            <option value="Home">Home</option>
+                            <option value="Collectables">Collectables</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Books">Books</option>
+                        </select>
+                    </div>
 
-            <div class="product-card">
-                <img src="images/products/product6.webp" alt="Product 6">
-                <h3>Product 6</h3>
-                <p class="price">£589.99</p>
-                <a href="item.html">View</a>
-            </div>
+                    <div class="search-price-row">
+                        <div class="form-group">
+                            <label for="minPrice">Min Price (£)</label>
+                            <input type="number" id="minPrice" name="minPrice" step="0.01" min="0" placeholder="0">
+                        </div>
 
-            <div class="product-card">
-                <img src="images/products/product7.webp" alt="Product 7">
-                <h3>Product 7</h3>
-                <p class="price">£219.99</p>
-                <a href="item.html">View</a>
-            </div>
+                        <div class="form-group">
+                            <label for="maxPrice">Max Price (£)</label>
+                            <input type="number" id="maxPrice" name="maxPrice" step="0.01" min="0" placeholder="100">
+                        </div>
+                    </div>
 
-            <div class="product-card">
-                <img src="images/products/product8.webp" alt="Product 8">
-                <h3>Product 8</h3>
-                <p class="price">£54.99</p>
-                <a href="item.html">View</a>
-            </div>
+                    <div class="form-group">
+                        <label for="postage">Postage</label>
+                        <select id="postage" name="postage">
+                            <option value="">Any</option>
+                            <option value="Free postage">Free postage</option>
+                            <option value="Collection only">Collection only</option>
+                            <option value="Paid postage">Paid postage</option>
+                        </select>
+                    </div>
 
-            <div class="product-card">
-                <img src="images/products/product9.webp" alt="Product 9">
-                <h3>Product 9</h3>
-                <p class="price">£62.99</p>
-                <a href="item.html">View</a>
-            </div>
+                    <div class="form-group">
+                        <label for="postcodeArea">Postcode Area</label>
+                        <input type="text" id="postcodeArea" name="postcode" placeholder="e.g. LE11">
+                    </div>
 
-            <div class="product-card">
-                <img src="images/products/product10.webp" alt="Product 10">
-                <h3>Product 10</h3>
-                <p class="price">£16.99</p>
-                <a href="item.html">View</a>
-            </div>  
+                    <div class="search-filter-buttons">
+                        <button type="submit" class="primary-button">Apply Filters</button>
+                        <button type="reset" class="secondary-button" id="clearFiltersButton">Clear</button>
+                    </div>
+                </form>
+            </aside>
 
+            <section class="search-results-card">
+                <div class="search-results-header">
+                    <p class="results-count" id="resultsCount">Showing 8 results</p>
 
-    
+                    <div class="sort-box">
+                        <label for="sortBy">Sort by</label>
+                        <select id="sortBy" name="sortBy">
+                            <option value="low-high">Price: Low to High</option>
+                            <option value="high-low">Price: High to Low</option>
+                            <option value="title">Title</option>
+                        </select>
+                    </div>
+                </div>
 
+                <div class="search-results-grid" id="searchResultsGrid">
+                    <a href="item.html" class="search-item-card" data-title="Wireless Headphones" data-category="Technology" data-price="45.00" data-postage="Free postage" data-postcode="LE11">
+                        <div class="search-item-image">🎧</div>
+                        <div class="search-item-content">
+                            <h3>Wireless Headphones</h3>
+                            <p>Seller: seller123</p>
+                            <p>Postage: Free postage</p>
+                            <strong>£45.00</strong>
+                        </div>
+                    </a>
 
+                    <a href="item.html" class="search-item-card" data-title="Mechanical Keyboard" data-category="Technology" data-price="70.00" data-postage="£2.99" data-postcode="LE12">
+                        <div class="search-item-image">⌨️</div>
+                        <div class="search-item-content">
+                            <h3>Mechanical Keyboard</h3>
+                            <p>Seller: keyshop</p>
+                            <p>Postage: £2.99</p>
+                            <strong>£70.00</strong>
+                        </div>
+                    </a>
 
+                    <a href="item.html" class="search-item-card" data-title="Smartphone" data-category="Technology" data-price="220.00" data-postage="Free postage" data-postcode="E14">
+                        <div class="search-item-image">📱</div>
+                        <div class="search-item-content">
+                            <h3>Smartphone</h3>
+                            <p>Seller: techworld</p>
+                            <p>Postage: Free postage</p>
+                            <strong>£220.00</strong>
+                        </div>
+                    </a>
 
+                    <a href="item.html" class="search-item-card" data-title="Gaming Mouse" data-category="Technology" data-price="25.00" data-postage="£1.99" data-postcode="M1">
+                        <div class="search-item-image">🖱️</div>
+                        <div class="search-item-content">
+                            <h3>Gaming Mouse</h3>
+                            <p>Seller: pcgear</p>
+                            <p>Postage: £1.99</p>
+                            <strong>£25.00</strong>
+                        </div>
+                    </a>
 
-        </search>
+                    <a href="item.html" class="search-item-card" data-title="Laptop Stand" data-category="Technology" data-price="18.00" data-postage="Free postage" data-postcode="LE11">
+                        <div class="search-item-image">💻</div>
+                        <div class="search-item-content">
+                            <h3>Laptop Stand</h3>
+                            <p>Seller: deskstuff</p>
+                            <p>Postage: Free postage</p>
+                            <strong>£18.00</strong>
+                        </div>
+                    </a>
 
-  
+                    <a href="item.html" class="search-item-card" data-title="Programming Book" data-category="Books" data-price="12.00" data-postage="£2.99" data-postcode="OX1">
+                        <div class="search-item-image">📘</div>
+                        <div class="search-item-content">
+                            <h3>Programming Book</h3>
+                            <p>Seller: bookseller</p>
+                            <p>Postage: £2.99</p>
+                            <strong>£12.00</strong>
+                        </div>
+                    </a>
 
+                    <a href="item.html" class="search-item-card" data-title="Winter Jacket" data-category="Clothing" data-price="48.00" data-postage="£4.99" data-postcode="B1">
+                        <div class="search-item-image">🧥</div>
+                        <div class="search-item-content">
+                            <h3>Winter Jacket</h3>
+                            <p>Seller: stylehub</p>
+                            <p>Postage: £4.99</p>
+                            <strong>£48.00</strong>
+                        </div>
+                    </a>
 
+                    <a href="item.html" class="search-item-card" data-title="Rare Card Bundle" data-category="Trading Cards" data-price="55.00" data-postage="Free postage" data-postcode="LE67">
+                        <div class="search-item-image">🃏</div>
+                        <div class="search-item-content">
+                            <h3>Rare Card Bundle</h3>
+                            <p>Seller: cardvault</p>
+                            <p>Postage: Free postage</p>
+                            <strong>£55.00</strong>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="pagination-bar">
+                    <button class="secondary-button pagination-button">Previous</button>
+                    <button class="pagination-number active-page">1</button>
+                    <button class="pagination-number">2</button>
+                    <button class="pagination-number">3</button>
+                    <button class="secondary-button pagination-button">Next</button>
+                </div>
+            </section>
+        </section>
     </main>
 
-    <footer>
-
-        <div id="footer", class="footer" >
-             &copy; 2026 iBay Marketplace. All rights reserved.
-        </div>
+    <footer class="site-footer">
+        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
     </footer>
-    
-</body> 
 
+</body>
 </html>

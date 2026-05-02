@@ -22,10 +22,11 @@
             </nav>
 
             <div class="header-actions">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search for items...">
-                </div>
-                <a href="login.html" class="icon-button">👤</a>
+                <form action="search.html" method="get" class="search-form">
+                    <input type="text" name="q" palceholder="Search for items">
+                    <button type="submit" class="search-submit-button">Search</button>
+                </form>
+                <a href="account.html" class="icon-button">👤</a>
                 <a href="basket.html" class="icon-button">🛒</a>
             </div>
         </div>
@@ -45,7 +46,7 @@
                     <p class="seller-eyebrow">Seller upload page</p>
                     <h1>Create or Edit a Listing</h1>
                     <p class="seller-subtitle">
-                        Complete all listing details below. Keep the form compact while making the preview easy to review.
+                        Complete the listing details below. Keep it clear, compact, and easy to review.
                     </p>
                 </div>
 
@@ -79,9 +80,9 @@
                         <div class="form-group">
                             <label for="condition">Condition</label>
                             <select id="condition" name="condition">
-                                <option>Used - Good</option>
                                 <option>New</option>
                                 <option>Like New</option>
+                                <option>Used - Good</option>
                                 <option>Used - Acceptable</option>
                             </select>
                         </div>
@@ -125,26 +126,20 @@
 
                 <div class="seller-right">
                     <div class="seller-panel">
-                        <h2>Upload 3 images</h2>
-                        <p>Show all main facets of the product where possible.</p>
+                        <h2>Upload 2 images</h2>
+                        <p>Upload two clear images of the item as required by the brief.</p>
 
                         <div class="upload-grid">
                             <label class="upload-slot" for="image1">
                                 <input type="file" id="image1" name="image1" accept="image/*" hidden>
                                 <span class="upload-plus">+</span>
-                                <span>Main view</span>
+                                <span>Main image</span>
                             </label>
 
                             <label class="upload-slot" for="image2">
                                 <input type="file" id="image2" name="image2" accept="image/*" hidden>
                                 <span class="upload-plus">+</span>
-                                <span>Side view</span>
-                            </label>
-
-                            <label class="upload-slot" for="image3">
-                                <input type="file" id="image3" name="image3" accept="image/*" hidden>
-                                <span class="upload-plus">+</span>
-                                <span>Close-up</span>
+                                <span>Second image</span>
                             </label>
                         </div>
                     </div>
@@ -166,7 +161,7 @@
                         <ul class="seller-checklist">
                             <li>Use a searchable title</li>
                             <li>Choose the correct category</li>
-                            <li>Upload all 3 images</li>
+                            <li>Upload both images</li>
                             <li>Include condition details</li>
                         </ul>
                     </div>

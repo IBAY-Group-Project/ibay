@@ -22,82 +22,100 @@
             </nav>
 
             <div class="header-actions">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search for items...">
-                </div>
-                <a href="login.html" class="icon-button">👤</a>
+                <form action="search.html" method="get" class="search-form">
+                    <input type="text" name="q" palceholder="Search for items">
+                    <button type="submit" class="search-submit-button">Search</button>
+                </form>
+                <a href="account.html" class="icon-button">👤</a>
                 <a href="basket.html" class="icon-button">🛒</a>
             </div>
         </div>
     </header>
 
-    <main class="product-page">
-        <section class="product-top">
-            <div class="product-gallery">
-                <div class="main-image">
-                    <img id="productMainImage" src="images/placeholder-product.jpg" alt="Product image">
+    <main class="item-page">
+        <section class="item-layout">
+            <div class="item-gallery-card">
+                <div class="item-gallery-main">
+                    <button class="gallery-arrow left" id="prevImage">&#10094;</button>
+
+                    <img
+                        id="mainProductImage"
+                        class="main-product-image"
+                        src="images/placeholder-product.jpg"
+                        alt="Product image">
+
+                    <button class="gallery-arrow right" id="nextImage">&#10095;</button>
                 </div>
 
-                <div class="thumbnail-row">
-                    <img src="images/placeholder-product.jpg" alt="Thumbnail 1" class="thumbnail active">
-                    <img src="images/placeholder-product.jpg" alt="Thumbnail 2" class="thumbnail">
-                    <img src="images/placeholder-product.jpg" alt="Thumbnail 3" class="thumbnail">
-                </div>
-            </div>
+                <div class="item-thumbnails">
+                    <img
+                        class="item-thumb active-thumb"
+                        src="images/placeholder-product.jpg"
+                        alt="Thumbnail 1"
+                        data-index="0">
 
-            <div class="product-info">
-                <p class="product-category" id="productCategory">Category Placeholder</p>
-                <h1 id="productTitle">Item Title Placeholder</h1>
-
-                <div class="seller-meta">
-                    <p><strong>Seller:</strong> <span id="sellerName">Seller Name</span></p>
-                    <p><strong>Seller Rating:</strong> <span id="sellerRating">0</span></p>
-                    <p><strong>Postcode Area:</strong> <span id="sellerPostcode">N/A</span></p>
-                </div>
-
-                <div class="price-box">
-                    <p class="label">Current Price</p>
-                    <p class="product-price" id="productPrice">£0.00</p>
-                </div>
-
-                <div class="auction-meta">
-                    <p><strong>Postage:</strong> <span id="productPostage">N/A</span></p>
-                    <p><strong>Listed:</strong> <span id="productStart">N/A</span></p>
-                    <p><strong>Ends:</strong> <span id="productFinish">N/A</span></p>
-                </div>
-
-                <div class="product-actions">
-                    <button class="primary-button">Add to Basket</button>
-                    <button class="secondary-button">Watch Item</button>
+                    <img
+                        class="item-thumb"
+                        src="images/placeholder-product-2.jpg"
+                        alt="Thumbnail 2"
+                        data-index="1">
                 </div>
             </div>
-        </section>
 
-        <section class="product-details">
-            <div class="details-card">
-                <h2>Description</h2>
-                <p id="productDescription">
-                    Product description will be loaded here from the database.
-                </p>
-            </div>
+            <div class="item-info-card">
+                <h1 class="item-title" id="itemTitle">Item Title Placeholder</h1>
 
-            <div class="details-card">
-                <h2>Database Mapping Reference</h2>
-                <ul class="mapping-list">
-                    <li><strong>itemId</strong> → iBayItems.itemId</li>
-                    <li><strong>title</strong> → iBayItems.title</li>
-                    <li><strong>category</strong> → iBayItems.category</li>
-                    <li><strong>description</strong> → iBayItems.description</li>
-                    <li><strong>price</strong> → iBayItems.price</li>
-                    <li><strong>postage</strong> → iBayItems.postage</li>
-                    <li><strong>start</strong> → iBayItems.start</li>
-                    <li><strong>finish</strong> → iBayItems.finish</li>
-                    <li><strong>seller userId</strong> → iBayItems.userId</li>
-                    <li><strong>seller name</strong> → iBayMembers.name</li>
-                    <li><strong>seller rating</strong> → iBayMembers.rating</li>
-                    <li><strong>seller postcode</strong> → iBayMembers.postcode</li>
-                    <li><strong>images</strong> → iBayImages linked by itemId</li>
-                </ul>
+                <div class="item-seller-row">
+                    <div>
+                        <p class="item-seller-name">
+                            Seller: <span id="sellerUserId">seller123</span>
+                        </p>
+                        <p class="item-seller-rating">
+                            Rating: <span id="sellerRating">98</span>
+                        </p>
+                    </div>
+
+                    <a href="#" class="contact-seller-link">Contact seller</a>
+                </div>
+
+                <div class="item-price-block">
+                    <p class="item-price-label">Price</p>
+                    <p class="item-price" id="itemPrice">£83.90</p>
+                </div>
+
+                <div class="item-meta-grid">
+                    <div class="item-meta-box">
+                        <span class="meta-label">Postage</span>
+                        <span class="meta-value" id="itemPostage">Free postage</span>
+                    </div>
+
+                    <div class="item-meta-box">
+                        <span class="meta-label">Listed</span>
+                        <span class="meta-value" id="itemStart">01 May 2026</span>
+                    </div>
+
+                    <div class="item-meta-box">
+                        <span class="meta-label">Ends</span>
+                        <span class="meta-value" id="itemFinish">08 May 2026</span>
+                    </div>
+
+                    <div class="item-meta-box">
+                        <span class="meta-label">Time left</span>
+                        <span class="meta-value" id="itemTimeLeft">2 days left</span>
+                    </div>
+                </div>
+
+                <div class="item-description-block">
+                    <h2>Description</h2>
+                    <p id="itemDescription">
+                        Product description will go here. This should later be loaded from the database using the description value in iBayItems.
+                    </p>
+                </div>
+
+                <div class="item-actions">
+                    <button class="primary-button item-action-button">Add to Basket</button>
+                    <button class="secondary-button item-action-button">Buy Now</button>
+                </div>
             </div>
         </section>
     </main>
