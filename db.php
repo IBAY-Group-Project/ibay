@@ -1,23 +1,12 @@
 <?php
-
-$host = "YOUR_HOST_FROM_UNI";   // important
+$host = "localhost";
 $db   = "group01";
-$user = "YOUR_USERNAME";
-$pass = "YOUR_PASSWORD";
+$user = "group01";
+$pass = "Juvwusorn7rhFvEEdMaX";
 
-try {
-    $pdo = new PDO(
-        "mysql:host=$host;dbname=$db;charset=utf8",
-        $user,
-        $pass
-    );
+$conn = new mysqli($host, $user, $pass, $db);
 
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    echo "DB connected successfully";
-
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
+if ($conn->connect_error) {
+    die("DB connection failed: " . $conn->connect_error);
 }
-
 ?>
