@@ -57,11 +57,11 @@ const categoryData = {
     ]
 };
 
-const categoryLinks = document.querySelectorAll('.category-nav a');
-const featuredProducts = document.getElementById('featuredProducts');
-const featuredTitle = document.getElementById('featuredTitle');
-const prevCategoryBtn = document.getElementById('prevCategory');
-const nextCategoryBtn = document.getElementById('nextCategory');
+const categoryLinks = document.querySelectorAll(".category-nav a");
+const featuredProducts = document.getElementById("featuredProducts");
+const featuredTitle = document.getElementById("featuredTitle");
+const prevCategoryBtn = document.getElementById("prevCategory");
+const nextCategoryBtn = document.getElementById("nextCategory");
 
 let categoryNames = Object.keys(categoryData);
 let currentCategoryIndex = 0;
@@ -71,11 +71,11 @@ function renderCategory(categoryName) {
     if (!featuredProducts || !featuredTitle) return;
 
     featuredTitle.textContent = `Best Selling in ${categoryName}`;
-    featuredProducts.innerHTML = '';
+    featuredProducts.innerHTML = "";
 
     categoryData[categoryName].forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
+        const card = document.createElement("div");
+        card.className = "product-card";
         card.innerHTML = `
             <div class="product-card-image">${product.icon}</div>
             <h3>${product.title}</h3>
@@ -85,9 +85,9 @@ function renderCategory(categoryName) {
     });
 
     categoryLinks.forEach(link => {
-        link.classList.remove('active');
+        link.classList.remove("active");
         if (link.dataset.category === categoryName) {
-            link.classList.add('active');
+            link.classList.add("active");
         }
     });
 }
@@ -99,7 +99,7 @@ function showCategoryByIndex(index) {
 
 if (categoryLinks.length) {
     categoryLinks.forEach((link, index) => {
-        link.addEventListener('click', (e) => {
+        link.addEventListener("click", e => {
             e.preventDefault();
             showCategoryByIndex(index);
             restartAutoRotate();
@@ -108,7 +108,7 @@ if (categoryLinks.length) {
 }
 
 if (prevCategoryBtn) {
-    prevCategoryBtn.addEventListener('click', () => {
+    prevCategoryBtn.addEventListener("click", () => {
         currentCategoryIndex = (currentCategoryIndex - 1 + categoryNames.length) % categoryNames.length;
         showCategoryByIndex(currentCategoryIndex);
         restartAutoRotate();
@@ -116,7 +116,7 @@ if (prevCategoryBtn) {
 }
 
 if (nextCategoryBtn) {
-    nextCategoryBtn.addEventListener('click', () => {
+    nextCategoryBtn.addEventListener("click", () => {
         currentCategoryIndex = (currentCategoryIndex + 1) % categoryNames.length;
         showCategoryByIndex(currentCategoryIndex);
         restartAutoRotate();
@@ -142,15 +142,195 @@ if (featuredProducts) {
     startAutoRotate();
 }
 
-const thumbnails = document.querySelectorAll('.thumbnail');
-const mainImage = document.getElementById('productMainImage');
+/* SELL PAGE PREVIEW */
 
-if (thumbnails.length && mainImage) {
-    thumbnails.forEach(thumbnail => {
-        thumbnail.addEventListener('click', () => {
-            thumbnails.forEach(t => t.classList.remove('active'));
-            thumbnail.classList.add('active');
-            mainImage.src = thumbnail.src;
-        });
+const titleInput = document.getElementById("title");
+const categoryInput = document.getElementById("category");
+const priceInput = document.getElementById("price");
+const descriptionInput = document.getElementById("description");
+
+const previewTitle = document.getElementById("previewTitle");
+const previewCategory = document.getElementById("previewCategory");
+const previewPrice = document.getElementById("previewPrice");
+const charCount = document.getElementById("charCount");
+
+function updateSellerPreview() {
+    if (!previewTitle || !previewCategory || !previewPrice || !charCount) return;
+
+    previewTitle.textContent =
+        titleInput && titleInput.value.trim() ? titleInput.value.trim() : "Your item title";
+
+    previewCategory.textContent =
+        categoryInput && categoryInput.value ? categoryInput.value : "Technology";
+
+    previewPrice.textContent =
+        "£" + (priceInput && priceInput.value ? Number(priceInput.value).toFixed(2) : "0.00");
+
+    charCount.textContent = `${descriptionInput ? descriptionInput.value.length : 0} / 500`;
+}
+
+if (titleInput || categoryInput || priceInput || descriptionInput) {
+    [titleInput, categoryInput, priceInput, descriptionInput].forEach(input => {
+        if (input) {
+            input.addEventListener("input", updateSellerPreview);
+        }
+    });
+
+    updateSellerPreview();
+}
+
+/* ITEM PAGE GALLERY */
+
+const productImages = [
+    "images/placeholder-product.jpg",
+    "images/placeholder-product-2.jpg"
+];
+
+const mainProductImage = document.getElementById("mainProductImage");
+const prevImageBtn = document.getElementById("prevImage");
+const nextImageBtn = document.getElementById("nextImage");
+const thumbnails = document.querySelectorAll(".item-thumb");
+
+let currentImageIndex = 0;
+
+function renderItemGallery() {
+    if (!mainProductImage || !thumbnails.length) return;
+
+    mainProductImage.src = productImages[currentImageIndex];
+
+    thumbnails.forEach((thumb, index) => {
+        thumb.src = productImages[index];
+        thumb.classList.toggle("active-thumb", index === currentImageIndex);
     });
 }
+
+if (mainProductImage && prevImageBtn && nextImageBtn && thumbnails.length) {
+    prevImageBtn.addEventListener("click", () => {
+        currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+        renderItemGallery();
+    });
+
+    nextImageBtn.addEventListener("click", () => {
+        currentImageIndex = (currentImageIndex + 1) % productImages.length;
+        renderItemGallery();
+    });
+
+    thumbnails.forEach((thumb, index) => {
+        thumb.addEventListener("click", () => {
+            currentImageIndex = index;
+            renderItemGallery();
+        });
+    });
+
+    renderItemGallery();
+}
+
+/* SEARCH PAGE URL PARAMS + FILTERING */
+
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+
+    const query = (params.get("q") || "").trim().toLowerCase();
+    const category = params.get("category") || "";
+    const minPrice = params.get("minPrice") || "";
+    const maxPrice = params.get("maxPrice") || "";
+    const postage = params.get("postage") || "";
+    const postcode = (params.get("postcode") || "").trim().toLowerCase();
+
+    const headerSearchInputs = document.querySelectorAll('.search-form input[name="q"]');
+    const pageSearchInput = document.querySelector('.search-page-form input[name="q"]');
+    const keywordInput = document.getElementById("searchKeyword");
+    const categorySearchInput = document.getElementById("searchCategory");
+    const minPriceInput = document.getElementById("minPrice");
+    const maxPriceInput = document.getElementById("maxPrice");
+    const postageInput = document.getElementById("postage");
+    const postcodeInput = document.getElementById("postcodeArea");
+    const sortSelect = document.getElementById("sortBy");
+    const resultsGrid = document.getElementById("searchResultsGrid");
+    const resultCards = resultsGrid ? Array.from(resultsGrid.querySelectorAll(".search-item-card")) : [];
+    const resultsCount = document.getElementById("resultsCount");
+    const clearFiltersButton = document.getElementById("clearFiltersButton");
+
+    headerSearchInputs.forEach(input => {
+        input.value = params.get("q") || "";
+    });
+
+    if (pageSearchInput) pageSearchInput.value = params.get("q") || "";
+    if (keywordInput) keywordInput.value = params.get("q") || "";
+    if (categorySearchInput) categorySearchInput.value = category;
+    if (minPriceInput) minPriceInput.value = minPrice;
+    if (maxPriceInput) maxPriceInput.value = maxPrice;
+    if (postageInput) postageInput.value = postage;
+    if (postcodeInput) postcodeInput.value = params.get("postcode") || "";
+
+    function applySearchFilters() {
+        if (!resultCards.length || !resultsGrid) return;
+
+        let visibleCards = resultCards.filter(card => {
+            const title = (card.dataset.title || "").toLowerCase();
+            const itemCategory = card.dataset.category || "";
+            const itemPrice = parseFloat(card.dataset.price || "0");
+            const itemPostage = card.dataset.postage || "";
+            const itemPostcode = (card.dataset.postcode || "").toLowerCase();
+
+            const matchesQuery = !query || title.includes(query);
+            const matchesCategory = !category || itemCategory === category;
+            const matchesMin = !minPrice || itemPrice >= parseFloat(minPrice);
+            const matchesMax = !maxPrice || itemPrice <= parseFloat(maxPrice);
+            const matchesPostage =
+                !postage ||
+                (postage === "Paid postage"
+                    ? itemPostage !== "Free postage" && itemPostage !== "Collection only"
+                    : itemPostage === postage);
+            const matchesPostcode = !postcode || itemPostcode.includes(postcode);
+
+            return (
+                matchesQuery &&
+                matchesCategory &&
+                matchesMin &&
+                matchesMax &&
+                matchesPostage &&
+                matchesPostcode
+            );
+        });
+
+        const sortValue = sortSelect ? sortSelect.value : "low-high";
+
+        visibleCards.sort((a, b) => {
+            const priceA = parseFloat(a.dataset.price || "0");
+            const priceB = parseFloat(b.dataset.price || "0");
+            const titleA = a.dataset.title || "";
+            const titleB = b.dataset.title || "";
+
+            if (sortValue === "high-low") return priceB - priceA;
+            if (sortValue === "title") return titleA.localeCompare(titleB);
+            return priceA - priceB;
+        });
+
+        resultCards.forEach(card => {
+            card.style.display = "none";
+        });
+
+        visibleCards.forEach(card => {
+            card.style.display = "flex";
+            resultsGrid.appendChild(card);
+        });
+
+        if (resultsCount) {
+            resultsCount.textContent = `Showing ${visibleCards.length} result${visibleCards.length === 1 ? "" : "s"}`;
+        }
+    }
+
+    if (sortSelect) {
+        sortSelect.addEventListener("change", applySearchFilters);
+    }
+
+    if (clearFiltersButton) {
+        clearFiltersButton.addEventListener("click", e => {
+            e.preventDefault();
+            window.location.href = "search.html";
+        });
+    }
+
+    applySearchFilters();
+});
