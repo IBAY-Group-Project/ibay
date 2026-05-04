@@ -1,3 +1,67 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+include("connection.php");
+
+if (isset($_POST['signup'])) {
+	$firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
+    	$surname   = mysqli_real_escape_string($conn, $_POST['surname']);
+    	$email     = mysqli_real_escape_string($conn, $_POST['email']);
+    	$password  = $_POST['password'];
+    	$confirm   = $_POST['confirmPassword'];
+
+    	// 1. Check passwords match
+    	if ($password !== $confirm) {
+        	die("Passwords do not match");
+    	}
+ 	
+	// 2. Password strength checks
+	if (strlen($password) < 8) {
+    		die("Password must be at least 8 characters long");
+	}
+
+	if (!preg_match('/[A-Z]/', $password)) {
+    		die("Password must contain at least one uppercase letter");
+	}
+
+	if (!preg_match('/[a-z]/', $password)) {
+    		die("Password must contain at least one lowercase letter");
+	}
+
+	if (!preg_match('/[0-9]/', $password)) {
+    		die("Password must contain at least one number");
+	}
+
+	if (!preg_match('/[\W]/', $password)) {
+    		die("Password must contain at least one special character");
+	}
+	
+   	// 2. Password hashing (IMPORTANT)
+	$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+	
+	$check = mysqli_query($conn, "SELECT * FROM iBayMembers WHERE email='$email'");
+	if (mysqli_num_rows($check) > 0) {
+    		echo "<script> 
+        		alert('An account with that email already exists. You may want to log in instead!'); 
+        		window.history.back();
+    	</script>";
+    	exit();
+}
+	// 3. Insert into database
+	$sql = "INSERT INTO iBayMembers (firstName, surname, email, password)
+		VALUES ('$firstName', '$surname', '$email', '$hashedPassword')";
+
+    	if (mysqli_query($conn, $sql)) {
+        	echo "Account created successfully";
+        	header("Location: /ibay/login.html");
+        	exit();
+    	} else {
+        	echo "Error: " . mysqli_error($conn);
+    	}
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,25 +73,8 @@
 <body>
 
     <header class="site-header">
-        <div class="top-header">
-            <div class="logo">
-                <a href="index.html">iBay</a>
-            </div>
+        <?php include("includes/navbar.php"); ?>
 
-            <nav class="top-nav">
-                <a href="sell.html">Sell</a>
-                <a href="signup.html">Signup</a>
-                <a href="login.html">Login</a>
-            </nav>
-
-            <div class="header-actions">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search for items...">
-                </div>
-                <a href="login.html" class="icon-button">👤</a>
-                <a href="basket.html" class="icon-button">🛒</a>
-            </div>
-        </div>
     </header>
 
     <main class="auth-page">

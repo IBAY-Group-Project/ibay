@@ -1,3 +1,15 @@
+<?php
+session_start();
+echo "<pre>";
+var_dump($_SESSION);
+echo "</pre>";
+
+$is_logged_in = isset($_SESSION['email']);
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,26 +21,7 @@
 <body>
 
     <header class="site-header">
-        <div class="top-header">
-            <div class="logo">
-                <a href="index.html">iBay</a>
-            </div>
-
-            <nav class="top-nav">
-                <a href="sell.html">Sell</a>
-                <a href="signup.html">Signup</a>
-                <a href="login.html">Login</a>
-            </nav>
-
-            <div class="header-actions">
-                <form action="search.html" method="get" class="search-form">
-                    <input type="text" name="q" palceholder="Search for items">
-                    <button type="submit" class="search-submit-button">Search</button>
-                </form>
-                <a href="account.html" class="icon-button">👤</a>
-                <a href="basket.html" class="icon-button">🛒</a>
-            </div>
-        </div>
+        <?php include("includes/navbar.php"); ?>   
     </header>
 
     <main class="account-page">
@@ -63,12 +56,12 @@
                 <h2>Quick Actions</h2>
 
                 <div class="account-actions-grid">
-                    <a href="sell.html" class="account-action-card">
+                    <a href="sell.php" class="account-action-card">
                         <h3>My Listings</h3>
                         <p>View and manage your current items for sale.</p>
                     </a>
 
-                    <a href="basket.html" class="account-action-card">
+                    <a href="basket.php" class="account-action-card">
                         <h3>My Basket</h3>
                         <p>See saved items and continue to checkout.</p>
                     </a>
@@ -78,7 +71,7 @@
                         <p>Update profile details, address, and contact info.</p>
                     </a>
 
-                    <a href="login.html" class="account-action-card">
+                    <a href="logout.php" class="account-action-card">
                         <h3>Logout</h3>
                         <p>Sign out of your iBay account safely.</p>
                     </a>

@@ -35,11 +35,34 @@ quantity button in the checkout needs + - functions
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
 
 
+
+
+- make sign up add a username too
+    - make sign in top button either user or email not just email
+    - also add quantity of items that the seller has avaiable in the ibayitems table and also in sell.php form
+
+- change all html to php ///
+
+- change everything from hardcode to db dependent 
+
+- add a         <?php if ($is_logged_in = isset($_SESSION['email'])): ?>          on sell.php to tell user they need to sign in to sell
+
+- on search.php make it max 8 per page and fix the logic ////
+
+- try to add singing in with google / apple etc
+
+- try to add paying with visa debit / credit  / mastercard etc
+
+- ai chatbot
+
+- auction
 
 

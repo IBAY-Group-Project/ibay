@@ -1,5 +1,5 @@
 <?php
-$host = "localhost";
+$host = "sci-project.lboro.ac.uk";
 $db   = "group01";
 $user = "group01";
 $pass = "Juvwusorn7rhFvEEdMaX";

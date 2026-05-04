@@ -334,3 +334,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     applySearchFilters();
 });
+
+console.log('main.js loaded');
+
+const toggleBtn = document.getElementById('toggleLoginType');
+const toggleBtn2 = document.getElementById('toggleLoginType2');
+
+if (toggleBtn) {
+    toggleBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const emailGroup = document.getElementById('email').closest('.form-group');
+        const usernameGroup = document.getElementById('usernameGroup');
+        emailGroup.style.display = 'none';
+        usernameGroup.style.display = 'block';
+
+        document.getElementById('email').removeAttribute('required');
+        document.getElementById('username').setAttribute('required','required');
+    });
+
+if (toggleBtn2) {
+    toggleBtn2.addEventListener('click', function(e) {
+        e.preventDefault();
+        const emailGroup = document.getElementById('email').closest('.form-group');
+        const usernameGroup = document.getElementById('usernameGroup');
+        emailGroup.style.display = 'block';
+        usernameGroup.style.display = 'none';
+
+        document.getElementById('username').removeAttribute('required');
+        document.getElementById('email').setAttribute('required','required');
+    });
+}
+

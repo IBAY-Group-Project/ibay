@@ -1,3 +1,8 @@
+<?php
+include("includes/check.php");
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,26 +15,9 @@
 <body>
 
     <header class="site-header">
-        <div class="top-header">
-            <div class="logo">
-                <a href="index.html">iBay</a>
-            </div>
 
-            <nav class="top-nav">
-                <a href="sell.html">Sell</a>
-                <a href="signup.html">Signup</a>
-                <a href="login.html">Login</a>
-            </nav>
+        <?php include("includes/navbar.php"); ?>
 
-            <div class="header-actions">
-                <form action="search.html" method="get" class="search-form">
-                    <input type="text" name="q" palceholder="Search for items">
-                    <button type="submit" class="search-submit-button">Search</button>
-                </form>
-                <a href="login.html" class="icon-button">👤</a>
-                <a href="basket.html" class="icon-button">🛒</a>
-            </div>
-        </div>
 
         <nav class="category-nav" id="categoryNav">
             <a href="#" class="active" data-category="Technology">Technology</a>

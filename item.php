@@ -1,33 +1,41 @@
+<?php
+include("includes/check.php");
+require("includes/db.php");
+
+// Get item ID from URL
+$item_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+if ($item_id === 0) {
+    header("Location: search.php");
+    exit;
+}
+
+// Fetch item from database
+$sql = "SELECT * FROM iBayItems WHERE itemId = $item_id AND sold = 0";
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) === 0) {
+    header("Location: search.php");
+    exit;
+}
+
+$item = mysqli_fetch_assoc($result);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBay - Item</title>
+    <title>iBay - Home</title>
     <link rel="stylesheet" href="style.css">
     <script src="js/main.js" defer></script>
 </head>
 <body>
 
     <header class="site-header">
-        <div class="top-header">
-            <div class="logo">
-                <a href="index.html">iBay</a>
-            </div>
 
-            <nav class="top-nav">
-                <a href="sell.html">Sell</a>
-                <a href="signup.html">Signup</a>
-                <a href="login.html">Login</a>
-            </nav>
-
-            <div class="header-actions">
-                <form action="search.html" method="get" class="search-form">
-                    <input type="text" name="q" palceholder="Search for items">
-                    <button type="submit" class="search-submit-button">Search</button>
-                </form>
-                <a href="account.html" class="icon-button">👤</a>
-                <a href="basket.html" class="icon-button">🛒</a>
+        <?php include("includes/navbar.php"); ?>
             </div>
         </div>
     </header>
@@ -63,12 +71,12 @@
             </div>
 
             <div class="item-info-card">
-                <h1 class="item-title" id="itemTitle">Item Title Placeholder</h1>
+                <h1 class="item-title" id="itemTitle"><?= $item['title'] ?></h1>
 
                 <div class="item-seller-row">
                     <div>
                         <p class="item-seller-name">
-                            Seller: <span id="sellerUserId">seller123</span>
+                            Seller: <span id="sellerUserId"><?= $item['userId'] ?></span>
                         </p>
                         <p class="item-seller-rating">
                             Rating: <span id="sellerRating">98</span>
@@ -80,20 +88,28 @@
 
                 <div class="item-price-block">
                     <p class="item-price-label">Price</p>
-                    <p class="item-price" id="itemPrice">£83.90</p>
+                    <p class="item-price" id="itemPrice">£<?= $item['price'] ?></p>
                 </div>
 
                 <div class="item-meta-grid">
                     <div class="item-meta-box">
                         <span class="meta-label">Postage</span>
-                        <span class="meta-value" id="itemPostage">Free postage</span>
+                        <span class="meta-value" id="itemPostage"><?= $item['postage'] ?></span>
                     </div>
 
                     <div class="item-meta-box">
                         <span class="meta-label">Listed</span>
-                        <span class="meta-value" id="itemStart">01 May 2026</span>
+                        <span class="meta-value" id="itemStart"><?= date('d M Y', strtotime($item['start'])) ?></span>
                     </div>
 
+                    <div class="item-meta-box">
+                        <span class="meta-label">Condition</span>
+                        <span class="meta-value" id=itemCondition><?= $item['condition']?></span>
+                    </div>
+
+                    <!-- Im hiding this for now--> 
+                    
+                    <!--
                     <div class="item-meta-box">
                         <span class="meta-label">Ends</span>
                         <span class="meta-value" id="itemFinish">08 May 2026</span>
@@ -103,12 +119,13 @@
                         <span class="meta-label">Time left</span>
                         <span class="meta-value" id="itemTimeLeft">2 days left</span>
                     </div>
+                    --> 
                 </div>
 
                 <div class="item-description-block">
                     <h2>Description</h2>
                     <p id="itemDescription">
-                        Product description will go here. This should later be loaded from the database using the description value in iBayItems.
+                        <?= $item['description']?>
                     </p>
                 </div>
 

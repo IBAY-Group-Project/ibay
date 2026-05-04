@@ -1,37 +1,22 @@
+<?php
+include("includes/check.php");
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBay - Online Marketplace</title>
+    <title>iBay - Home</title>
     <link rel="stylesheet" href="style.css">
     <script src="js/main.js" defer></script>
-    
 </head>
+<body>
 
+    <header class="site-header">
 
-<body> 
-
-    <header class="header"> 
-
-        <div id = 'menu'>
-            <img src='images/menu.svg' width='30' alt='Menu Icon' />
-        </div>
-
-        <a class ="button" href="sell.html"> Sell </a>
-
-
-
-        <div id="logo">
-            <a href="index.html"> 
-            <img src="images/ibay.svg" width="200" alt=" Ebay Logo" />
-            </a>
-        </div>
-
-        <div id="login">
-            <a href="signup.html" class="signup-button">Signup</a>
-            <a href="login.html" class="login-button">Login</a>
-        </div> 
+        <?php include("includes/navbar.php"); ?>
   
     </header>
 

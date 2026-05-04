@@ -1,32 +1,22 @@
+<?php
+include("includes/check.php");
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBay - Basket</title>
+    <title>iBay - Home</title>
     <link rel="stylesheet" href="style.css">
+    <script src="js/main.js" defer></script>
 </head>
 <body>
 
     <header class="site-header">
-        <div class="top-header">
-            <div class="logo">
-                <a href="index.html">iBay</a>
-            </div>
 
-            <nav class="top-nav">
-                <a href="sell.html">Sell</a>
-                <a href="signup.html">Signup</a>
-                <a href="login.html">Login</a>
-            </nav>
-
-            <div class="header-actions">
-                <form action="search.html" method="get" class="search-form">
-                    <input type="text" name="q" palceholder="Search for items">
-                    <button type="submit" class="search-submit-button">Search</button>
-                </form>
-                <a href="login.html" class="icon-button">👤</a>
-                <a href="basket.html" class="icon-button">🛒</a>
+        <?php include("includes/navbar.php"); ?>
             </div>
         </div>
     </header>

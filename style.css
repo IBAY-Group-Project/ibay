@@ -1285,12 +1285,15 @@ a {
 }
 
 .pagination-number {
+    border: 1px solid #cccccc;
     width: 42px;
     height: 42px;
-    border: 1px solid #cccccc;
     border-radius: 10px;
     background-color: #fff;
     font-weight: 600;
+    display: flex;
+    align-items: center;    
+    justify-content: center;
     cursor: pointer;
 }
 
