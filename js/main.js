@@ -351,6 +351,7 @@ if (toggleBtn) {
         document.getElementById('email').removeAttribute('required');
         document.getElementById('username').setAttribute('required','required');
     });
+}
 
 if (toggleBtn2) {
     toggleBtn2.addEventListener('click', function(e) {
