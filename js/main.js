@@ -366,3 +366,7 @@ if (toggleBtn2) {
     });
 }
 
+document.querySelector('.auth-form')?.addEventListener('submit', () => {
+    console.log('FORM SUBMITTED');
+});
+

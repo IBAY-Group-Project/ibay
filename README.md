@@ -46,7 +46,7 @@ quantity button in the checkout needs + - functions
 
 
 - make sign up add a username too
-    - make sign in top button either user or email not just email
+    - make sign in top button either user or email not just email ///
     - also add quantity of items that the seller has avaiable in the ibayitems table and also in sell.php form
 
 - change all html to php ///

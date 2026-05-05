@@ -1,10 +1,25 @@
 <?php
-session_start();
-echo "<pre>";
-var_dump($_SESSION);
-echo "</pre>";
+include("includes/check.php");
+include("connection.php");
 
-$is_logged_in = isset($_SESSION['email']);
+$userId = $_SESSION['userId'];
+
+// Fetch user details
+$sql = "SELECT * FROM iBayMembers WHERE userId = $userId";
+$result = mysqli_query($conn, $sql);
+$user = mysqli_fetch_assoc($result);
+
+// Count active listings
+$listingsSql = "SELECT COUNT(*) as count FROM iBayItems WHERE userId = $userId AND sold = 0";
+$listingsResult = mysqli_query($conn, $listingsSql);
+$listings = mysqli_fetch_assoc($listingsResult)['count'];
+
+//Count basket items
+$basketSql = "SELECT COUNT(*) as count FROM iBayBasket WHERE userId = $userId";
+$basketResult = mysqli_query($conn , $basketSql);
+$basket= mysqli_fetch_assoc($basketResult)['count'];
+
+
 ?>
 
 
@@ -27,27 +42,27 @@ $is_logged_in = isset($_SESSION['email']);
     <main class="account-page">
         <section class="account-layout">
             <div class="account-profile-card">
-                <div class="account-avatar">A</div>
+                <div class="account-avatar"><?= strtoupper(substr($_SESSION['firstname'], 0, 1)) ?></div>         <!-- the capital letter of the first letter in the firstname -->
                 <h1>My Account</h1>
-                <p class="account-name">Adam User</p>
-                <p class="account-userid">@adam123</p>
+                <p class="account-name"><?= $user['firstname']?> <?= $user['surname']?> </p>
+                <p class="account-userid">@<?= $user['username']?></p>
 
                 <div class="account-profile-meta">
                     <div class="account-meta-row">
                         <span>Email</span>
-                        <span>adam@email.com</span>
+                        <span><?= $user['email']?></span>
                     </div>
                     <div class="account-meta-row">
                         <span>Rating</span>
-                        <span>98</span>
+                        <span><?= $user['rating']?></span>
                     </div>
                     <div class="account-meta-row">
                         <span>Listings</span>
-                        <span>4 active</span>
+                        <span><?= $listings?> active</span>
                     </div>
                     <div class="account-meta-row">
                         <span>Basket</span>
-                        <span>2 items</span>
+                        <span><?= $basket?> items</span>
                     </div>
                 </div>
             </div>
