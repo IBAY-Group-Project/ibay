@@ -1,59 +1,59 @@
 const categoryData = {
     "Technology": [
-        { icon: "🎧", title: "Wireless Headphones", price: "£45.00" },
-        { icon: "⌨️", title: "Mechanical Keyboard", price: "£70.00" },
-        { icon: "📱", title: "Smartphone", price: "£220.00" },
-        { icon: "🖱️", title: "Gaming Mouse", price: "£25.00" },
-        { icon: "💻", title: "Laptop Stand", price: "£18.00" }
+        { icon: "ðŸŽ§", title: "Wireless Headphones", price: "Â£45.00" },
+        { icon: "âŒ¨ï¸", title: "Mechanical Keyboard", price: "Â£70.00" },
+        { icon: "ðŸ“±", title: "Smartphone", price: "Â£220.00" },
+        { icon: "ðŸ–±ï¸", title: "Gaming Mouse", price: "Â£25.00" },
+        { icon: "ðŸ’»", title: "Laptop Stand", price: "Â£18.00" }
     ],
     "Clothing": [
-        { icon: "👕", title: "Vintage T-Shirt", price: "£12.00" },
-        { icon: "👟", title: "Running Trainers", price: "£35.00" },
-        { icon: "🧥", title: "Winter Jacket", price: "£48.00" },
-        { icon: "🧢", title: "Cap", price: "£8.00" },
-        { icon: "👖", title: "Denim Jeans", price: "£20.00" }
+        { icon: "ðŸ‘•", title: "Vintage T-Shirt", price: "Â£12.00" },
+        { icon: "ðŸ‘Ÿ", title: "Running Trainers", price: "Â£35.00" },
+        { icon: "ðŸ§¥", title: "Winter Jacket", price: "Â£48.00" },
+        { icon: "ðŸ§¢", title: "Cap", price: "Â£8.00" },
+        { icon: "ðŸ‘–", title: "Denim Jeans", price: "Â£20.00" }
     ],
     "Trading Cards": [
-        { icon: "🃏", title: "Rare Card Bundle", price: "£55.00" },
-        { icon: "📦", title: "Graded Card", price: "£110.00" },
-        { icon: "🎴", title: "Collector Set", price: "£80.00" },
-        { icon: "🪙", title: "Limited Edition Card", price: "£40.00" },
-        { icon: "📇", title: "Starter Deck", price: "£18.00" }
+        { icon: "ðŸƒ", title: "Rare Card Bundle", price: "Â£55.00" },
+        { icon: "ðŸ“¦", title: "Graded Card", price: "Â£110.00" },
+        { icon: "ðŸŽ´", title: "Collector Set", price: "Â£80.00" },
+        { icon: "ðŸª™", title: "Limited Edition Card", price: "Â£40.00" },
+        { icon: "ðŸ“‡", title: "Starter Deck", price: "Â£18.00" }
     ],
     "Gardening": [
-        { icon: "🪴", title: "Plant Pot Set", price: "£14.00" },
-        { icon: "🌱", title: "Seed Pack Bundle", price: "£9.00" },
-        { icon: "🚿", title: "Garden Hose Nozzle", price: "£11.00" },
-        { icon: "✂️", title: "Pruning Shears", price: "£17.00" },
-        { icon: "🧤", title: "Gardening Gloves", price: "£7.00" }
+        { icon: "ðŸª´", title: "Plant Pot Set", price: "Â£14.00" },
+        { icon: "ðŸŒ±", title: "Seed Pack Bundle", price: "Â£9.00" },
+        { icon: "ðŸš¿", title: "Garden Hose Nozzle", price: "Â£11.00" },
+        { icon: "âœ‚ï¸", title: "Pruning Shears", price: "Â£17.00" },
+        { icon: "ðŸ§¤", title: "Gardening Gloves", price: "Â£7.00" }
     ],
     "Home": [
-        { icon: "🛋️", title: "Cushion Set", price: "£16.00" },
-        { icon: "🕯️", title: "Decor Candle Pack", price: "£10.00" },
-        { icon: "🪞", title: "Wall Mirror", price: "£24.00" },
-        { icon: "🍽️", title: "Dining Plate Set", price: "£28.00" },
-        { icon: "🧺", title: "Laundry Basket", price: "£13.00" }
+        { icon: "ðŸ›‹ï¸", title: "Cushion Set", price: "Â£16.00" },
+        { icon: "ðŸ•¯ï¸", title: "Decor Candle Pack", price: "Â£10.00" },
+        { icon: "ðŸªž", title: "Wall Mirror", price: "Â£24.00" },
+        { icon: "ðŸ½ï¸", title: "Dining Plate Set", price: "Â£28.00" },
+        { icon: "ðŸ§º", title: "Laundry Basket", price: "Â£13.00" }
     ],
     "Collectables": [
-        { icon: "🎁", title: "Vintage Figure", price: "£60.00" },
-        { icon: "🪙", title: "Old Coin", price: "£95.00" },
-        { icon: "🎮", title: "Retro Game", price: "£42.00" },
-        { icon: "📼", title: "Classic VHS", price: "£15.00" },
-        { icon: "🧸", title: "Collector Toy", price: "£34.00" }
+        { icon: "ðŸŽ", title: "Vintage Figure", price: "Â£60.00" },
+        { icon: "ðŸª™", title: "Old Coin", price: "Â£95.00" },
+        { icon: "ðŸŽ®", title: "Retro Game", price: "Â£42.00" },
+        { icon: "ðŸ“¼", title: "Classic VHS", price: "Â£15.00" },
+        { icon: "ðŸ§¸", title: "Collector Toy", price: "Â£34.00" }
     ],
     "Sports": [
-        { icon: "⚽", title: "Football", price: "£14.00" },
-        { icon: "🏀", title: "Basketball", price: "£18.00" },
-        { icon: "🎾", title: "Tennis Racket", price: "£29.00" },
-        { icon: "🏋️", title: "Dumbbell Set", price: "£52.00" },
-        { icon: "🚴", title: "Cycling Helmet", price: "£26.00" }
+        { icon: "âš½", title: "Football", price: "Â£14.00" },
+        { icon: "ðŸ€", title: "Basketball", price: "Â£18.00" },
+        { icon: "ðŸŽ¾", title: "Tennis Racket", price: "Â£29.00" },
+        { icon: "ðŸ‹ï¸", title: "Dumbbell Set", price: "Â£52.00" },
+        { icon: "ðŸš´", title: "Cycling Helmet", price: "Â£26.00" }
     ],
     "Books": [
-        { icon: "📘", title: "Programming Book", price: "£12.00" },
-        { icon: "📕", title: "Novel Collection", price: "£15.00" },
-        { icon: "📗", title: "Maths Textbook", price: "£20.00" },
-        { icon: "📙", title: "History Book", price: "£11.00" },
-        { icon: "📚", title: "Book Bundle", price: "£25.00" }
+        { icon: "ðŸ“˜", title: "Programming Book", price: "Â£12.00" },
+        { icon: "ðŸ“•", title: "Novel Collection", price: "Â£15.00" },
+        { icon: "ðŸ“—", title: "Maths Textbook", price: "Â£20.00" },
+        { icon: "ðŸ“™", title: "History Book", price: "Â£11.00" },
+        { icon: "ðŸ“š", title: "Book Bundle", price: "Â£25.00" }
     ]
 };
 
@@ -164,7 +164,7 @@ function updateSellerPreview() {
         categoryInput && categoryInput.value ? categoryInput.value : "Technology";
 
     previewPrice.textContent =
-        "£" + (priceInput && priceInput.value ? Number(priceInput.value).toFixed(2) : "0.00");
+        "Â£" + (priceInput && priceInput.value ? Number(priceInput.value).toFixed(2) : "0.00");
 
     charCount.textContent = `${descriptionInput ? descriptionInput.value.length : 0} / 500`;
 }
@@ -365,8 +365,4 @@ if (toggleBtn2) {
         document.getElementById('email').setAttribute('required','required');
     });
 }
-
-document.querySelector('.auth-form')?.addEventListener('submit', () => {
-    console.log('FORM SUBMITTED');
-});
 

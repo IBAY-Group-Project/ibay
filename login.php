@@ -11,7 +11,6 @@ if (isset($_POST['login'])) {
     $password = $_POST['password'];
 
     $result = mysqli_query($conn, "SELECT * FROM iBayMembers WHERE email='$email' OR username='$email'");
-    
 
     if (mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);
