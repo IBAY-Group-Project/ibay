@@ -5,9 +5,13 @@
     </div>
 
     <nav class="top-nav">
-        <a href="sell.php">Sell</a>
-        <a href="signup.php">Signup</a>
-        <a href="login.php">Login</a>
+        <?php if ($is_logged_in = isset($_SESSION['email'])): ?>
+            <a href="sell.php">Sell</a>
+        <?php else: ?>
+            <a href="sell.php">Sell</a>
+            <a href="signup.php">Signup</a>
+            <a href="login.php">Login</a>
+        <?php endif; ?> 
     </nav>
 
     <div class="header-actions">
