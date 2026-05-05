@@ -4,6 +4,34 @@ include("connection.php");
 
 $userId = $_SESSION['userId'];
 
+// Handle form submission
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = $_POST['title'] ?? '';
+    $category = $_POST['category'] ?? '';
+    $condition = $_POST['condition'] ?? '';
+    $price = $_POST['price'] ?? '0';
+    $postage = $_POST['postage'] ?? '';
+    $description = $_POST['description'] ?? '';
+    
+    if (!empty($title) && !empty($category)) {
+        $sql = "INSERT INTO iBayItems (userId, title, category, `condition`, price, postage, description, sold) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+        
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "ssssdss", $userId, $title, $category, $condition, $price, $postage, $description);
+        
+        if (mysqli_stmt_execute($stmt)) {
+            header("Location: account.php");
+            exit;
+        } else {
+            echo "Error: " . mysqli_error($conn);
+        }
+    }
+}
+
+
+
 // Fetch user details
 $sql = "SELECT * FROM iBayMembers WHERE userId = $userId";
 $result = mysqli_query($conn, $sql);
@@ -13,6 +41,11 @@ $user = mysqli_fetch_assoc($result);
 $listingsSql = "SELECT COUNT(*) as count FROM iBayItems WHERE userId = $userId AND sold = 0";
 $listingsResult = mysqli_query($conn, $listingsSql);
 $listings = mysqli_fetch_assoc($listingsResult)['count'];
+
+$basketSql = "SELECT COUNT(*) as count FROM iBayItems WHERE userId = $userId";
+$basketResult = mysqli_query($conn, $basketSql);
+$basket = mysqli_fetch_assoc($basketResult)['count'];
+
 
 ?>
 
@@ -55,12 +88,12 @@ $listings = mysqli_fetch_assoc($listingsResult)['count'];
                 </div>
             </div>
 
-            <form class="seller-form" action="#" method="post" enctype="multipart/form-data">
+            <form class="seller-form" action="sell.php" method="post" enctype="multipart/form-data">
                 <div class="seller-left">
                     <div class="seller-grid">
                         <div class="form-group seller-wide">
                             <label for="title">Item title</label>
-                            <input type="text" id="title" name="title" placeholder="e.g. Sony WH-1000XM4 Headphones">
+                            <input type="text" id="title" name="title" placeholder="e.g. Sony WH-1000XM4 Headphones" required>
                         </div>
 
                         <div class="form-group">
@@ -89,12 +122,12 @@ $listings = mysqli_fetch_assoc($listingsResult)['count'];
 
                         <div class="form-group">
                             <label for="price">Starting price (£)</label>
-                            <input type="number" id="price" name="price" step="0.01" min="0" placeholder="0.00">
+                            <input type="number" id="price" name="price" step="0.01" min="0" placeholder="0.00" required>
                         </div>
 
                         <div class="form-group">
                             <label for="postage">Postage</label>
-                            <select id="postage" name="postage">
+                            <select id="postage" name="postage" required>
                                 <option>Free postage</option>
                                 <option>£1.99</option>
                                 <option>£2.99</option>
@@ -105,17 +138,17 @@ $listings = mysqli_fetch_assoc($listingsResult)['count'];
 
                         <div class="form-group">
                             <label for="finish">Auction end</label>
-                            <input type="date" id="finish" name="finish">
+                            <input type="date" id="finish" name="finish" required>
                         </div>
 
                         <div class="form-group">
                             <label for="postcode">Postcode area</label>
-                            <input type="text" id="postcode" name="postcode" placeholder="e.g. LE11">
+                            <input type="text" id="postcode" name="postcode" placeholder="e.g. LE11" required>
                         </div>
 
                         <div class="form-group seller-wide">
                             <label for="description">Description</label>
-                            <textarea id="description" name="description" rows="6" placeholder="Describe condition, included accessories, delivery details, and any flaws."></textarea>
+                            <textarea id="description" name="description" rows="6" placeholder="Describe condition, included accessories, delivery details, and any flaws." required></textarea>
                             <div class="description-meta">
                                 <span>Write clearly so buyers trust the listing.</span>
                                 <span id="charCount">0 / 500</span>

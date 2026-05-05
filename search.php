@@ -47,7 +47,10 @@ if ($current_page < 1) $current_page = 1;
 if ($current_page > $total_pages) $current_page = $total_pages;
 $offset = ($current_page - 1) * $items_per_page;
 
-$sql = "SELECT * FROM iBayItems $where LIMIT $items_per_page OFFSET $offset";
+$sql = "SELECT i.*, m.username FROM iBayItems i JOIN iBayMembers m ON i.userId = m.userId $where LIMIT $items_per_page OFFSET $offset";
+
+
+
 
 $result = mysqli_query($conn, $sql);
 ?>
@@ -168,7 +171,7 @@ $result = mysqli_query($conn, $sql);
                         <div class="search-item-content">
                             <h3><?= $item['title'] ?></h3>
 
-                            <p>Seller: <?= $item['userId'] ?></p>
+                            <p>Seller: <?= $item['username'] ?></p>
 
                             <p>Postage: <?= $item['postage'] ?></p>
 

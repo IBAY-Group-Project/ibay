@@ -11,7 +11,11 @@ if ($item_id === 0) {
 }
 
 // Fetch item from database
-$sql = "SELECT * FROM iBayItems WHERE itemId = $item_id AND sold = 0";
+
+$sql = "SELECT i.*, m.username FROM iBayItems i 
+        JOIN iBayMembers m ON i.userId = m.userId 
+        WHERE itemId = $item_id AND sold = 0";
+        
 $result = mysqli_query($conn, $sql);
 
 if (mysqli_num_rows($result) === 0) {
@@ -76,7 +80,7 @@ $item = mysqli_fetch_assoc($result);
                 <div class="item-seller-row">
                     <div>
                         <p class="item-seller-name">
-                            Seller: <span id="sellerUserId"><?= $item['userId'] ?></span>
+                            Seller: <span id="sellerUserId"><?= $item['username'] ?></span>
                         </p>
                         <p class="item-seller-rating">
                             Rating: <span id="sellerRating">98</span>
@@ -129,10 +133,12 @@ $item = mysqli_fetch_assoc($result);
                     </p>
                 </div>
 
-                <div class="item-actions">
-                    <button class="primary-button item-action-button">Add to Basket</button>
-                    <button class="secondary-button item-action-button">Buy Now</button>
-                </div>
+            <form action="modify_basket.php" method="post" class="item-actions">
+                <input type="hidden" name="action" value="add">
+                <input type="hidden" name="itemId" value="<?= $item['itemId'] ?>">
+                <button type="submit" class="primary-button item-action-button">Add to Basket</button>
+                <button type="button" class="secondary-button item-action-button">Buy Now</button>
+            </form>
             </div>
         </section>
     </main>

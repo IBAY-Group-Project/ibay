@@ -57,6 +57,21 @@ quantity button in the checkout needs + - functions
 
 - on search.php make it max 8 per page and fix the logic ////
 
+- sort out the images on the item / sell  / search page still has placeholders
+
+- homepage is stll hardcoded
+
+- thers no validation on auction end date on sell page  (or postcode)
+
+
+
+
+
+
+
+
+
+
 - try to add singing in with google / apple etc
 
 - try to add paying with visa debit / credit  / mastercard etc
@@ -65,4 +80,3 @@ quantity button in the checkout needs + - functions
 
 - auction
 
-ggg
