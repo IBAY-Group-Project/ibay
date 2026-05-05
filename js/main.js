@@ -164,7 +164,7 @@ function updateSellerPreview() {
         categoryInput && categoryInput.value ? categoryInput.value : "Technology";
 
     previewPrice.textContent =
-        "Â£" + (priceInput && priceInput.value ? Number(priceInput.value).toFixed(2) : "0.00");
+        "£" + (priceInput && priceInput.value ? Number(priceInput.value).toFixed(2) : "0.00");
 
     charCount.textContent = `${descriptionInput ? descriptionInput.value.length : 0} / 500`;
 }

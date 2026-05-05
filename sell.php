@@ -1,5 +1,19 @@
 <?php
 include("includes/check.php");
+include("connection.php");
+
+$userId = $_SESSION['userId'];
+
+// Fetch user details
+$sql = "SELECT * FROM iBayMembers WHERE userId = $userId";
+$result = mysqli_query($conn, $sql);
+$user = mysqli_fetch_assoc($result);
+
+// Count active listings
+$listingsSql = "SELECT COUNT(*) as count FROM iBayItems WHERE userId = $userId AND sold = 0";
+$listingsResult = mysqli_query($conn, $listingsSql);
+$listings = mysqli_fetch_assoc($listingsResult)['count'];
+
 ?>
 
 <!DOCTYPE html>
