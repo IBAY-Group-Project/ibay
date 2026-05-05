@@ -107,7 +107,7 @@ $result = mysqli_query($conn, $sql);
                     <span>£<?= number_format($subtotal + $totalPostage, 2) ?></span>
                 </div>
 
-                <button class="primary-button">Proceed to Checkout</button>
+                <a href="checkout.php" class="primary-button">Proceed to Checkout</a>
             </aside>
         </section>
     </main>
