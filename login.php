@@ -1,3 +1,4 @@
+
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -5,33 +6,43 @@ error_reporting(E_ALL);
 session_start();
 include("connection.php");
 
-if (isset($_POST['login'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $loginMode = $_POST['login_mode'] ?? 'email';
+    $login = trim($_POST['email'] ?? $_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
 
-    $email    = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = $_POST['password'];
+    if ($loginMode === 'email') {
+        $sql = "SELECT * FROM iBayMembers WHERE email='$login'";
+    } else {
+        $sql = "SELECT * FROM iBayMembers WHERE username='$login'";
+    }
 
-    $result = mysqli_query($conn, "SELECT * FROM iBayMembers WHERE email='$email' OR username='$email'");
+    $result = mysqli_query($conn, $sql);
 
-    if (mysqli_num_rows($result) == 1) {
+    if (!$result) {
+        die("SQL ERROR: " . mysqli_error($conn));
+    }
+
+    if (mysqli_num_rows($result) === 1) {
         $row = mysqli_fetch_assoc($result);
 
         if (password_verify($password, $row['password'])) {
-            // Store user info in session
-            $_SESSION['userId']   = $row['userId'];
+            $_SESSION['userId'] = $row['userId'];
             $_SESSION['firstname'] = $row['firstname'];
-            $_SESSION['email']     = $row['email'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['is_admin'] = $row['is_admin'];
 
-            // Redirect to homepage
             header("Location: /ibay/index.php");
             exit();
         } else {
-            echo "<script> alert('Incorrect password!'); window.history.back(); </script>";
+            echo "PASSWORD WRONG";
         }
     } else {
-        echo "<script> alert('Email not found!'); window.history.back(); </script>";
+        echo "USER NOT FOUND";
     }
 }
 ?>
+
 
 
 
@@ -55,14 +66,14 @@ if (isset($_POST['login'])) {
             <h1>Login to iBay</h1>
             <p class="auth-subtitle">Access your account to manage listings, saved items, and purchases.</p>
 
+   
             <form class="auth-form" action="login.php" method="post">
-                
                 <div class="form-group">
                     <div class="login-toggle-row">
                         <label for="email">Email</label>
                         <button type="button" id="toggleLoginType" class="toggle-link">Use username instead</button>
                     </div>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    <input type="text" name="email" id="email" required>
                 </div>
 
                 <div class="form-group" id="usernameGroup" style="display: none;">
@@ -70,7 +81,7 @@ if (isset($_POST['login'])) {
                         <label for="username">Username</label>
                         <button type="button" id="toggleLoginType2" class="toggle-link">Use email instead</button>
                     </div>
-                    <input type="text" id="username" name="email" placeholder="Enter your username" required>
+                    <input type="text" name="username" id="username">
                 </div>
 
                 <div class="form-group">
@@ -78,12 +89,13 @@ if (isset($_POST['login'])) {
                     <input type="password" id="password" name="password" placeholder="Enter your password" required>
                 </div>
 
+                <input type="hidden" name="login_mode" id="login_mode" value="email">
+
                 <div class="login-row">
                     <label class="remember-me">
                         <input type="checkbox" name="remember">
                         <span>Remember me</span>
                     </label>
-
                     <a href="#" class="forgot-password">Forgot password?</a>
                 </div>
 
@@ -94,6 +106,7 @@ if (isset($_POST['login'])) {
                     <a href="signup.html">Create an account</a>
                 </p>
             </form>
+
         </section>
     </main>
 
