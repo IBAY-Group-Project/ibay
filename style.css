@@ -1852,6 +1852,59 @@ a {
     color: #1f1f1f;
 }
 
+.order-delivery-info {
+    border-top: 1px solid #e3e3e3;
+    padding-top: 20px;
+    margin-bottom: 24px;
+}
+
+.order-delivery-info h2 {
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+}
+
+.delivery-info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.delivery-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 14px;
+    background: #f7f7f7;
+    border-radius: 8px;
+    gap: 16px;
+}
+
+.delivery-info-label {
+    color: #888;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.delivery-info-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1f1f1f;
+    text-align: right;
+    line-height: 1.4;
+}
+
+.order-card-delivery {
+    color: #2e7d32;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.order-card-address,
+.order-card-phone {
+    color: #666;
+    font-size: 0.82rem;
+}
+
 .success-actions {
     display: flex;
     gap: 12px;

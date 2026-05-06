@@ -6,12 +6,26 @@ $subtotal = 0;
 $totalPostage = 0;
 $paymentMethod = $_POST['paymentMethod'] ?? '';
 
+$phone    = trim($_POST['phone'] ?? '');
+$address  = trim($_POST['address'] ?? '');
+$postcode = trim($_POST['postcode'] ?? '');
+
 if (!empty($_POST['saveDetails'])) {
-    $phone    = mysqli_real_escape_string($conn, trim($_POST['phone'] ?? ''));
-    $address  = mysqli_real_escape_string($conn, trim($_POST['address'] ?? ''));
-    $postcode = mysqli_real_escape_string($conn, trim($_POST['postcode'] ?? ''));
-    mysqli_query($conn, "UPDATE iBayMembers SET phone_number='$phone', address='$address', postcode='$postcode' WHERE userId={$_SESSION['userId']}");
+    $phoneSafe    = mysqli_real_escape_string($conn, $phone);
+    $addressSafe  = mysqli_real_escape_string($conn, $address);
+    $postcodeSafe = mysqli_real_escape_string($conn, $postcode);
+    mysqli_query($conn, "UPDATE iBayMembers SET phone_number='$phoneSafe', address='$addressSafe', postcode='$postcodeSafe' WHERE userId={$_SESSION['userId']}");
 }
+
+$deliveryDate = new DateTime();
+$daysAdded = 0;
+while ($daysAdded < 5) {
+    $deliveryDate->modify('+1 day');
+    if ($deliveryDate->format('N') < 6) {
+        $daysAdded++;
+    }
+}
+$deliveryDateStr = $deliveryDate->format('Y-m-d');
 
 $buyerId = $_SESSION['userId'];
 
@@ -53,16 +67,20 @@ while ($item = $basketResult->fetch_assoc()) {
 }
 
 $orderInsert = "INSERT INTO iBayOrders
-(buyerId, orderTotal, totalPostage, paymentMethod, orderDate)
-VALUES (?, ?, ?, ?, NOW())";
+(buyerId, orderTotal, totalPostage, paymentMethod, orderDate, shippingAddress, postcode, phone, deliveryDate)
+VALUES (?, ?, ?, ?, NOW(), ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($orderInsert);
 $stmt->bind_param(
-    "idds",
+    "iddsssss",
     $buyerId,
     $subtotal,
     $totalPostage,
-    $paymentMethod
+    $paymentMethod,
+    $address,
+    $postcode,
+    $phone,
+    $deliveryDateStr
 );
 $stmt->execute();
 $orderId = $conn->insert_id;

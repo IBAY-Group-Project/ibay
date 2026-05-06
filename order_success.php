@@ -94,6 +94,35 @@ if (!$order) {
             </div>
         </section>
 
+        <?php if (!empty($order['shippingAddress']) || !empty($order['phone']) || !empty($order['deliveryDate'])): ?>
+        <section class="order-delivery-info">
+            <h2>Delivery Information</h2>
+            <div class="delivery-info-grid">
+                <?php if (!empty($order['deliveryDate'])): ?>
+                <div class="delivery-info-item">
+                    <span class="delivery-info-label">Estimated Delivery</span>
+                    <span class="delivery-info-value"><?= date('l, d M Y', strtotime($order['deliveryDate'])) ?></span>
+                </div>
+                <?php endif; ?>
+                <?php if (!empty($order['shippingAddress'])): ?>
+                <div class="delivery-info-item">
+                    <span class="delivery-info-label">Delivering To</span>
+                    <span class="delivery-info-value">
+                        <?= htmlspecialchars($order['shippingAddress']) ?><br>
+                        <?= htmlspecialchars($order['postcode'] ?? '') ?>
+                    </span>
+                </div>
+                <?php endif; ?>
+                <?php if (!empty($order['phone'])): ?>
+                <div class="delivery-info-item">
+                    <span class="delivery-info-label">Contact Number</span>
+                    <span class="delivery-info-value"><?= htmlspecialchars($order['phone']) ?></span>
+                </div>
+                <?php endif; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
         <div class="success-actions">
             <a href="orders.php" class="secondary-button" id="view-orders-btn">View All Orders</a>
             <a href="index.php" class="primary-button" id="continue-shopping-btn">Continue Shopping</a>

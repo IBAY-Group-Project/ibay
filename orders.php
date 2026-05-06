@@ -53,8 +53,16 @@ $result = mysqli_query($conn, $sql);
                     <div class="search-item-image">🧾</div>
                     <div class="search-item-content">
                         <h3>Order #<?= $order['orderId'] ?></h3>
-                        <p><?= date('d M Y', strtotime($order['orderDate'])) ?></p>
-                        <p><?= htmlspecialchars($order['paymentMethod']) ?></p>
+                        <p><?= date('d M Y', strtotime($order['orderDate'])) ?> &middot; <?= htmlspecialchars($order['paymentMethod']) ?></p>
+                        <?php if (!empty($order['deliveryDate'])): ?>
+                            <p class="order-card-delivery">Arriving <?= date('d M Y', strtotime($order['deliveryDate'])) ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($order['shippingAddress'])): ?>
+                            <p class="order-card-address"><?= htmlspecialchars($order['shippingAddress']) ?>, <?= htmlspecialchars($order['postcode'] ?? '') ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($order['phone'])): ?>
+                            <p class="order-card-phone"><?= htmlspecialchars($order['phone']) ?></p>
+                        <?php endif; ?>
                         <strong>£<?= number_format($order['orderTotal'] + $order['totalPostage'], 2) ?></strong>
                     </div>
                 </a>
