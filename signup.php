@@ -127,9 +127,7 @@ if (isset($_POST['signup'])) {
         </section>
     </main>
 
-    <footer class="site-footer">
-        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
-    </footer>
+    <?php include("includes/footer.php"); ?>
 
     <script src="js/signup.js"></script>
 </body>

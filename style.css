@@ -1923,3 +1923,119 @@ a {
     align-items: center;
     justify-content: center;
 }
+
+
+
+/* -- Chatbot -- */
+#chat-bubble {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 58px;
+    height: 58px;
+    background-color: #1f3f8f;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    z-index: 1000;
+    color: white;
+    transition: transform 0.2s ease;
+}
+
+#chat-bubble:hover { transform: scale(1.08); }
+
+#chat-window {
+    position: fixed;
+    bottom: 100px;
+    right: 28px;
+    width: 340px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+#chat-window.open { display: flex; }
+
+#chat-header {
+    background-color: #1f3f8f;
+    color: white;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+#chat-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+#chat-messages {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+.chat-msg {
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    max-width: 90%;
+}
+
+.chat-msg.bot {
+    background-color: #f0f4ff;
+    color: #1f1f1f;
+    align-self: flex-start;
+}
+
+.chat-msg.user {
+    background-color: #1f3f8f;
+    color: white;
+    align-self: flex-end;
+}
+
+#chat-questions {
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid #eee;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.chat-q {
+    background-color: #f5f7ff;
+    border: 1px solid #d0d9f5;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.88rem;
+    text-align: left;
+    cursor: pointer;
+    color: #1f3f8f;
+    font-weight: 500;
+    transition: background-color 0.15s ease;
+}
+
+.chat-q:hover { background-color: #e0e8ff; }
+
+#chat-back { padding: 0 14px 14px; }

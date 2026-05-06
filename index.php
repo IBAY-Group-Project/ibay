@@ -1,5 +1,15 @@
 <?php
 include("includes/check.php");
+include("connection.php");
+
+$sql = "SELECT i.itemId, i.title, i.price, i.category, i.`condition`, img.image
+        FROM iBayItems i
+        LEFT JOIN iBayImages img ON i.itemId = img.itemId
+        WHERE i.sold = 0
+        GROUP BY i.itemId
+        ORDER BY i.start DESC
+        LIMIT 10";
+$result = mysqli_query($conn, $sql);
 ?>
 
 
@@ -97,9 +107,7 @@ include("includes/check.php");
         </section>
     </main>
 
-    <footer class="site-footer">
-        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
-    </footer>
+    <?php include("includes/footer.php"); ?>
 
 </body>
 </html>

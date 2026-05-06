@@ -367,3 +367,39 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// -- Chatbot --
+function toggleChat() {
+    const win = document.getElementById('chat-window');
+    if (win) win.classList.toggle('open');
+}
+
+function askQuestion(btn) {
+    const question  = btn.textContent;
+    const answer    = btn.getAttribute('data-answer');
+    const messages  = document.getElementById('chat-messages');
+    const questions = document.getElementById('chat-questions');
+    const backDiv   = document.getElementById('chat-back');
+
+    const userMsg = document.createElement('div');
+    userMsg.classList.add('chat-msg', 'user');
+    userMsg.textContent = question;
+    messages.appendChild(userMsg);
+
+    const botMsg = document.createElement('div');
+    botMsg.classList.add('chat-msg', 'bot');
+    botMsg.textContent = answer;
+    messages.appendChild(botMsg);
+
+    messages.scrollTop     = messages.scrollHeight;
+    questions.style.display = 'none';
+    backDiv.style.display   = 'block';
+}
+
+function resetChat() {
+    const messages  = document.getElementById('chat-messages');
+    const questions = document.getElementById('chat-questions');
+    const backDiv   = document.getElementById('chat-back');
+    messages.innerHTML      = '<div class="chat-msg bot">Hi! How can I help you today? Choose a question below.</div>';
+    questions.style.display = 'flex';
+    backDiv.style.display   = 'none';
+}
