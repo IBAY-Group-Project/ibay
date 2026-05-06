@@ -42,7 +42,7 @@ if (!$order) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, 1f3f8finitial-scale=1.0">
     <title>Order Confirmed - iBay</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -52,60 +52,58 @@ if (!$order) {
     <?php include("includes/navbar.php"); ?>
 </header>
 
-<main class="checkout-main">
-    <section class="checkout-title">
-        <h1>Order Confirmed</h1>
-    </section>
-
+<main class="order-success-page">
     <div class="order-success">
+
         <div class="success-message">
-            <h2>Thank you for your order!</h2>
-            <p>Order ID: <strong><?php echo $orderId; ?></strong></p>
+            <h1>Order Confirmed</h1>
+            <p>Thank you for your purchase. Your order has been placed successfully.</p>
+            <p class="success-meta">Order <strong>#<?= $orderId ?></strong> &nbsp;·&nbsp; <?= date('d M Y', strtotime($order['orderDate'])) ?> &nbsp;·&nbsp; <?= htmlspecialchars($order['paymentMethod']) ?></p>
         </div>
 
         <section class="order-details">
-            <h3>Order Items</h3>
+            <h2>Items</h2>
             <?php while ($item = $result->fetch_assoc()): ?>
                 <div class="success-item">
-                    <p><strong><?php echo htmlspecialchars($item['username']); ?></strong></p>
-                    <p>Title: <?php echo $item['title']; ?></p>
-                    <p>Qty: <?php echo $item['quantity']; ?></p>
-                    <p>Price: £<?php echo number_format($item['finalPrice'], 2); ?></p>
-                    <p>Postage: £<?php echo number_format($item['itemPostage'], 2); ?></p>
-                    
-
+                    <div class="success-item-image">📦</div>
+                    <div class="success-item-info">
+                        <h3><?= htmlspecialchars($item['title']) ?></h3>
+                        <p>Sold by <strong><?= htmlspecialchars($item['username']) ?></strong></p>
+                        <p>Qty: <?= $item['quantity'] ?></p>
+                    </div>
+                    <div class="success-item-price">
+                        <strong>£<?= number_format($item['finalPrice'], 2) ?></strong>
+                        <span>+ £<?= number_format($item['itemPostage'], 2) ?> postage</span>
+                    </div>
                 </div>
             <?php endwhile; ?>
         </section>
 
         <section class="order-summary">
-            <h3>Summary</h3>
             <div class="summary-row">
-                <span>Subtotal:</span>
+                <span>Subtotal</span>
                 <span>£<?= number_format($order['orderTotal'], 2) ?></span>
             </div>
-
             <div class="summary-row">
-                <span>Postage:</span>
+                <span>Postage</span>
                 <span>£<?= number_format($order['totalPostage'], 2) ?></span>
             </div>
-
-            <div class="summary-row total">
-                <span>Total:</span>
+            <div class="summary-row summary-total">
+                <span>Total</span>
                 <span>£<?= number_format($order['orderTotal'] + $order['totalPostage'], 2) ?></span>
             </div>
         </section>
 
         <div class="success-actions">
-            <a href="index.php" class="button">Continue Shopping</a>
+            <a href="orders.php" class="secondary-button" id="view-orders-btn">View All Orders</a>
+            <a href="index.php" class="primary-button" id="continue-shopping-btn">Continue Shopping</a>
         </div>
+
     </div>
 </main>
 
-<footer>
-    <div class="footer">
-        &copy; 2026 iBay Marketplace. All rights reserved.
-    </div>
+<footer class="site-footer">
+    <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
 </footer>
 
 </body>

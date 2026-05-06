@@ -82,6 +82,13 @@ if (isset($_POST['signup'])) {
             <h1>Create your iBay account</h1>
             <p class="auth-subtitle">Register to buy, sell, and manage listings.</p>
 
+            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=420551119650-1vo8vduihfvnq3jrs0ii3etbl60kamr8.apps.googleusercontent.com&redirect_uri=http://localhost/ibay/google_callback.php&response_type=code&scope=email%20profile" class="google-button">
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="G" width="18" height="18">
+                Sign up with Google
+            </a>
+
+            <div class="auth-divider"><span>or</span></div>
+
             <form class="auth-form" id="signup-form" action="php/signup.php" method="post">
                 <div class="form-row">
                     <div class="form-group">

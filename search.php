@@ -83,7 +83,7 @@ $result = mysqli_query($conn, $sql);
 
             <form action="search.php" method="get" class="search-page-form">
                 <input type="text" name="q" placeholder="Search for items...">
-                <button type="submit" class="primary-button search-page-button">Search</button>
+                <button type="submit" class="primary-button search-page-button" >Search</button>
             </form>
         </section>
 

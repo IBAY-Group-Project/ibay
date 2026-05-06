@@ -67,30 +67,37 @@ $basket= mysqli_fetch_assoc($basketResult)['count'];
                 </div>
             </div>
 
-            <div class="account-actions-panel">
-                <h2>Quick Actions</h2>
+            <div style="display:flex; flex-direction:column; gap:24px; height:100%;">
+                <div class="account-actions-panel" style="flex:1;">
+                    <h2>Quick Actions</h2>
 
-                <div class="account-actions-grid">
-                    <a href="sell.php" class="account-action-card">
-                        <h3>My Listings</h3>
-                        <p>View and manage your current items for sale.</p>
-                    </a>
+                    <div class="account-actions-grid">
+                        <a href="listings.php" class="account-action-card">
+                            <h3>My Listings</h3>
+                            <p>View and manage your current items for sale.</p>
+                        </a>
 
-                    <a href="basket.php" class="account-action-card">
-                        <h3>My Basket</h3>
-                        <p>See saved items and continue to checkout.</p>
-                    </a>
+                        <a href="basket.php" class="account-action-card">
+                            <h3>My Basket</h3>
+                            <p>See saved items and continue to checkout.</p>
+                        </a>
 
-                    <a href="#" class="account-action-card">
-                        <h3>Account Details</h3>
-                        <p>Update profile details, address, and contact info.</p>
-                    </a>
+                        <a href="details.php" class="account-action-card">
+                            <h3>Account Details</h3>
+                            <p>Update profile details, address, and contact info.</p>
+                        </a>
 
-                    <a href="logout.php" class="account-action-card">
-                        <h3>Logout</h3>
-                        <p>Sign out of your iBay account safely.</p>
-                    </a>
+                        <a href="orders.php" class="account-action-card">
+                            <h3>My Orders</h3>
+                            <p>Track current orders and view past purchases.</p>
+                        </a>
+                    </div>
                 </div>
+
+                <a href="logout.php" class="account-action-card" id="logout-card">
+                    <h3>Logout</h3>
+                    <p>Sign out of your iBay account safely.</p>
+                </a>
             </div>
         </section>
     </main>

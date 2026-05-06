@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <header class="site-header">
 
         <?php include("includes/navbar.php"); ?>
+    </header>
 
     <main class="auth-page">
         <section class="auth-card">
@@ -67,6 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="auth-subtitle">Access your account to manage listings, saved items, and purchases.</p>
 
    
+            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=420551119650-1vo8vduihfvnq3jrs0ii3etbl60kamr8.apps.googleusercontent.com&redirect_uri=http://localhost/ibay/google_callback.php&response_type=code&scope=email%20profile" class="google-button">
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="G" width="18" height="18">
+                Sign in with Google
+            </a>
+
+            <div class="auth-divider"><span>or</span></div>
+
             <form class="auth-form" action="login.php" method="post">
                 <div class="form-group">
                     <div class="login-toggle-row">

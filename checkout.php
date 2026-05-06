@@ -4,6 +4,10 @@ include("connection.php");
 
 $buyerId = $_SESSION['userId'];
 
+$userSql = "SELECT firstname, surname, email, phone_number, address, postcode FROM iBayMembers WHERE userId = $buyerId";
+$userResult = mysqli_query($conn, $userSql);
+$userData = mysqli_fetch_assoc($userResult);
+
 $sql = "SELECT b.quantity, i.price, i.postage
         FROM iBayBasket b
         JOIN iBayItems i ON b.itemId = i.itemId
@@ -57,70 +61,57 @@ $total = $subtotal + $totalPostage;
         <div class="checkout-details-card">
             <h1>Checkout</h1>
 
-            <form action="confirmation.html" method="post" class="checkout-form">
+            <form action="payment.php" method="post" class="checkout-form" id="checkout-form">
 
                 <div class="checkout-form-group">
                     <label for="firstName">First Name</label>
-                    <input type="text" id="firstName" name="firstName" required>
+                    <input type="text" id="firstName" name="firstName" value="<?= htmlspecialchars($userData['firstname'] ?? '') ?>" required>
                 </div>
 
                 <div class="checkout-form-group">
                     <label for="lastName">Last Name</label>
-                    <input type="text" id="lastName" name="lastName" required>
+                    <input type="text" id="lastName" name="lastName" value="<?= htmlspecialchars($userData['surname'] ?? '') ?>" required>
                 </div>
 
                 <div class="checkout-form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($userData['email'] ?? '') ?>" required>
                 </div>
 
-                
                 <div class="checkout-form-group">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required>
+                    <input type="tel" id="phone" name="phone" value="<?= htmlspecialchars($userData['phone_number'] ?? '') ?>" required>
                 </div>
 
                 <div class="checkout-form-group">
                     <label for="address">Shipping Address</label>
-                    <input type="text" id="address" name="address" placeholder="Enter the first line of your address" required>
+                    <input type="text" id="address" name="address" value="<?= htmlspecialchars($userData['address'] ?? '') ?>" placeholder="Enter the first line of your address" required>
                 </div>
 
-                
                 <div class="checkout-form-group">
                     <label for="postcode">Postcode</label>
-                    <input type="text" id="postcode" name="postcode" required>
+                    <input type="text" id="postcode" name="postcode" value="<?= htmlspecialchars($userData['postcode'] ?? '') ?>" required>
                 </div>
 
                 <fieldset class="checkout-fieldset">
                     <legend>Payment Method</legend>
-
                     <label>
-                        <input type="radio" name="payment" value="credit-card" required>
+                        <input type="radio" name="paymentMethod" value="Credit Card" required>
                         Credit Card
                     </label>
-
                     <label>
-                        <input type="radio" name="payment" value="paypal">
+                        <input type="radio" name="paymentMethod" value="PayPal">
                         PayPal
                     </label>
                 </fieldset>
 
-                <!--
-                <fieldset class="checkout-fieldset">
-                    <legend>Shipping Method</legend>
+                <label class="checkout-save-label">
+                    <input type="checkbox" name="saveDetails" value="1" checked>
+                    Save these details to my account
+                </label>
 
-                    <label>
-                        <input type="radio" name="shipping" value="standard" required>
-                        Standard Shipping
-                    </label>
-
-                    <label>
-                        <input type="radio" name="shipping" value="express">
-                        Express Shipping
-                    </label>
-                </fieldset>
-
-                -->
+                <input type="hidden" name="subtotal" value="<?= $subtotal ?>">
+                <input type="hidden" name="totalPostage" value="<?= $totalPostage ?>">
 
             </form>
         </div>
@@ -143,16 +134,7 @@ $total = $subtotal + $totalPostage;
                 <span>£<?= number_format((float)$total, 2) ?></span>
             </div>
 
-            <form action="payment.php" method="post">
-                <input type="hidden" name="subtotal" value="<?php echo $subtotal ?? ''; ?>">
-                <input type="hidden" name="totalPostage" value="<?php echo $totalPostage ?? ''; ?>">
-                <input type="hidden" name="total" value="<?php echo $total ?? ''; ?>">
-                <input type="hidden" name="name" value="<?php echo $_POST['name'] ?? ''; ?>">
-                <input type="hidden" name="email" value="<?php echo $_POST['email'] ?? ''; ?>">
-                <input type="hidden" name="address" value="<?php echo $_POST['address'] ?? ''; ?>">
-                <input type="hidden" name="paymentMethod" value="<?php echo $_POST['paymentMethod'] ?? ''; ?>">
-                <button type="submit" class="primary-button checkout-pay-button">Pay Now</button>
-            </form>
+            <button type="submit" form="checkout-form" class="primary-button checkout-pay-button">Pay Now</button>
         </aside>
 
     </section>

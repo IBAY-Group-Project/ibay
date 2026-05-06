@@ -6,6 +6,13 @@ $subtotal = 0;
 $totalPostage = 0;
 $paymentMethod = $_POST['paymentMethod'] ?? '';
 
+if (!empty($_POST['saveDetails'])) {
+    $phone    = mysqli_real_escape_string($conn, trim($_POST['phone'] ?? ''));
+    $address  = mysqli_real_escape_string($conn, trim($_POST['address'] ?? ''));
+    $postcode = mysqli_real_escape_string($conn, trim($_POST['postcode'] ?? ''));
+    mysqli_query($conn, "UPDATE iBayMembers SET phone_number='$phone', address='$address', postcode='$postcode' WHERE userId={$_SESSION['userId']}");
+}
+
 $buyerId = $_SESSION['userId'];
 
 $basketQuery = "SELECT b.itemId, b.quantity, i.userId as sellerId, i.price, i.postage, i.title 
