@@ -2,9 +2,7 @@
 session_start();
 include("connection.php");
 
-define('GOOGLE_CLIENT_ID',     '420551119650-1vo8vduihfvnq3jrs0ii3etbl60kamr8.apps.googleusercontent.com');
-define('GOOGLE_CLIENT_SECRET', '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');
-define('GOOGLE_REDIRECT_URI',  'http://localhost/ibay/google_callback.php');
+include("config.php");
 
 if (!isset($_GET['code'])) {
     header("Location: login.php");
