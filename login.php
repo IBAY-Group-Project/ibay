@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="email">Email</label>
                         <button type="button" id="toggleLoginType" class="toggle-link">Use username instead</button>
                     </div>
-                    <input type="text" name="email" id="email" required>
+                    <input type="text" name="email" id="email" placeholder="Enter your email" required>
                 </div>
 
                 <div class="form-group" id="usernameGroup" style="display: none;">
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="username">Username</label>
                         <button type="button" id="toggleLoginType2" class="toggle-link">Use email instead</button>
                     </div>
-                    <input type="text" name="username" id="username">
+                    <input type="text" name="username" id="username" placeholder="Enter your username">
                 </div>
 
                 <div class="form-group">
