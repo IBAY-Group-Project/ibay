@@ -284,6 +284,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// -- Star rating --
+document.querySelectorAll('.star-rating').forEach(container => {
+    const labels = Array.from(container.querySelectorAll('label'));
+    const inputs = Array.from(container.querySelectorAll('input'));
+    function highlight(upTo) {
+        labels.forEach((l, i) => { l.style.color = i <= upTo ? '#f5a623' : '#ccc'; });
+    }
+    labels.forEach((label, index) => {
+        label.addEventListener('mouseover', () => highlight(index));
+        label.addEventListener('mouseout',  () => highlight(inputs.findIndex(inp => inp.checked)));
+    });
+    inputs.forEach((input, index) => input.addEventListener('change', () => highlight(index)));
+    highlight(inputs.findIndex(inp => inp.checked));
+});
+
 // -- Chatbot --
 function toggleChat() {
     const win = document.getElementById('chat-window');

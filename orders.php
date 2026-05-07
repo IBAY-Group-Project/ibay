@@ -2,7 +2,32 @@
 include("includes/check.php");
 require("includes/db.php");
 
-$userId = $_SESSION['userId'];
+$userId        = $_SESSION['userId'];
+$ratingSuccess = false;
+
+// Add buyer_rating column if it doesn't exist yet
+$colCheck = $conn->query("SHOW COLUMNS FROM iBaySales LIKE 'buyer_rating'");
+if ($colCheck && $colCheck->num_rows === 0) {
+    $conn->query("ALTER TABLE iBaySales ADD COLUMN buyer_rating TINYINT DEFAULT NULL");
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rate_seller'])) {
+    $rateOrderId  = (int)($_POST['orderId']  ?? 0);
+    $rateSellerId = (int)($_POST['sellerId'] ?? 0);
+    $ratingVal    = isset($_POST['rating_' . $rateSellerId]) ? (int)$_POST['rating_' . $rateSellerId] : 0;
+
+    if ($ratingVal >= 1 && $ratingVal <= 5 && $rateOrderId && $rateSellerId) {
+        $upd = $conn->prepare("UPDATE iBaySales SET buyer_rating = ? WHERE orderId = ? AND sellerId = ? AND buyerId = ?");
+        $upd->bind_param("iiii", $ratingVal, $rateOrderId, $rateSellerId, $userId);
+        $upd->execute();
+        if ($upd->affected_rows > 0) {
+            $avgRow = $conn->query("SELECT AVG(buyer_rating) as avg_r FROM iBaySales WHERE sellerId = $rateSellerId AND buyer_rating IS NOT NULL")->fetch_assoc();
+            $newAvg = round($avgRow['avg_r'], 1);
+            $conn->query("UPDATE iBayMembers SET rating = $newAvg WHERE userId = $rateSellerId");
+            $ratingSuccess = true;
+        }
+    }
+}
 
 $count_sql = "SELECT COUNT(*) as total FROM iBayOrders WHERE buyerId = $userId";
 $count_result = mysqli_query($conn, $count_sql);
@@ -47,8 +72,13 @@ $result = mysqli_query($conn, $sql);
             <p class="results-count">Showing <?= mysqli_num_rows($result) ?> of <?= $total_orders ?> orders (Page <?= $current_page ?> of <?= $total_pages ?>)</p>
         </div>
 
+        <?php if ($ratingSuccess): ?>
+            <div class="alert-success" style="margin-bottom:12px;">Rating submitted — thank you!</div>
+        <?php endif; ?>
+
         <div class="search-results-grid">
             <?php while ($order = mysqli_fetch_assoc($result)): ?>
+            <div class="order-card-wrapper">
                 <a href="order_success.php?orderId=<?= $order['orderId'] ?>" class="search-item-card">
                     <div class="search-item-image">🧾</div>
                     <div class="search-item-content">
@@ -60,12 +90,38 @@ $result = mysqli_query($conn, $sql);
                         <?php if (!empty($order['shippingAddress'])): ?>
                             <p class="order-card-address"><?= htmlspecialchars($order['shippingAddress']) ?>, <?= htmlspecialchars($order['postcode'] ?? '') ?></p>
                         <?php endif; ?>
-                        <?php if (!empty($order['phone'])): ?>
-                            <p class="order-card-phone"><?= htmlspecialchars($order['phone']) ?></p>
-                        <?php endif; ?>
                         <strong>£<?= number_format($order['orderTotal'] + $order['totalPostage'], 2) ?></strong>
                     </div>
                 </a>
+                <?php
+                $ss = $conn->prepare("SELECT s.sellerId, m.firstname, m.surname, MAX(s.buyer_rating) as my_rating FROM iBaySales s JOIN iBayMembers m ON s.sellerId = m.userId WHERE s.orderId = ? AND s.buyerId = ? GROUP BY s.sellerId, m.firstname, m.surname");
+                $ss->bind_param("ii", $order['orderId'], $userId);
+                $ss->execute();
+                $orderSellers = $ss->get_result();
+                if ($orderSellers->num_rows > 0):
+                ?>
+                <details class="order-rating-toggle">
+                    <summary>Rate Sellers</summary>
+                    <?php while ($seller = $orderSellers->fetch_assoc()): ?>
+                    <form method="POST">
+                        <input type="hidden" name="rate_seller" value="1">
+                        <input type="hidden" name="orderId"    value="<?= $order['orderId'] ?>">
+                        <input type="hidden" name="sellerId"   value="<?= $seller['sellerId'] ?>">
+                        <div class="rating-block" style="margin-top:8px;">
+                            <h3>Rate <?= htmlspecialchars($seller['firstname'] . ' ' . $seller['surname']) ?></h3>
+                            <div class="star-rating" id="stars-<?= $order['orderId'] ?>_<?= $seller['sellerId'] ?>">
+                                <?php for ($i = 1; $i <= 5; $i++): ?>
+                                    <input type="radio" name="rating_<?= $seller['sellerId'] ?>" id="star_<?= $order['orderId'] ?>_<?= $seller['sellerId'] ?>_<?= $i ?>" value="<?= $i ?>" <?= ($seller['my_rating'] == $i) ? 'checked' : '' ?>>
+                                    <label for="star_<?= $order['orderId'] ?>_<?= $seller['sellerId'] ?>_<?= $i ?>">&#9733;</label>
+                                <?php endfor; ?>
+                            </div>
+                            <button type="submit" class="primary-button" style="margin-top:8px; width:auto; padding:6px 16px; font-size:0.85rem;">Submit</button>
+                        </div>
+                    </form>
+                    <?php endwhile; ?>
+                </details>
+                <?php endif; ?>
+            </div>
             <?php endwhile; ?>
         </div>
 
