@@ -80,6 +80,7 @@ $basket = mysqli_fetch_assoc($basketResult)['count'];
                     <h1>Create or Edit a Listing</h1>
                     <p class="seller-subtitle">
                         Complete the listing details below. Keep it clear, compact, and easy to review.
+                        <button class="secondary-button" onclick="document.getElementById('how-to-sell-modal').style.display='flex'" style="margin-left:12px;padding:6px 14px;font-size:0.85rem;">? How to sell</button>
                     </p>
                 </div>
 
@@ -208,6 +209,16 @@ $basket = mysqli_fetch_assoc($basketResult)['count'];
             </form>
         </section>
     </main>
+
+    <div id="how-to-sell-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;align-items:center;justify-content:center;">
+        <div style="background:#fff;border-radius:14px;width:90%;max-width:860px;height:80vh;display:flex;flex-direction:column;overflow:hidden;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #eee;">
+                <h2 style="margin:0;font-size:1.1rem;">How to Create a Listing</h2>
+                <button onclick="document.getElementById('how-to-sell-modal').style.display='none'" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:#666;">&times;</button>
+            </div>
+            <iframe src="https://scribehow.com/embed/How_To_Create_A_New_Auction_Listing_On_Ibay__dp9HemTqTxq0HDEbH8zIdA" style="flex:1;border:none;" allowfullscreen></iframe>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
