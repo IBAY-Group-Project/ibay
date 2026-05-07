@@ -370,36 +370,42 @@ document.addEventListener("DOMContentLoaded", () => {
 // -- Chatbot --
 function toggleChat() {
     const win = document.getElementById('chat-window');
-    if (win) win.classList.toggle('open');
+    if (win) {
+        win.classList.toggle('open');
+        if (win.classList.contains('open')) document.getElementById('chat-input').focus();
+    }
 }
 
-function askQuestion(btn) {
-    const question  = btn.textContent;
-    const answer    = btn.getAttribute('data-answer');
-    const messages  = document.getElementById('chat-messages');
-    const questions = document.getElementById('chat-questions');
-    const backDiv   = document.getElementById('chat-back');
+async function sendChat() {
+    const input    = document.getElementById('chat-input');
+    const messages = document.getElementById('chat-messages');
+    const text     = input.value.trim();
+    if (!text) return;
 
     const userMsg = document.createElement('div');
     userMsg.classList.add('chat-msg', 'user');
-    userMsg.textContent = question;
+    userMsg.textContent = text;
     messages.appendChild(userMsg);
+    input.value = '';
+    messages.scrollTop = messages.scrollHeight;
 
-    const botMsg = document.createElement('div');
-    botMsg.classList.add('chat-msg', 'bot');
-    botMsg.textContent = answer;
-    messages.appendChild(botMsg);
+    const typing = document.createElement('div');
+    typing.classList.add('chat-msg', 'bot');
+    typing.textContent = '...';
+    messages.appendChild(typing);
+    messages.scrollTop = messages.scrollHeight;
 
-    messages.scrollTop     = messages.scrollHeight;
-    questions.style.display = 'none';
-    backDiv.style.display   = 'block';
-}
+    try {
+        const res  = await fetch('php/chat.php', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ message: text })
+        });
+        const data = await res.json();
+        typing.textContent = data.reply;
+    } catch {
+        typing.textContent = 'Sorry, something went wrong. Please try again.';
+    }
 
-function resetChat() {
-    const messages  = document.getElementById('chat-messages');
-    const questions = document.getElementById('chat-questions');
-    const backDiv   = document.getElementById('chat-back');
-    messages.innerHTML      = '<div class="chat-msg bot">Hi! How can I help you today? Choose a question below.</div>';
-    questions.style.display = 'flex';
-    backDiv.style.display   = 'none';
+    messages.scrollTop = messages.scrollHeight;
 }

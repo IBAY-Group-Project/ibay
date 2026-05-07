@@ -2038,4 +2038,33 @@ a {
 
 .chat-q:hover { background-color: #e0e8ff; }
 
-#chat-back { padding: 0 14px 14px; }
+#chat-input-row {
+    display: flex;
+    gap: 8px;
+    padding: 10px 14px;
+    border-top: 1px solid #eee;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #d0d9f5;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    outline: none;
+}
+
+#chat-input:focus { border-color: #1f3f8f; }
+
+#chat-send {
+    background-color: #1f3f8f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.15s ease;
+}
+
+#chat-send:hover { background-color: #163070; }
