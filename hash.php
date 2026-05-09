@@ -1,5 +1,5 @@
 <?php
-$password = "1";
+$password = "test";
 $hashed = password_hash($password, PASSWORD_DEFAULT);
-echo "INSERT INTO iBayMembers (email, password, username) VALUES ('admin@ibay.com', '$hashed', 'admin');";
+echo "UPDATE iBayMembers SET password='$hashed' WHERE email='test@ibay.com';";
 ?>
