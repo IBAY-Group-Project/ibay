@@ -24,6 +24,17 @@ if (mysqli_num_rows($result) === 0) {
 }
 
 $item = mysqli_fetch_assoc($result);
+
+$imgSql = "SELECT image FROM iBayImages WHERE itemId = $item_id LIMIT 2";
+$imgResult = mysqli_query($conn, $imgSql);
+$itemImages = [];
+while ($imgRow = mysqli_fetch_assoc($imgResult)) {
+    $url = $imgRow['image'];
+    $itemImages[] = str_starts_with($url, 'http') ? $url : 'images/products/' . htmlspecialchars($url);
+}
+if (empty($itemImages)) {
+    $itemImages = ['images/placeholder-product.jpg', 'images/placeholder-product-2.jpg'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +64,7 @@ $item = mysqli_fetch_assoc($result);
                     <img
                         id="mainProductImage"
                         class="main-product-image"
-                        src="images/placeholder-product.jpg"
+                        src="<?= $itemImages[0] ?>"
                         alt="Product image">
 
                     <button class="gallery-arrow right" id="nextImage">&#10095;</button>
@@ -62,13 +73,13 @@ $item = mysqli_fetch_assoc($result);
                 <div class="item-thumbnails">
                     <img
                         class="item-thumb active-thumb"
-                        src="images/placeholder-product.jpg"
+                        src="<?= $itemImages[0] ?>"
                         alt="Thumbnail 1"
                         data-index="0">
 
                     <img
                         class="item-thumb"
-                        src="images/placeholder-product-2.jpg"
+                        src="<?= $itemImages[1] ?? $itemImages[0] ?>"
                         alt="Thumbnail 2"
                         data-index="1">
                 </div>

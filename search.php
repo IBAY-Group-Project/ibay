@@ -47,7 +47,7 @@ if ($current_page < 1) $current_page = 1;
 if ($current_page > $total_pages) $current_page = $total_pages;
 $offset = ($current_page - 1) * $items_per_page;
 
-$sql = "SELECT i.*, m.username FROM iBayItems i JOIN iBayMembers m ON i.userId = m.userId $where LIMIT $items_per_page OFFSET $offset";
+$sql = "SELECT i.*, m.username, img.image FROM iBayItems i JOIN iBayMembers m ON i.userId = m.userId LEFT JOIN iBayImages img ON i.itemId = img.itemId $where GROUP BY i.itemId LIMIT $items_per_page OFFSET $offset";
 
 
 
@@ -166,7 +166,21 @@ $result = mysqli_query($conn, $sql);
 
                     <a href="item.php?id=<?= $item['itemId'] ?>" class="search-item-card">
 
-                        <div class="search-item-image">📦</div>
+                        <?php
+                            $img = $item['image'] ?? '';
+                            if ($img && str_starts_with($img, 'http')) {
+                                $src = preg_replace('/s-l\d+/', 's-l400', $img);
+                            } else {
+                                $src = $img ? 'images/products/' . htmlspecialchars($img) : '';
+                            }
+                        ?>
+                        <div class="search-item-image">
+                            <?php if ($src): ?>
+                                <img src="<?= $src ?>" alt="<?= htmlspecialchars($item['title']) ?>">
+                            <?php else: ?>
+                                📦
+                            <?php endif; ?>
+                        </div>
 
                         <div class="search-item-content">
                             <h3><?= $item['title'] ?></h3>

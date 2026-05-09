@@ -22,6 +22,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_bind_param($stmt, "ssssdss", $userId, $title, $category, $condition, $price, $postage, $description);
         
         if (mysqli_stmt_execute($stmt)) {
+            $itemId = mysqli_insert_id($conn);
+
+            foreach (['image1', 'image2'] as $field) {
+                if (!isset($_FILES[$field]) || $_FILES[$field]['error'] !== UPLOAD_ERR_OK) continue;
+
+                $file     = $_FILES[$field];
+                $filename = uniqid() . '_' . basename($file['name']);
+                $dest     = __DIR__ . '/images/products/' . $filename;
+
+                if (move_uploaded_file($file['tmp_name'], $dest)) {
+                    $mime = $file['type'];
+                    $size = $file['size'];
+                    $imgStmt = mysqli_prepare($conn, "INSERT INTO iBayImages (image, mimeType, imageSize, itemId) VALUES (?, ?, ?, ?)");
+                    mysqli_stmt_bind_param($imgStmt, "ssii", $filename, $mime, $size, $itemId);
+                    mysqli_stmt_execute($imgStmt);
+                }
+            }
+
             header("Location: account.php");
             exit;
         } else {
@@ -164,16 +182,18 @@ $basket = mysqli_fetch_assoc($basketResult)['count'];
                         <p>Upload two clear images of the item as required by the brief.</p>
 
                         <div class="upload-grid">
-                            <label class="upload-slot" for="image1">
+                            <label class="upload-slot" for="image1" id="slot1">
                                 <input type="file" id="image1" name="image1" accept="image/*" hidden>
-                                <span class="upload-plus">+</span>
-                                <span>Main image</span>
+                                <img id="preview1" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:8px;">
+                                <span class="upload-plus" id="plus1">+</span>
+                                <span id="label1">Main image</span>
                             </label>
 
-                            <label class="upload-slot" for="image2">
+                            <label class="upload-slot" for="image2" id="slot2">
                                 <input type="file" id="image2" name="image2" accept="image/*" hidden>
-                                <span class="upload-plus">+</span>
-                                <span>Second image</span>
+                                <img id="preview2" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:8px;">
+                                <span class="upload-plus" id="plus2">+</span>
+                                <span id="label2">Second image</span>
                             </label>
                         </div>
                     </div>
@@ -181,7 +201,10 @@ $basket = mysqli_fetch_assoc($basketResult)['count'];
                     <div class="seller-panel">
                         <h2>Live listing preview</h2>
                         <div class="listing-preview-card">
-                            <div class="listing-preview-image">Preview</div>
+                            <div class="listing-preview-image" id="previewImageBox" style="overflow:hidden;display:flex;align-items:center;justify-content:center;">
+                                <img id="previewMainImage" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;">
+                                <span id="previewPlaceholder">Preview</span>
+                            </div>
                             <div class="listing-preview-content">
                                 <h3 id="previewTitle">Your item title</h3>
                                 <p id="previewCategory">Technology</p>
@@ -223,6 +246,40 @@ $basket = mysqli_fetch_assoc($basketResult)['count'];
     <footer class="site-footer">
         <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
     </footer>
+
+    <script>
+        function previewUpload(inputId, previewId, plusId, labelId, isMain) {
+            const input   = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            const plus    = document.getElementById(plusId);
+            const label   = document.getElementById(labelId);
+
+            input.addEventListener('change', function () {
+                const file = this.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    plus.style.display    = 'none';
+                    label.style.display   = 'none';
+
+                    if (isMain) {
+                        const mainPreview  = document.getElementById('previewMainImage');
+                        const placeholder  = document.getElementById('previewPlaceholder');
+                        mainPreview.src    = e.target.result;
+                        mainPreview.style.display  = 'block';
+                        placeholder.style.display  = 'none';
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        previewUpload('image1', 'preview1', 'plus1', 'label1', true);
+        previewUpload('image2', 'preview2', 'plus2', 'label2', false);
+    </script>
 
 </body>
 </html>

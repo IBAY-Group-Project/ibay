@@ -98,15 +98,13 @@ if (titleInput || categoryInput || priceInput || descriptionInput) {
 
 /* ITEM PAGE GALLERY */
 
-const productImages = [
-    "images/placeholder-product.jpg",
-    "images/placeholder-product-2.jpg"
-];
-
 const mainProductImage = document.getElementById("mainProductImage");
 const prevImageBtn = document.getElementById("prevImage");
 const nextImageBtn = document.getElementById("nextImage");
 const thumbnails = document.querySelectorAll(".item-thumb");
+
+// Read images from the src attributes PHP has already set
+const productImages = Array.from(thumbnails).map(t => t.getAttribute("src"));
 
 let currentImageIndex = 0;
 

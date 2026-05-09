@@ -4,11 +4,13 @@ include("connection.php");
 
 $userId = $_SESSION['userId'];
 
-$sql = "SELECT b.basketId, b.quantity, i.itemId, i.title, i.price,i.postage, m.username 
-        FROM iBayBasket b 
-        JOIN iBayItems i ON b.itemId = i.itemId 
-        JOIN iBayMembers m ON i.userId = m.userId 
-        WHERE b.userId = $userId";
+$sql = "SELECT b.basketId, b.quantity, i.itemId, i.title, i.price, i.postage, m.username, img.image
+        FROM iBayBasket b
+        JOIN iBayItems i ON b.itemId = i.itemId
+        JOIN iBayMembers m ON i.userId = m.userId
+        LEFT JOIN iBayImages img ON i.itemId = img.itemId
+        WHERE b.userId = $userId
+        GROUP BY b.basketId";
 
 $result = mysqli_query($conn, $sql);
 ?>
@@ -51,7 +53,11 @@ $result = mysqli_query($conn, $sql);
                     }
                 ?>
                     <div class="basket-item">
-                        <img src="images/placeholder-product.jpg" alt="Basket item image" class="basket-item-image">
+                        <?php
+                            $bImg = $item['image'] ?? '';
+                            $bSrc = $bImg ? (str_starts_with($bImg, 'http') ? $bImg : 'images/products/' . htmlspecialchars($bImg)) : 'images/placeholder-product.jpg';
+                        ?>
+                        <img src="<?= $bSrc ?>" alt="Basket item image" class="basket-item-image">
 
                         <div class="basket-item-info">
                             <h2><?= $item['title'] ?></h2>

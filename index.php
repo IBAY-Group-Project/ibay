@@ -56,7 +56,12 @@ $result = mysqli_query($conn, $sql);
                     <?php
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) {
-                            $imageSrc  = $row['image'] ? 'images/products/' . htmlspecialchars($row['image']) : 'images/placeholder.jpg';
+                            $img = $row['image'] ?? '';
+                            if ($img && str_starts_with($img, 'http')) {
+                                $imageSrc = preg_replace('/s-l\d+/', 's-l400', $img);
+                            } else {
+                                $imageSrc = $img ? 'images/products/' . htmlspecialchars($img) : 'images/placeholder.jpg';
+                            }
                             $title     = htmlspecialchars($row['title']);
                             $category  = htmlspecialchars($row['category']);
                             $condition = htmlspecialchars($row['condition']);

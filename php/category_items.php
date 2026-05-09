@@ -32,7 +32,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         'price'     => number_format($row['price'], 2),
         'category'  => $row['category'],
         'condition' => $row['condition'],
-        'image'     => $row['image'] ? 'images/products/' . $row['image'] : 'images/placeholder.jpg',
+        'image'     => $row['image'] ? (str_starts_with($row['image'], 'http') ? $row['image'] : 'images/products/' . $row['image']) : 'images/placeholder.jpg',
     ];
 }
 
