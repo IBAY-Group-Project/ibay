@@ -1,139 +1,264 @@
-// -- Tab switcher (item page) --
-const tabButtons = document.querySelectorAll('.tab-button');
-const tabPanels  = document.querySelectorAll('.tab-panel');
+/* HOMEPAGE CAROUSEL SCROLL */
+const carouselTrack = document.getElementById("featuredProducts");
+const prevCategoryBtn = document.getElementById("prevCategory");
+const nextCategoryBtn = document.getElementById("nextCategory");
 
-if (tabButtons.length && tabPanels.length) {
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            tabButtons.forEach(btn   => btn.classList.remove('active'));
-            tabPanels.forEach(panel  => panel.classList.remove('active'));
-            button.classList.add('active');
-            const matchingPanel = document.getElementById(button.getAttribute('data-tab'));
-            if (matchingPanel) matchingPanel.classList.add('active');
-        });
+if (carouselTrack && prevCategoryBtn && nextCategoryBtn) {
+    prevCategoryBtn.addEventListener("click", () => carouselTrack.scrollBy({ left: -carouselTrack.clientWidth, behavior: "smooth" }));
+    nextCategoryBtn.addEventListener("click", () => carouselTrack.scrollBy({ left:  carouselTrack.clientWidth, behavior: "smooth" }));
+}
+
+/* HOMEPAGE CATEGORY FILTER */
+const featuredTitle  = document.getElementById("featuredTitle");
+const carouselFooter = document.getElementById("carouselFooter");
+const viewMoreBtn    = document.getElementById("viewMoreBtn");
+const categoryNavLinks = document.querySelectorAll(".category-nav a[data-category]");
+
+categoryNavLinks.forEach(link => {
+    link.addEventListener("click", e => {
+        e.preventDefault();
+        const category = link.dataset.category;
+
+        categoryNavLinks.forEach(l => l.classList.remove("active"));
+        link.classList.add("active");
+
+        if (featuredTitle) featuredTitle.textContent = category;
+        if (viewMoreBtn)    viewMoreBtn.href = "search.php?category=" + encodeURIComponent(category);
+        if (carouselFooter) carouselFooter.style.display = "";
+
+        if (!carouselTrack) return;
+        carouselTrack.style.opacity = "0.4";
+
+        fetch("php/category_items.php?category=" + encodeURIComponent(category))
+            .then(r => r.json())
+            .then(items => {
+                carouselTrack.innerHTML = "";
+                carouselTrack.style.opacity = "1";
+                if (!items.length) {
+                    carouselTrack.innerHTML = '<p>No listings in this category yet. <a href="sell.php">Be the first to sell!</a></p>';
+                    return;
+                }
+                items.forEach(item => {
+                    const card = document.createElement("div");
+                    card.className = "product-card";
+                    card.innerHTML = `
+                        <img src="${item.image}" alt="${item.title}">
+                        <div class="product-card-details">
+                            <h3>${item.title}</h3>
+                            <p class="category">${item.category}</p>
+                            <p class="condition">${item.condition}</p>
+                            <p class="price">&pound;${item.price}</p>
+                            <a href="item.php?id=${item.itemId}" class="primary-button">View</a>
+                        </div>
+                    `;
+                    carouselTrack.appendChild(card);
+                });
+            })
+            .catch(() => {
+                carouselTrack.style.opacity = "1";
+                carouselTrack.innerHTML = "<p>Could not load listings.</p>";
+            });
+    });
+});
+
+/* SELL PAGE PREVIEW */
+const titleInput       = document.getElementById("title");
+const categoryInput    = document.getElementById("category");
+const priceInput       = document.getElementById("price");
+const descriptionInput = document.getElementById("description");
+const previewTitle     = document.getElementById("previewTitle");
+const previewCategory  = document.getElementById("previewCategory");
+const previewPrice     = document.getElementById("previewPrice");
+const charCount        = document.getElementById("charCount");
+
+function updateSellerPreview() {
+    if (!previewTitle || !previewCategory || !previewPrice || !charCount) return;
+
+    previewTitle.textContent =
+        titleInput && titleInput.value.trim() ? titleInput.value.trim() : "Your item title";
+
+    previewCategory.textContent =
+        categoryInput && categoryInput.value ? categoryInput.value : "Technology";
+
+    previewPrice.textContent =
+        "\u00a3" + (priceInput && priceInput.value ? Number(priceInput.value).toFixed(2) : "0.00");
+
+    charCount.textContent = `${descriptionInput ? descriptionInput.value.length : 0} / 500`;
+}
+
+if (titleInput || categoryInput || priceInput || descriptionInput) {
+    [titleInput, categoryInput, priceInput, descriptionInput].forEach(input => {
+        if (input) input.addEventListener("input", updateSellerPreview);
+    });
+    updateSellerPreview();
+}
+
+/* ITEM PAGE GALLERY */
+const galleryImages    = window.galleryImages || [];
+const mainProductImage = document.getElementById("mainProductImage");
+const prevImageBtn     = document.getElementById("prevImage");
+const nextImageBtn     = document.getElementById("nextImage");
+const thumbnails       = document.querySelectorAll(".item-thumb");
+let currentImageIndex  = 0;
+
+function renderItemGallery() {
+    if (!mainProductImage || !galleryImages.length) return;
+    mainProductImage.src = galleryImages[currentImageIndex];
+    thumbnails.forEach((thumb, index) => {
+        thumb.classList.toggle("active-thumb", index === currentImageIndex);
     });
 }
 
-// -- Carousel (homepage) --
-const track   = document.getElementById('featuredProducts');
-const prevBtn = document.getElementById('prevCategory');
-const nextBtn = document.getElementById('nextCategory');
-
-if (track && prevBtn && nextBtn) {
-    nextBtn.addEventListener('click', () => track.scrollBy({ left: 220, behavior: 'smooth' }));
-    prevBtn.addEventListener('click', () => track.scrollBy({ left: -220, behavior: 'smooth' }));
+if (mainProductImage && prevImageBtn && nextImageBtn) {
+    prevImageBtn.addEventListener("click", () => {
+        currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+        renderItemGallery();
+    });
+    nextImageBtn.addEventListener("click", () => {
+        currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+        renderItemGallery();
+    });
+    thumbnails.forEach((thumb, index) => {
+        thumb.addEventListener("click", () => {
+            currentImageIndex = index;
+            renderItemGallery();
+        });
+    });
+    renderItemGallery();
 }
 
-// -- Chatbot --
+/* SEARCH PAGE */
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+
+    const query    = (params.get("q") || "").trim().toLowerCase();
+    const category = params.get("category") || "";
+    const minPrice = params.get("minPrice") || "";
+    const maxPrice = params.get("maxPrice") || "";
+    const postage  = params.get("postage") || "";
+    const postcode = (params.get("postcode") || "").trim().toLowerCase();
+
+    const headerSearchInputs  = document.querySelectorAll('.search-form input[name="q"]');
+    const pageSearchInput     = document.querySelector('.search-page-form input[name="q"]');
+    const keywordInput        = document.getElementById("searchKeyword");
+    const categorySearchInput = document.getElementById("searchCategory");
+    const minPriceInput       = document.getElementById("minPrice");
+    const maxPriceInput       = document.getElementById("maxPrice");
+    const postageInput        = document.getElementById("postage");
+    const postcodeInput       = document.getElementById("postcodeArea");
+    const sortSelect          = document.getElementById("sortBy");
+    const clearFiltersButton  = document.getElementById("clearFiltersButton");
+
+    headerSearchInputs.forEach(input => { input.value = params.get("q") || ""; });
+    if (pageSearchInput)     pageSearchInput.value     = params.get("q") || "";
+    if (keywordInput)        keywordInput.value        = params.get("q") || "";
+    if (categorySearchInput) categorySearchInput.value = category;
+    if (minPriceInput)       minPriceInput.value       = minPrice;
+    if (maxPriceInput)       maxPriceInput.value       = maxPrice;
+    if (postageInput)        postageInput.value        = postage;
+    if (postcodeInput)       postcodeInput.value       = params.get("postcode") || "";
+
+    if (sortSelect) {
+        sortSelect.addEventListener("change", () => sortSelect.form && sortSelect.form.submit());
+    }
+
+    if (clearFiltersButton) {
+        clearFiltersButton.addEventListener("click", e => {
+            e.preventDefault();
+            window.location.href = "search.php";
+        });
+    }
+});
+
+/* LOGIN TOGGLE */
+document.addEventListener("DOMContentLoaded", () => {
+    const toggleEmail    = document.getElementById("toggleLoginType");
+    const toggleUsername = document.getElementById("toggleLoginType2");
+    const emailInput     = document.getElementById("email");
+    const usernameInput  = document.getElementById("username");
+    const loginModeField = document.getElementById("login_mode");
+
+    if (!toggleEmail || !toggleUsername || !emailInput || !usernameInput) return;
+
+    usernameInput.disabled = true;
+
+    toggleEmail.addEventListener("click", () => {
+        emailInput.parentElement.style.display    = "none";
+        usernameInput.parentElement.style.display = "block";
+        emailInput.disabled    = true;
+        usernameInput.disabled = false;
+        loginModeField.value   = "username";
+        usernameInput.focus();
+    });
+
+    toggleUsername.addEventListener("click", () => {
+        usernameInput.parentElement.style.display = "none";
+        emailInput.parentElement.style.display    = "block";
+        usernameInput.disabled = true;
+        emailInput.disabled    = false;
+        loginModeField.value   = "email";
+        emailInput.focus();
+    });
+});
+
+/* STAR RATING */
+document.querySelectorAll('.star-rating').forEach(container => {
+    const labels = Array.from(container.querySelectorAll('label'));
+    const inputs = Array.from(container.querySelectorAll('input'));
+    function highlight(upTo) {
+        labels.forEach((l, i) => { l.style.color = i <= upTo ? '#f5a623' : '#ccc'; });
+    }
+    labels.forEach((label, index) => {
+        label.addEventListener('mouseover', () => highlight(index));
+        label.addEventListener('mouseout',  () => highlight(inputs.findIndex(inp => inp.checked)));
+    });
+    inputs.forEach((input, index) => input.addEventListener('change', () => highlight(index)));
+    highlight(inputs.findIndex(inp => inp.checked));
+});
+
+/* CHATBOT */
 function toggleChat() {
     const win = document.getElementById('chat-window');
-    if (win) win.classList.toggle('open');
+    if (win) {
+        win.classList.toggle('open');
+        if (win.classList.contains('open')) {
+            const input = document.getElementById('chat-input');
+            if (input) input.focus();
+        }
+    }
 }
 
-function askQuestion(btn) {
-    const question  = btn.textContent;
-    const answer    = btn.getAttribute('data-answer');
-    const messages  = document.getElementById('chat-messages');
-    const questions = document.getElementById('chat-questions');
-    const backDiv   = document.getElementById('chat-back');
+async function sendChat() {
+    const input    = document.getElementById('chat-input');
+    const messages = document.getElementById('chat-messages');
+    if (!input || !messages) return;
+    const text = input.value.trim();
+    if (!text) return;
 
     const userMsg = document.createElement('div');
     userMsg.classList.add('chat-msg', 'user');
-    userMsg.textContent = question;
+    userMsg.textContent = text;
     messages.appendChild(userMsg);
+    input.value = '';
+    messages.scrollTop = messages.scrollHeight;
 
-    const botMsg = document.createElement('div');
-    botMsg.classList.add('chat-msg', 'bot');
-    botMsg.textContent = answer;
-    messages.appendChild(botMsg);
+    const typing = document.createElement('div');
+    typing.classList.add('chat-msg', 'bot');
+    typing.textContent = '...';
+    messages.appendChild(typing);
+    messages.scrollTop = messages.scrollHeight;
 
-    messages.scrollTop     = messages.scrollHeight;
-    questions.style.display = 'none';
-    backDiv.style.display   = 'block';
-}
-
-function resetChat() {
-    const messages  = document.getElementById('chat-messages');
-    const questions = document.getElementById('chat-questions');
-    const backDiv   = document.getElementById('chat-back');
-    messages.innerHTML      = '<div class="chat-msg bot">Hi! How can I help you today? Choose a question below.</div>';
-    questions.style.display = 'flex';
-    backDiv.style.display   = 'none';
-}
-
-// -- Item page image gallery --
-const galleryImages  = window.galleryImages || [];
-let currentIndex     = 0;
-const mainImage      = document.getElementById('mainProductImage');
-const thumbs         = document.querySelectorAll('.item-thumb');
-
-function showImage(index) {
-    if (!mainImage || galleryImages.length === 0) return;
-    currentIndex  = index;
-    mainImage.src = galleryImages[index];
-    thumbs.forEach((t, i) => t.classList.toggle('active-thumb', i === index));
-}
-
-const prevImageBtn = document.getElementById('prevImage');
-const nextImageBtn = document.getElementById('nextImage');
-
-if (prevImageBtn) prevImageBtn.addEventListener('click', () => showImage((currentIndex - 1 + galleryImages.length) % galleryImages.length));
-if (nextImageBtn) nextImageBtn.addEventListener('click', () => showImage((currentIndex + 1) % galleryImages.length));
-
-thumbs.forEach(thumb => {
-    thumb.addEventListener('click', () => showImage(parseInt(thumb.getAttribute('data-index'))));
-});
-
-// -- Account details inline edit --
-function startEdit(field) {
-    document.getElementById('val-'    + field).style.display = 'none';
-    document.getElementById('inp-'    + field).style.display = 'block';
-    document.getElementById('save-'   + field).style.display = 'inline-block';
-    document.getElementById('cancel-' + field).style.display = 'inline-block';
-    document.getElementById('row-'    + field).querySelector('.edit-btn').style.display = 'none';
-
-    const input  = document.getElementById('inp-'    + field);
-    const hidden = document.getElementById('hidden-' + field);
-    input.addEventListener('input', () => { hidden.value = input.value; });
-    input.focus();
-}
-
-function cancelEdit(field) {
-    const original = document.getElementById('hidden-' + field).value;
-    document.getElementById('inp-'    + field).value            = original;
-    document.getElementById('val-'    + field).style.display    = 'block';
-    document.getElementById('inp-'    + field).style.display    = 'none';
-    document.getElementById('save-'   + field).style.display    = 'none';
-    document.getElementById('cancel-' + field).style.display    = 'none';
-    document.getElementById('row-'    + field).querySelector('.edit-btn').style.display = 'inline-block';
-}
-
-function togglePassword() {
-    const fields = document.getElementById('passwordFields');
-    if (fields) fields.classList.toggle('open');
-}
-
-// -- Star rating (checkout) --
-document.querySelectorAll('.star-rating').forEach(group => {
-    const labels = Array.from(group.querySelectorAll('label'));
-    const inputs = Array.from(group.querySelectorAll('input'));
-
-    function highlightStars(upToIndex) {
-        labels.forEach((l, i) => { l.style.color = i <= upToIndex ? '#f5a623' : '#ccc'; });
+    try {
+        const res  = await fetch('php/chat.php', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ message: text })
+        });
+        const data = await res.json();
+        typing.textContent = data.reply;
+    } catch {
+        typing.textContent = 'Sorry, something went wrong. Please try again.';
     }
 
-    function resetStars() {
-        const checked = inputs.find(inp => inp.checked);
-        if (checked) {
-            highlightStars(inputs.indexOf(checked));
-        } else {
-            labels.forEach(l => l.style.color = '#ccc');
-        }
-    }
-
-    labels.forEach((label, index) => {
-        label.addEventListener('mouseover', () => highlightStars(index));
-        label.addEventListener('mouseout',  () => resetStars());
-        label.addEventListener('click',     () => highlightStars(index));
-    });
-});
+    messages.scrollTop = messages.scrollHeight;
+}

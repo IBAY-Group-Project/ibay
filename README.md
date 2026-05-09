@@ -1,36 +1,67 @@
 # ibay
-Version 1.1.0
+Version 2.3.0
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+07/05/2026 21:04
+
+modified index.php to match dan
+ratings in order.php
+account details 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-items on search results and in the item page should have 2 images and ideally carousel functionality, currently has just 1
+- make sign up add a username too
+    - make sign in top button either user or email not just email ///
+    - also add quantity of items that the seller has avaiable in the ibayitems table and also in sell.php form
 
-no filter or sorting on search results
+- change all html to php ///
 
-10 items hardcoded into search.html, should be dependant on search query
+- change everything from hardcode to db dependent 
 
-product1 hardcoded into item.html, should be dependant on selected item from the search results
+- add a         <?php if ($is_logged_in = isset($_SESSION['email'])): ?>          on sell.php to tell user they need to sign in to sell
 
-no dedicated back button / clicking the ebay logo takes you back to the homepage
+- on search.php make it max 8 per page and fix the logic ////
 
-clear logic between what you can do in the 2 states (Guest / Logged In) - you need to be logged in to add to basket / sell items but can view items as a guest
+- sort out the images on the item / sell  / search page still has placeholders
 
-might want recommended items on the item page / home page depending on user data
+- homepage is stll hardcoded
 
-grouped all buttons under .button class, differentiated in stylesheet by id
+- thers no validation on auction end date on sell page  (or postcode)
 
-basket / checkout button in the header 
+- prompt to finish setting up account before checkout  / save the info 
 
-on the item page considering tabs vs accordion style 
+- add an auto address finder when filling out
 
-checkout.html include the subtotal ( price x quantity) and maybe exclude the price in the item details
+- add My Orders page through the Account page //
 
-checkout is again hardcoded with product1 and might need a layout change when actual items are used to keep everything in one screen
 
-quantity button in the checkout needs + - functions
 
+
+
+
+
+
+
+
+
+
+- try to add paying with visa debit / credit  / mastercard etc
+
+- ai chatbot
+
+- auction
+
+- page redirects
+
+-postcode.io api for postcode validation
+
+- email verification sendgrid
+
+http://localhost/ibay/order_success.php?orderId=1778004555
 

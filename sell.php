@@ -1,80 +1,54 @@
-<?php 
-session_start();
-include("php/connection.php");
+<?php
+include("includes/check.php");
+include("connection.php");
 
-if (!isset($_SESSION['userId'])) {
-    header("Location: login.html");
-    exit();
-}
+$userId = $_SESSION['userId'];
 
-if (isset($_POST['publish'])) {
+// Handle form submission
 
-    $userId      = $_SESSION['userId'];
-    $title       = mysqli_real_escape_string($conn, $_POST['title']);
-    $category    = mysqli_real_escape_string($conn, $_POST['category']);
-    $condition   = mysqli_real_escape_string($conn, $_POST['condition']);
-    $description = mysqli_real_escape_string($conn, $_POST['description']);
-    $price       = mysqli_real_escape_string($conn, $_POST['price']);
-    $postage     = mysqli_real_escape_string($conn, $_POST['postage']);
-
-    $sql = "INSERT INTO iBayItems (userId, title, category, `condition`, description, price, postage)
-            VALUES ('$userId', '$title', '$category', '$condition', '$description', '$price', '$postage')";
-
-    if (mysqli_query($conn, $sql)) {
-        $itemId = mysqli_insert_id($conn);
-
-        $imageFields = ['image1', 'image2', 'image3'];
-
-        foreach ($imageFields as $field) {
-            if ($_FILES[$field]['error'] === 0) {
-                $fileName = $_FILES[$field]['name'];
-                $tempName = $_FILES[$field]['tmp_name'];
-                $fileSize = $_FILES[$field]['size'];
-
-                $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-                $validExts = ['jpg', 'jpeg', 'png', 'webp', 'avif', 'heic'];
-
-                if (!in_array($ext, $validExts)) {
-                    echo "<script> alert('Invalid image type for " . $field . "'); </script>";
-                    continue;
-                }
-
-                if ($fileSize > 5000000) {
-                    echo "<script> alert('Image too large for $field'); </script>";
-                    continue;
-                }
-
-                $newFileName = uniqid() . '_' . bin2hex(random_bytes(5)) . '.' . $ext;
-                $uploadDir   = $_SERVER['DOCUMENT_ROOT'] . '/images/products/';
-
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-
-                $destination = $uploadDir . $newFileName;
-
-                if (move_uploaded_file($tempName, $destination)) {
-                    $imagePath = mysqli_real_escape_string($conn, $newFileName);
-                    $mimeType  = mime_content_type($destination);
-                    $mimeType  = mysqli_real_escape_string($conn, $mimeType);
-
-                    $imgSql = "INSERT INTO iBayImages (image, mimeType, imageSize, itemId)
-                               VALUES ('$imagePath', '$mimeType', '$fileSize', '$itemId')";
-                    mysqli_query($conn, $imgSql);
-                }
-            }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = $_POST['title'] ?? '';
+    $category = $_POST['category'] ?? '';
+    $condition = $_POST['condition'] ?? '';
+    $price = $_POST['price'] ?? '0';
+    $postage = $_POST['postage'] ?? '';
+    $description = $_POST['description'] ?? '';
+    
+    if (!empty($title) && !empty($category)) {
+        $sql = "INSERT INTO iBayItems (userId, title, category, `condition`, price, postage, description, sold) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+        
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "ssssdss", $userId, $title, $category, $condition, $price, $postage, $description);
+        
+        if (mysqli_stmt_execute($stmt)) {
+            header("Location: account.php");
+            exit;
+        } else {
+            echo "Error: " . mysqli_error($conn);
         }
-
-        echo "<script> 
-            alert('Listing published successfully!'); 
-            document.location.href = 'index.php';
-        </script>";
-
-    } else {
-        echo "<script> alert('Error: " . mysqli_error($conn) . "'); </script>";
     }
 }
+
+
+
+// Fetch user details
+$sql = "SELECT * FROM iBayMembers WHERE userId = $userId";
+$result = mysqli_query($conn, $sql);
+$user = mysqli_fetch_assoc($result);
+
+// Count active listings
+$listingsSql = "SELECT COUNT(*) as count FROM iBayItems WHERE userId = $userId AND sold = 0";
+$listingsResult = mysqli_query($conn, $listingsSql);
+$listings = mysqli_fetch_assoc($listingsResult)['count'];
+
+$basketSql = "SELECT COUNT(*) as count FROM iBayItems WHERE userId = $userId";
+$basketResult = mysqli_query($conn, $basketSql);
+$basket = mysqli_fetch_assoc($basketResult)['count'];
+
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,34 +61,8 @@ if (isset($_POST['publish'])) {
 <body>
 
     <header class="site-header">
-        <div class="top-header">
-            <div class="logo">
-                <a href="index.php">iBay</a>
-            </div>
+        <?php include("includes/navbar.php"); ?>
 
-            <nav class="top-nav">
-                <a href="sell.php">Sell</a>
-                <?php if (isset($_SESSION['userId'])): ?>
-                    <a href="account.html">Account</a>
-                    <a href="php/logout.php">Logout</a>
-                <?php else: ?>
-                    <a href="signup.html">Signup</a>
-                    <a href="login.html">Login</a>
-                <?php endif; ?>
-            </nav>
-
-            <div class="header-actions">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search for items...">
-                </div>
-                <?php if (isset($_SESSION['userId'])): ?>
-                    <a href="basket.html" class="icon-button">??</a>
-                <?php else: ?>
-                    <a href="login.html" class="icon-button">??</a>
-                    <a href="basket.html" class="icon-button">??</a>
-                <?php endif; ?>
-            </div>
-        </div>
 
         <nav class="seller-subnav">
             <a href="#" class="active">Seller dashboard</a>
@@ -131,7 +79,8 @@ if (isset($_POST['publish'])) {
                     <p class="seller-eyebrow">Seller upload page</p>
                     <h1>Create or Edit a Listing</h1>
                     <p class="seller-subtitle">
-                        Complete all listing details below. Keep the form compact while making the preview easy to review.
+                        Complete the listing details below. Keep it clear, compact, and easy to review.
+                        <button class="secondary-button" onclick="document.getElementById('how-to-sell-modal').style.display='flex'" style="margin-left:12px;padding:6px 14px;font-size:0.85rem;">? How to sell</button>
                     </p>
                 </div>
 
@@ -165,27 +114,37 @@ if (isset($_POST['publish'])) {
                         <div class="form-group">
                             <label for="condition">Condition</label>
                             <select id="condition" name="condition">
-                                <option>Used - Good</option>
                                 <option>New</option>
                                 <option>Like New</option>
+                                <option>Used - Good</option>
                                 <option>Used - Acceptable</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="price">Price (&pound;)</label>
+                            <label for="price">Starting price (£)</label>
                             <input type="number" id="price" name="price" step="0.01" min="0" placeholder="0.00" required>
                         </div>
 
                         <div class="form-group">
                             <label for="postage">Postage</label>
-                            <select id="postage" name="postage">
+                            <select id="postage" name="postage" required>
                                 <option>Free postage</option>
-                                <option>&pound;1.99</option>
-                                <option>&pound;2.99</option>
-                                <option>&pound;4.99</option>
+                                <option>£1.99</option>
+                                <option>£2.99</option>
+                                <option>£4.99</option>
                                 <option>Collection only</option>
                             </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="finish">Auction end</label>
+                            <input type="date" id="finish" name="finish" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="postcode">Postcode area</label>
+                            <input type="text" id="postcode" name="postcode" placeholder="e.g. LE11" required>
                         </div>
 
                         <div class="form-group seller-wide">
@@ -201,26 +160,20 @@ if (isset($_POST['publish'])) {
 
                 <div class="seller-right">
                     <div class="seller-panel">
-                        <h2>Upload 3 images</h2>
-                        <p>Show all main facets of the product where possible.</p>
+                        <h2>Upload 2 images</h2>
+                        <p>Upload two clear images of the item as required by the brief.</p>
 
                         <div class="upload-grid">
                             <label class="upload-slot" for="image1">
                                 <input type="file" id="image1" name="image1" accept="image/*" hidden>
                                 <span class="upload-plus">+</span>
-                                <span>Main view</span>
+                                <span>Main image</span>
                             </label>
 
                             <label class="upload-slot" for="image2">
                                 <input type="file" id="image2" name="image2" accept="image/*" hidden>
                                 <span class="upload-plus">+</span>
-                                <span>Side view</span>
-                            </label>
-
-                            <label class="upload-slot" for="image3">
-                                <input type="file" id="image3" name="image3" accept="image/*" hidden>
-                                <span class="upload-plus">+</span>
-                                <span>Close-up</span>
+                                <span>Second image</span>
                             </label>
                         </div>
                     </div>
@@ -232,7 +185,7 @@ if (isset($_POST['publish'])) {
                             <div class="listing-preview-content">
                                 <h3 id="previewTitle">Your item title</h3>
                                 <p id="previewCategory">Technology</p>
-                                <strong id="previewPrice">&pound;0.00</strong>
+                                <strong id="previewPrice">£0.00</strong>
                             </div>
                         </div>
                     </div>
@@ -242,7 +195,7 @@ if (isset($_POST['publish'])) {
                         <ul class="seller-checklist">
                             <li>Use a searchable title</li>
                             <li>Choose the correct category</li>
-                            <li>Upload all 3 images</li>
+                            <li>Upload both images</li>
                             <li>Include condition details</li>
                         </ul>
                     </div>
@@ -251,11 +204,21 @@ if (isset($_POST['publish'])) {
                 <div class="seller-actions">
                     <button type="button" class="secondary-button">Save Draft</button>
                     <button type="button" class="secondary-button">Preview Listing</button>
-                    <button type="submit" name="publish" class="primary-button seller-submit">Publish Listing</button>
+                    <button type="submit" class="primary-button seller-submit">Publish Listing</button>
                 </div>
             </form>
         </section>
     </main>
+
+    <div id="how-to-sell-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;align-items:center;justify-content:center;">
+        <div style="background:#fff;border-radius:14px;width:90%;max-width:860px;height:80vh;display:flex;flex-direction:column;overflow:hidden;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #eee;">
+                <h2 style="margin:0;font-size:1.1rem;">How to Create a Listing</h2>
+                <button onclick="document.getElementById('how-to-sell-modal').style.display='none'" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:#666;">&times;</button>
+            </div>
+            <iframe src="https://scribehow.com/embed/How_To_Create_A_New_Auction_Listing_On_Ibay__dp9HemTqTxq0HDEbH8zIdA" style="flex:1;border:none;" allowfullscreen></iframe>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>

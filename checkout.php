@@ -1,145 +1,45 @@
 <?php
-session_start();
-include("php/connection.php");
+$requireLogin = true;
+include("includes/check.php");
+include("includes/db.php");
 
-if (!isset($_SESSION['userId'])) {
-    header("Location: login.html");
+$buyerId = $_SESSION['userId'];
+
+$userSql    = "SELECT firstname, surname, email, phone_number, address, postcode FROM iBayMembers WHERE userId = $buyerId";
+$userResult = mysqli_query($conn, $userSql);
+$userData   = mysqli_fetch_assoc($userResult);
+
+$sql  = "SELECT b.quantity, i.price, i.postage
+         FROM iBayBasket b
+         JOIN iBayItems i ON b.itemId = i.itemId
+         WHERE b.userId = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $buyerId);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Redirect if basket is empty
+if ($result->num_rows === 0) {
+    header("Location: basket.php");
     exit();
 }
 
-$userId   = $_SESSION['userId'];
-$success  = false;
-$error    = '';
-$buyNowId = isset($_GET['id']) && is_numeric($_GET['id']) ? (int)$_GET['id'] : null;
+$subtotal     = 0;
+$totalPostage = 0;
 
-$buyerResult = mysqli_query($conn, "SELECT * FROM iBayMembers WHERE userId = '$userId'");
-$buyer       = mysqli_fetch_assoc($buyerResult);
+while ($row = $result->fetch_assoc()) {
+    $subtotal += $row['price'] * $row['quantity'];
 
-if (isset($_POST['confirm'])) {
-    $address  = mysqli_real_escape_string($conn, trim($_POST['address']));
-    $postcode = mysqli_real_escape_string($conn, trim($_POST['postcode']));
-
-    if (empty($address) || empty($postcode)) {
-        $error = "Please enter a delivery address and postcode before confirming.";
+    $postageRaw = $row['postage'];
+    if (stripos($postageRaw, 'free') !== false || stripos($postageRaw, 'collection') !== false) {
+        $postage = 0;
     } else {
-        if ($buyNowId) {
-            $itemResult = mysqli_query($conn, "SELECT * FROM iBayItems WHERE itemId = '$buyNowId' AND sold = 0");
-            if (mysqli_num_rows($itemResult) == 0) {
-                $error = "This item is no longer available.";
-            } else {
-                $item       = mysqli_fetch_assoc($itemResult);
-                $sellerId   = $item['userId'];
-                $finalPrice = $item['price'];
-                $newRating  = isset($_POST['rating']) ? (int)$_POST['rating'] : 0;
-
-                if ($newRating < 1 || $newRating > 5) {
-                    $error = "Please give the seller a rating between 1 and 5 before confirming.";
-                } else {
-                    mysqli_query($conn, "UPDATE iBayMembers SET address='$address', postcode='$postcode' WHERE userId='$userId'");
-                    mysqli_query($conn, "INSERT INTO iBaySales (itemId, buyerId, sellerId, finalPrice, saleDate) VALUES ('$buyNowId', '$userId', '$sellerId', '$finalPrice', NOW())");
-                    mysqli_query($conn, "UPDATE iBayItems SET sold = 1 WHERE itemId = '$buyNowId'");
-
-                    $sellerResult  = mysqli_query($conn, "SELECT rating FROM iBayMembers WHERE userId = '$sellerId'");
-                    $sellerRow     = mysqli_fetch_assoc($sellerResult);
-                    $currentRating = $sellerRow['rating'];
-                    $salesCount    = mysqli_query($conn, "SELECT COUNT(*) as count FROM iBaySales WHERE sellerId = '$sellerId'");
-                    $salesRow      = mysqli_fetch_assoc($salesCount);
-                    $totalSales    = $salesRow['count'];
-                    $newAvg        = ($currentRating == 0 || $totalSales <= 1) ? $newRating : round((($currentRating * ($totalSales - 1)) + $newRating) / $totalSales, 1);
-
-                    mysqli_query($conn, "UPDATE iBayMembers SET rating = '$newAvg' WHERE userId = '$sellerId'");
-                    $success = true;
-                }
-            }
-        } else {
-            $basketResult = mysqli_query($conn, "
-                SELECT b.*, i.userId as sellerId, i.price, i.sold, i.itemId as bItemId
-                FROM iBayBasket b
-                JOIN iBayItems i ON b.itemId = i.itemId
-                WHERE b.userId = '$userId'
-            ");
-
-            if (mysqli_num_rows($basketResult) == 0) {
-                $error = "Your basket is empty.";
-            } else {
-                $allGood = true;
-                $rows    = [];
-                while ($row = mysqli_fetch_assoc($basketResult)) {
-                    if ($row['sold'] == 1) { $error = "One or more items in your basket have already been sold."; $allGood = false; break; }
-                    $rows[] = $row;
-                }
-
-                if ($allGood) {
-                    $sellerIds = array_unique(array_column($rows, 'sellerId'));
-                    foreach ($sellerIds as $sid) {
-                        $ratingVal = isset($_POST['rating_' . $sid]) ? (int)$_POST['rating_' . $sid] : 0;
-                        if ($ratingVal < 1 || $ratingVal > 5) { $error = "Please rate all sellers before confirming."; $allGood = false; break; }
-                    }
-                }
-
-                if ($allGood) {
-                    mysqli_query($conn, "UPDATE iBayMembers SET address='$address', postcode='$postcode' WHERE userId='$userId'");
-                    foreach ($rows as $row) {
-                        $itemId     = $row['bItemId'];
-                        $sellerId   = $row['sellerId'];
-                        $finalPrice = $row['price'] * $row['quantity'];
-                        mysqli_query($conn, "INSERT INTO iBaySales (itemId, buyerId, sellerId, finalPrice, saleDate) VALUES ('$itemId', '$userId', '$sellerId', '$finalPrice', NOW())");
-                        mysqli_query($conn, "UPDATE iBayItems SET sold = 1 WHERE itemId = '$itemId'");
-
-                        $newRating     = (int)$_POST['rating_' . $sellerId];
-                        $sellerResult  = mysqli_query($conn, "SELECT rating FROM iBayMembers WHERE userId = '$sellerId'");
-                        $sellerRow     = mysqli_fetch_assoc($sellerResult);
-                        $currentRating = $sellerRow['rating'];
-                        $salesCount    = mysqli_query($conn, "SELECT COUNT(*) as count FROM iBaySales WHERE sellerId = '$sellerId'");
-                        $salesRow      = mysqli_fetch_assoc($salesCount);
-                        $totalSales    = $salesRow['count'];
-                        $newAvg        = ($currentRating == 0 || $totalSales <= 1) ? $newRating : round((($currentRating * ($totalSales - 1)) + $newRating) / $totalSales, 1);
-                        mysqli_query($conn, "UPDATE iBayMembers SET rating = '$newAvg' WHERE userId = '$sellerId'");
-                    }
-                    mysqli_query($conn, "DELETE FROM iBayBasket WHERE userId = '$userId'");
-                    $success = true;
-                }
-            }
-        }
+        $postage = (float)preg_replace('/[^0-9.]/', '', $postageRaw);
     }
+    $totalPostage += $postage;
 }
 
-$buyerResult = mysqli_query($conn, "SELECT * FROM iBayMembers WHERE userId = '$userId'");
-$buyer       = mysqli_fetch_assoc($buyerResult);
-
-if ($buyNowId) {
-    $summaryResult = mysqli_query($conn, "
-        SELECT i.*, img.image, m.firstname, m.surname, m.userId as sellerId
-        FROM iBayItems i
-        LEFT JOIN iBayImages img ON i.itemId = img.itemId
-        JOIN iBayMembers m ON i.userId = m.userId
-        WHERE i.itemId = '$buyNowId'
-        GROUP BY i.itemId
-    ");
-    $summaryItems = [];
-    while ($row = mysqli_fetch_assoc($summaryResult)) { $row['quantity'] = 1; $summaryItems[] = $row; }
-} else {
-    $summaryResult = mysqli_query($conn, "
-        SELECT i.*, b.quantity, img.image, m.firstname, m.surname, m.userId as sellerId
-        FROM iBayBasket b
-        JOIN iBayItems i ON b.itemId = i.itemId
-        LEFT JOIN iBayImages img ON i.itemId = img.itemId
-        JOIN iBayMembers m ON i.userId = m.userId
-        WHERE b.userId = '$userId'
-        GROUP BY b.basketId
-    ");
-    $summaryItems = [];
-    while ($row = mysqli_fetch_assoc($summaryResult)) { $summaryItems[] = $row; }
-}
-
-$sellers = [];
-foreach ($summaryItems as $item) {
-    $sid = $item['sellerId'];
-    if (!isset($sellers[$sid])) $sellers[$sid] = $item['firstname'] . ' ' . $item['surname'];
-}
-
-$total = 0;
-foreach ($summaryItems as $item) { $total += $item['price'] * $item['quantity']; }
+$total = $subtotal + $totalPostage;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -148,114 +48,100 @@ foreach ($summaryItems as $item) { $total += $item['price'] * $item['quantity'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iBay - Checkout</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="js/main.js" defer></script>
 </head>
 <body>
     <header class="site-header">
-        <div class="top-header">
-            <div class="logo"><a href="index.php">iBay</a></div>
-            <nav class="top-nav">
-                <a href="sell.php">Sell</a>
-                <a href="account.php">Account</a>
-                <a href="php/logout.php">Logout</a>
-            </nav>
-            <div class="header-actions">
-                <form action="search.php" method="GET" class="search-form">
-                    <input type="text" name="q" placeholder="Search for items...">
-                    <button type="submit" class="search-submit-button">Search</button>
-                </form>
-                <a href="account.php" class="icon-button">&#128100;</a>
-                <a href="basket.php" class="icon-button">&#128722;</a>
-            </div>
+        <?php include("includes/navbar.php"); ?>
         </div>
     </header>
 
-    <main class="basket-page">
-        <?php if ($success): ?>
-            <div class="order-confirmed">
-                <div class="order-confirmed-box">
-                    <div class="order-confirmed-icon">&#10003;</div>
-                    <h1>Order Confirmed!</h1>
-                    <p>Thank you for your purchase. Your order has been placed successfully.</p>
-                    <p>Total paid: <strong>&pound;<?php echo number_format($total, 2); ?></strong></p>
-                    <div class="order-confirmed-actions">
-                        <a href="index.php" class="primary-button" style="width:auto;padding:12px 24px;">Continue Shopping</a>
-                        <a href="account.php" class="secondary-button" style="width:auto;padding:12px 24px;">My Account</a>
+    <main class="checkout-page">
+        <section class="checkout-layout">
+
+            <div class="checkout-details-card">
+                <h1>Checkout</h1>
+
+                <form action="payment.php" method="post" class="checkout-form" id="checkout-form">
+
+                    <div class="checkout-form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" value="<?php echo htmlspecialchars($userData['firstname'] ?? ''); ?>" required>
                     </div>
-                </div>
+
+                    <div class="checkout-form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($userData['surname'] ?? ''); ?>" required>
+                    </div>
+
+                    <div class="checkout-form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($userData['email'] ?? ''); ?>" required>
+                    </div>
+
+                    <div class="checkout-form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($userData['phone_number'] ?? ''); ?>" required>
+                    </div>
+
+                    <div class="checkout-form-group">
+                        <label for="address">Shipping Address</label>
+                        <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($userData['address'] ?? ''); ?>" placeholder="Enter the first line of your address" required>
+                    </div>
+
+                    <div class="checkout-form-group">
+                        <label for="postcode">Postcode</label>
+                        <input type="text" id="postcode" name="postcode" value="<?php echo htmlspecialchars($userData['postcode'] ?? ''); ?>" required>
+                    </div>
+
+                    <fieldset class="checkout-fieldset">
+                        <legend>Payment Method</legend>
+                        <label>
+                            <input type="radio" name="paymentMethod" value="Credit Card" required>
+                            Credit Card
+                        </label>
+                        <label>
+                            <input type="radio" name="paymentMethod" value="PayPal">
+                            PayPal
+                        </label>
+                    </fieldset>
+
+                    <label class="checkout-save-label">
+                        <input type="checkbox" name="saveDetails" value="1" checked>
+                        Save these details to my account
+                    </label>
+
+                    <input type="hidden" name="subtotal"     value="<?php echo $subtotal; ?>">
+                    <input type="hidden" name="totalPostage" value="<?php echo $totalPostage; ?>">
+
+                </form>
             </div>
 
-        <?php else: ?>
-            <div class="basket-layout">
-                <div class="basket-items-card">
-                    <h1>Checkout</h1>
-                    <?php if ($error): ?>
-                        <div class="alert-error"><?php echo $error; ?></div>
-                    <?php endif; ?>
-                    <?php foreach ($summaryItems as $item): ?>
-                        <?php $imageSrc = $item['image'] ? 'images/products/' . htmlspecialchars($item['image']) : 'images/placeholder.jpg'; ?>
-                        <div class="basket-item">
-                            <img src="<?php echo $imageSrc; ?>" alt="<?php echo htmlspecialchars($item['title']); ?>" class="basket-item-image">
-                            <div class="basket-item-info">
-                                <h2><?php echo htmlspecialchars($item['title']); ?></h2>
-                                <p>Seller: <?php echo htmlspecialchars($item['firstname'] . ' ' . $item['surname']); ?></p>
-                                <p>Postage: <?php echo htmlspecialchars($item['postage']); ?></p>
-                                <p>Qty: <?php echo $item['quantity']; ?></p>
-                                <p class="basket-item-price">&pound;<?php echo number_format($item['price'] * $item['quantity'], 2); ?></p>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+            <aside class="checkout-summary-card">
+                <h2>Summary</h2>
+
+                <div class="checkout-summary-row">
+                    <span>Subtotal</span>
+                    <span>&pound;<?php echo number_format($subtotal, 2); ?></span>
                 </div>
 
-                <aside class="basket-summary-card">
-                    <h2>Order Summary</h2>
-                    <div class="basket-summary-row">
-                        <span>Subtotal</span>
-                        <span>&pound;<?php echo number_format($total, 2); ?></span>
-                    </div>
-                    <div class="basket-summary-row total-row">
-                        <span>Total</span>
-                        <span>&pound;<?php echo number_format($total, 2); ?></span>
-                    </div>
+                <div class="checkout-summary-row">
+                    <span>Shipping</span>
+                    <span>&pound;<?php echo number_format($totalPostage, 2); ?></span>
+                </div>
 
-                    <form method="POST" action="checkout.php<?php echo $buyNowId ? '?id=' . $buyNowId : ''; ?>">
-                        <div class="address-block">
-                            <h3>Delivery Address</h3>
-                            <label for="address">Street Address</label>
-                            <input type="text" id="address" name="address" placeholder="Enter your delivery address" value="<?php echo htmlspecialchars($buyer['address'] ?? ''); ?>" required>
-                            <label for="postcode">Postcode</label>
-                            <input type="text" id="postcode" name="postcode" placeholder="Enter your postcode" value="<?php echo htmlspecialchars($buyer['postcode'] ?? ''); ?>" required>
-                            <?php if (!empty($buyer['address'])): ?>
-                                <p style="font-size:0.82rem;color:#1f3f8f;margin-top:4px;">&#10003; Pre-filled from your saved address. Update if needed.</p>
-                            <?php endif; ?>
-                        </div>
+                <div class="checkout-summary-row total-row">
+                    <span>Total</span>
+                    <span>&pound;<?php echo number_format($total, 2); ?></span>
+                </div>
 
-                        <?php foreach ($sellers as $sid => $sellerName): ?>
-                            <div class="rating-block">
-                                <h3>Rate seller: <?php echo htmlspecialchars($sellerName); ?></h3>
-                                <p>How would you rate this seller? (required)</p>
-                                <div class="star-rating" id="stars-<?php echo $sid; ?>">
-                                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                                        <input type="radio" name="<?php echo $buyNowId ? 'rating' : 'rating_' . $sid; ?>" id="star_<?php echo $sid . '_' . $i; ?>" value="<?php echo $i; ?>">
-                                        <label for="star_<?php echo $sid . '_' . $i; ?>">&#9733;</label>
-                                    <?php endfor; ?>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+                <button type="submit" form="checkout-form" class="primary-button checkout-pay-button">Pay Now</button>
+            </aside>
 
-                        <button type="submit" name="confirm" class="primary-button" style="margin-top:16px;">Confirm Order</button>
-                    </form>
-
-                    <a href="<?php echo $buyNowId ? 'item.php?id=' . $buyNowId : 'basket.php'; ?>" class="secondary-button" style="display:block;text-align:center;margin-top:10px;padding:12px;">
-                        &#8592; <?php echo $buyNowId ? 'Back to Item' : 'Back to Basket'; ?>
-                    </a>
-                </aside>
-            </div>
-        <?php endif; ?>
+        </section>
     </main>
 
-    <footer class="site-footer">
-        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
-    </footer>
+    <?php include("includes/footer.php"); ?>
 </body>
 </html>
