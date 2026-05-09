@@ -9,11 +9,14 @@ if (!$orderId) {
     exit();
 }
 
-$query = "SELECT s.*, i.title, m.username
+$query = "SELECT s.*, i.title, m.username, img.image
 FROM iBaySales s
 JOIN iBayItems i ON s.itemId = i.itemId
 JOIN iBayMembers m ON s.sellerId = m.userId
-WHERE s.orderId = ? AND s.buyerId = ?";
+LEFT JOIN iBayImages img ON s.itemId = img.itemId
+WHERE s.orderId = ? AND s.buyerId = ?
+GROUP BY s.saleId";
+
 $stmt = $conn->prepare($query);
 $stmt->bind_param("ii", $orderId, $_SESSION['userId']);
 $stmt->execute();
@@ -64,8 +67,18 @@ if (!$order) {
         <section class="order-details">
             <h2>Items</h2>
             <?php while ($item = $result->fetch_assoc()): ?>
+                <?php
+                    $img = $item['image'] ?? '';
+                    $src = $img ? (str_starts_with($img, 'http') ? $img : 'images/products/' . htmlspecialchars($img)) : '';
+                ?>
                 <div class="success-item">
-                    <div class="success-item-image">📦</div>
+                    <div class="success-item-image">
+                        <?php if ($src): ?>
+                            <img src="<?= $src ?>" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">
+                        <?php else: ?>
+                            📦
+                        <?php endif; ?>
+                    </div>
                     <div class="success-item-info">
                         <h3><?= htmlspecialchars($item['title']) ?></h3>
                         <p>Sold by <strong><?= htmlspecialchars($item['username']) ?></strong></p>
