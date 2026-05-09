@@ -20,6 +20,7 @@ a {
     border-bottom: 1px solid #dddddd;
 }
 
+
 .top-header {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -776,6 +777,56 @@ a {
     min-width: 190px;
 }
 
+
+.how-to{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    z-index:2000;
+    align-items:center;
+    justify-content:center;
+}
+
+.modal-content {
+    background:#fff;
+    border-radius:14px;
+    width:90%;
+    max-width:860px;
+    height:80vh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.modal-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 20px;
+    border-bottom:1px solid #eee;
+}
+
+.modal-header h2 {
+    margin:0;
+    font-size:1.1rem;
+}
+
+.modal-header button {
+    background:none;
+    border:none;
+    font-size:1.4rem;
+    cursor:pointer;
+    color:#666;
+}
+
+.modal-content iframe {
+    flex:1;
+    border:none;
+}
+
+
+
 /* ITEM PAGE */
 
 .item-page {
@@ -963,6 +1014,12 @@ a {
     min-width: 180px;
 }
 
+.item-actions form {
+    display: contents;
+    margin:0;
+    padding:0;
+}
+
 /* BASKET PAGE */
 
 .basket-page {
@@ -1023,6 +1080,16 @@ a {
 .basket-remove-button {
     white-space: nowrap;
 }
+
+.primary-button,
+.basket-summary-card .secondary-button {
+    display: block;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+}
+
 
 .basket-summary-card h2 {
     font-size: 1.4rem;

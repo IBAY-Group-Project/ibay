@@ -21,17 +21,15 @@ $result = mysqli_query($conn, $sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBay - Home</title>
+    <title>iBay - Basket</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="js/main.js" defer></script>
 </head>
 <body>
 
     <header class="site-header">
-
         <?php include("includes/navbar.php"); ?>
-            </div>
-        </div>
     </header>
 
     <main class="basket-page">
@@ -42,15 +40,20 @@ $result = mysqli_query($conn, $sql);
                 <?php 
                 $subtotal = 0;
                 $totalPostage = 0;
+                $hasItems     = mysqli_num_rows($result) > 0;
 
-                while ($item = mysqli_fetch_assoc($result)): 
-                    $itemTotal = $item['price'] * $item['quantity'];
-                    $subtotal += $itemTotal;
+                if ($hasItems):
+                    while ($item = mysqli_fetch_assoc($result)):
+                        $itemTotal  = $item['price'] * $item['quantity'];
+                        $subtotal  += $itemTotal;
 
-                    if ($item['postage'] !== 'Free postage' && $item['postage'] !== 'Collection only') {
-                        $postageAmount = (float)str_replace('£', '', $item['postage']);
+                        $postageRaw = $item['postage'];
+                        if (stripos($postageRaw, 'free') !== false || stripos($postageRaw, 'collection') !== false) {
+                            $postageAmount = 0;
+                        } else {
+                            $postageAmount = (float)preg_replace('/[^0-9.]/', '', $postageRaw);
+                        }
                         $totalPostage += $postageAmount;
-                    }
                 ?>
                     <div class="basket-item">
                         <?php
@@ -60,8 +63,8 @@ $result = mysqli_query($conn, $sql);
                         <img src="<?= $bSrc ?>" alt="Basket item image" class="basket-item-image">
 
                         <div class="basket-item-info">
-                            <h2><?= $item['title'] ?></h2>
-                            <p>Seller: <?= $item['username'] ?></p>
+                            <h2><?= htmlspecialchars($item['title']) ?></h2>
+                            <p>Seller: <?= htmlspecialchars($item['username']) ?></p>
                             <p class="basket-item-price">£<?= number_format($itemTotal, 2) ?></p>
                             <p>Qty: <?= $item['quantity'] ?></p>
                         </div>
@@ -89,38 +92,47 @@ $result = mysqli_query($conn, $sql);
                             </form>
                         </div>
                     </div>
-                <?php endwhile; ?>
-
+                <?php 
+                    endwhile;
+                else:
+                ?>
+                    <div style="text-align:center; padding:60px 20px;">
+                        <i class="fa-solid fa-basket-shopping" style="font-size:3rem;color:#ccc;margin-bottom:16px;display:block;"></i>
+                        <h3>Your basket is empty</h3>
+                        <p style="color:#666;margin-top:8px;">Browse listings and add items to your basket</p>
+                        <a href="index.php" class="primary-button" style="width:auto;display:inline-block;margin-top:20px;padding:12px 24px;">Continue Shopping</a>
+                    </div>
+                <?php endif; ?>
             </div>
 
 
-
+            <?php if ($hasItems): ?>
             <aside class="basket-summary-card">
                 <h2>Summary</h2>
-
+ 
                 <div class="basket-summary-row">
                     <span>Subtotal</span>
                     <span>£<?= number_format($subtotal, 2) ?></span>
                 </div>
-
+ 
                 <div class="basket-summary-row">
                     <span>Postage</span>
                     <span>£<?= number_format($totalPostage, 2) ?></span>
                 </div>
-
+ 
                 <div class="basket-summary-row total-row">
                     <span>Total</span>
                     <span>£<?= number_format($subtotal + $totalPostage, 2) ?></span>
                 </div>
-
+ 
                 <a href="checkout.php" class="primary-button">Proceed to Checkout</a>
+                <a href="index.php" class="secondary-button" >Continue Shopping</a>
             </aside>
+            <?php endif; ?>
         </section>
     </main>
 
-    <footer class="site-footer">
-        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
-    </footer>
+   <?php include("includes/footer.php"); ?>
 
 </body>
 </html>

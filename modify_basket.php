@@ -1,39 +1,35 @@
 <?php
+$requireLogin = true;
 include("includes/check.php");
-include("connection.php");
+include("includes/db.php");
 
 $userId = $_SESSION['userId'];
-$action = $_POST['action'];
+$action = $_POST['action'] ?? '';
 
-if ($action == 'add') {
-    $itemId = $_POST['itemId'];
-    $sql = "INSERT INTO iBayBasket (userId, itemId, quantity, addedAt) 
-            VALUES ($userId, $itemId, 1, NOW())
-            ON DUPLICATE KEY UPDATE quantity = quantity + 1";
-    mysqli_query($conn, $sql);
+if ($action === 'add') {
+    $itemId = (int)($_POST['itemId'] ?? 0);
+    if ($itemId > 0) {
+        $sql = "INSERT INTO iBayBasket (userId, itemId, quantity, addedAt) 
+                VALUES ($userId, $itemId, 1, NOW())
+                ON DUPLICATE KEY UPDATE quantity = quantity + 1";
+        mysqli_query($conn, $sql);
+    }
 
-} elseif ($action == 'remove') {
-    $basketId = $_POST['basketId'];
-    $sql = "UPDATE iBayBasket SET quantity = quantity - 1 WHERE basketId = $basketId";
-    mysqli_query($conn, $sql);
-    
-    // Delete row if quantity drops to 0
-    $sql2 = "DELETE FROM iBayBasket WHERE basketId = $basketId AND quantity <= 0";
-    mysqli_query($conn, $sql2);
+} elseif ($action === 'remove') {
+    $basketId = (int)($_POST['basketId'] ?? 0);
+    mysqli_query($conn, "UPDATE iBayBasket SET quantity = quantity - 1 WHERE basketId = $basketId AND userId = $userId");
+    mysqli_query($conn, "DELETE FROM iBayBasket WHERE basketId = $basketId AND quantity <= 0");
 
+} elseif ($action === 'increase') {
+    $basketId = (int)($_POST['basketId'] ?? 0);
+    mysqli_query($conn, "UPDATE iBayBasket SET quantity = quantity + 1 WHERE basketId = $basketId AND userId = $userId");
 
-} elseif ($action == 'increase') {
-    $basketId = $_POST['basketId'];
-    $sql = "UPDATE iBayBasket SET quantity = quantity + 1 WHERE basketId = $basketId";
-    mysqli_query($conn, $sql);
-
-
-} elseif ($action == 'decrease') {
-    $basketId = $_POST['basketId'];
-    $sql = "UPDATE iBayBasket SET quantity = quantity - 1 WHERE basketId = $basketId";
-    mysqli_query($conn, $sql);
-    $sql2 = "DELETE FROM iBayBasket WHERE basketId = $basketId AND quantity <= 0";
-    mysqli_query($conn, $sql2);
+} elseif ($action === 'decrease') {
+    $basketId = (int)($_POST['basketId'] ?? 0);
+    mysqli_query($conn, "UPDATE iBayBasket SET quantity = quantity - 1 WHERE basketId = $basketId AND userId = $userId");
+    mysqli_query($conn, "DELETE FROM iBayBasket WHERE basketId = $basketId AND quantity <= 0");
 }
+
 header("Location: basket.php");
+exit();
 ?>

@@ -18,21 +18,27 @@ $stmt->bind_param("i", $buyerId);
 $stmt->execute();
 $result = $stmt->get_result();
 
+// Redirect if basket is empty
+if ($result->num_rows === 0) {
+    header("Location: basket.php");
+    exit();
+}
+
 $subtotal = 0;
 $totalPostage = 0;
 
 while ($row = $result->fetch_assoc()) {
-
+ 
     $subtotal += $row['price'] * $row['quantity'];
-
+ 
     $postageRaw = $row['postage'];
-
-    if (stripos($postageRaw, 'free') !== false) {
+ 
+    if (stripos($postageRaw, 'free') !== false || stripos($postageRaw, 'collection') !== false) {
         $postage = 0;
     } else {
-        $postage = (float) str_replace(['£'], '', $postageRaw);
+        $postage = (float)preg_replace('/[^0-9.]/', '', $postageRaw);
     }
-
+ 
     $totalPostage += $postage;
 }
 
@@ -47,6 +53,7 @@ $total = $subtotal + $totalPostage;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iBay - Checkout</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="js/main.js" defer></script>
 </head>
 <body>
@@ -140,9 +147,8 @@ $total = $subtotal + $totalPostage;
     </section>
 </main>
 
-<footer class="site-footer">
-    <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
-</footer>
+<?php include("includes/footer.php"); ?>
+
 
 </body>
 </html>

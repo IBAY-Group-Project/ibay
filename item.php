@@ -12,9 +12,10 @@ if ($item_id === 0) {
 
 // Fetch item from database
 
-$sql = "SELECT i.*, m.username FROM iBayItems i 
+$sql = "SELECT i.*, m.username, m.firstname, m.surname, m.rating
+        FROM iBayItems i 
         JOIN iBayMembers m ON i.userId = m.userId 
-        WHERE itemId = $item_id AND sold = 0";
+        WHERE i.itemId = $item_id AND i.sold = 0";
         
 $result = mysqli_query($conn, $sql);
 
@@ -24,16 +25,16 @@ if (mysqli_num_rows($result) === 0) {
 }
 
 $item = mysqli_fetch_assoc($result);
-
-$imgSql = "SELECT image FROM iBayImages WHERE itemId = $item_id LIMIT 2";
-$imgResult = mysqli_query($conn, $imgSql);
+ 
+// Get all images for this item
+$imgResult = mysqli_query($conn, "SELECT image FROM iBayImages WHERE itemId = $item_id");
 $itemImages = [];
 while ($imgRow = mysqli_fetch_assoc($imgResult)) {
     $url = $imgRow['image'];
     $itemImages[] = str_starts_with($url, 'http') ? $url : 'images/products/' . htmlspecialchars($url);
 }
 if (empty($itemImages)) {
-    $itemImages = ['images/placeholder-product.jpg', 'images/placeholder-product-2.jpg'];
+    $itemImages[] = 'images/placeholder-product.jpg';
 }
 ?>
 
@@ -42,121 +43,108 @@ if (empty($itemImages)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBay - Home</title>
+    <title>iBay - <?= htmlspecialchars($item['title']) ?></title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="js/main.js" defer></script>
+    <script>
+        window.galleryImages = <?= json_encode($itemImages) ?>;
+    </script>
 </head>
 <body>
 
     <header class="site-header">
-
         <?php include("includes/navbar.php"); ?>
-            </div>
-        </div>
     </header>
-
+ 
     <main class="item-page">
         <section class="item-layout">
             <div class="item-gallery-card">
                 <div class="item-gallery-main">
                     <button class="gallery-arrow left" id="prevImage">&#10094;</button>
-
+ 
                     <img
                         id="mainProductImage"
                         class="main-product-image"
                         src="<?= $itemImages[0] ?>"
-                        alt="Product image">
-
+                        alt="<?= htmlspecialchars($item['title']) ?>">
+ 
                     <button class="gallery-arrow right" id="nextImage">&#10095;</button>
                 </div>
-
+ 
                 <div class="item-thumbnails">
-                    <img
-                        class="item-thumb active-thumb"
-                        src="<?= $itemImages[0] ?>"
-                        alt="Thumbnail 1"
-                        data-index="0">
-
-                    <img
-                        class="item-thumb"
-                        src="<?= $itemImages[1] ?? $itemImages[0] ?>"
-                        alt="Thumbnail 2"
-                        data-index="1">
+                    <?php foreach ($itemImages as $index => $imgSrc): ?>
+                        <img
+                            class="item-thumb <?= $index === 0 ? 'active-thumb' : '' ?>"
+                            src="<?= $imgSrc ?>"
+                            alt="Thumbnail <?= $index + 1 ?>"
+                            data-index="<?= $index ?>">
+                    <?php endforeach; ?>
                 </div>
             </div>
-
+ 
             <div class="item-info-card">
-                <h1 class="item-title" id="itemTitle"><?= $item['title'] ?></h1>
-
+                <h1 class="item-title"><?= htmlspecialchars($item['title']) ?></h1>
+ 
                 <div class="item-seller-row">
                     <div>
                         <p class="item-seller-name">
-                            Seller: <span id="sellerUserId"><?= $item['username'] ?></span>
+                            Seller: <strong><?= htmlspecialchars($item['username']) ?></strong>
                         </p>
                         <p class="item-seller-rating">
-                            Rating: <span id="sellerRating">98</span>
+                            Rating: <strong><?= $item['rating'] > 0 ? $item['rating'] . ' / 5' : 'No ratings yet' ?></strong>
                         </p>
                     </div>
-
-                    <a href="#" class="contact-seller-link">Contact seller</a>
+                    <a href="mailto:?subject=iBay enquiry about <?= htmlspecialchars($item['title']) ?>" class="contact-seller-link">Contact seller</a>
                 </div>
-
+ 
                 <div class="item-price-block">
                     <p class="item-price-label">Price</p>
-                    <p class="item-price" id="itemPrice">£<?= $item['price'] ?></p>
+                    <p class="item-price">£<?= number_format($item['price'], 2) ?></p>
                 </div>
-
+ 
                 <div class="item-meta-grid">
                     <div class="item-meta-box">
-                        <span class="meta-label">Postage</span>
-                        <span class="meta-value" id="itemPostage"><?= $item['postage'] ?></span>
+                        <span class="meta-label">Condition</span>
+                        <span class="meta-value"><?= htmlspecialchars($item['condition']) ?></span>
                     </div>
-
+                    <div class="item-meta-box">
+                        <span class="meta-label">Postage</span>
+                        <span class="meta-value"><?= htmlspecialchars($item['postage']) ?></span>
+                    </div>
+                    <div class="item-meta-box">
+                        <span class="meta-label">Category</span>
+                        <span class="meta-value"><?= htmlspecialchars($item['category']) ?></span>
+                    </div>
                     <div class="item-meta-box">
                         <span class="meta-label">Listed</span>
-                        <span class="meta-value" id="itemStart"><?= date('d M Y', strtotime($item['start'])) ?></span>
+                        <span class="meta-value"><?= date('d M Y', strtotime($item['start'])) ?></span>
                     </div>
-
-                    <div class="item-meta-box">
-                        <span class="meta-label">Condition</span>
-                        <span class="meta-value" id=itemCondition><?= $item['condition']?></span>
-                    </div>
-
-                    <!-- Im hiding this for now--> 
-                    
-                    <!--
-                    <div class="item-meta-box">
-                        <span class="meta-label">Ends</span>
-                        <span class="meta-value" id="itemFinish">08 May 2026</span>
-                    </div>
-
-                    <div class="item-meta-box">
-                        <span class="meta-label">Time left</span>
-                        <span class="meta-value" id="itemTimeLeft">2 days left</span>
-                    </div>
-                    --> 
                 </div>
-
+ 
                 <div class="item-description-block">
                     <h2>Description</h2>
-                    <p id="itemDescription">
-                        <?= $item['description']?>
-                    </p>
+                    <p><?= htmlspecialchars($item['description']) ?></p>
                 </div>
-
-            <form action="modify_basket.php" method="post" class="item-actions">
-                <input type="hidden" name="action" value="add">
-                <input type="hidden" name="itemId" value="<?= $item['itemId'] ?>">
-                <button type="submit" class="primary-button item-action-button">Add to Basket</button>
-                <button type="button" class="secondary-button item-action-button">Buy Now</button>
-            </form>
+ 
+                <div class="item-actions">
+                    <?php if (isset($_SESSION['userId'])): ?>
+                        <form action="modify_basket.php" method="post" style="display:inline;">
+                            <input type="hidden" name="action" value="add">
+                            <input type="hidden" name="itemId" value="<?= $item['itemId'] ?>">
+                            <button type="submit" class="primary-button item-action-button">Add to Basket</button>
+                        </form>
+                        <a href="basket.php" class="secondary-button item-action-button">View Basket</a>
+                    <?php else: ?>
+                        <a href="login.php" class="primary-button item-action-button">Log in to Buy</a>
+                    <?php endif; ?>
+                </div>
             </div>
+ 
         </section>
     </main>
-
-    <footer class="site-footer">
-        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
-    </footer>
-
+ 
+    <?php include("includes/footer.php"); ?>
+ 
 </body>
 </html>

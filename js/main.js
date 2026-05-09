@@ -13,26 +13,27 @@ const featuredTitle  = document.getElementById("featuredTitle");
 const carouselFooter = document.getElementById("carouselFooter");
 const viewMoreBtn    = document.getElementById("viewMoreBtn");
 const categoryNavLinks = document.querySelectorAll(".category-nav a[data-category]");
-
+ 
 categoryNavLinks.forEach(link => {
     link.addEventListener("click", e => {
         e.preventDefault();
         const category = link.dataset.category;
-
+ 
         categoryNavLinks.forEach(l => l.classList.remove("active"));
         link.classList.add("active");
-
-        if (featuredTitle) featuredTitle.textContent = category ;
+ 
+        if (featuredTitle) featuredTitle.textContent = category;
         if (viewMoreBtn)    viewMoreBtn.href = "search.php?category=" + encodeURIComponent(category);
         if (carouselFooter) carouselFooter.style.display = "";
-
+ 
         if (!carouselTrack) return;
-        carouselTrack.innerHTML = "<p>Loading...</p>";
-
+        carouselTrack.style.opacity = "0.4";
+ 
         fetch("php/category_items.php?category=" + encodeURIComponent(category))
             .then(r => r.json())
             .then(items => {
                 carouselTrack.innerHTML = "";
+                carouselTrack.style.opacity = "1";
                 if (!items.length) {
                     carouselTrack.innerHTML = '<p>No listings in this category yet. <a href="sell.php">Be the first to sell!</a></p>';
                     return;
@@ -46,7 +47,7 @@ categoryNavLinks.forEach(link => {
                             <h3>${item.title}</h3>
                             <p class="category">${item.category}</p>
                             <p class="condition">${item.condition}</p>
-                            <p class="price">£${item.price}</p>
+                            <p class="price">&pound;${item.price}</p>
                             <a href="item.php?id=${item.itemId}" class="primary-button">View</a>
                         </div>
                     `;
@@ -54,6 +55,7 @@ categoryNavLinks.forEach(link => {
                 });
             })
             .catch(() => {
+                carouselTrack.style.opacity = "1";
                 carouselTrack.innerHTML = "<p>Could not load listings.</p>";
             });
     });
@@ -81,7 +83,7 @@ function updateSellerPreview() {
         categoryInput && categoryInput.value ? categoryInput.value : "Technology";
 
     previewPrice.textContent =
-        "£" + (priceInput && priceInput.value ? Number(priceInput.value).toFixed(2) : "0.00");
+        "\u00a3" + (priceInput && priceInput.value ? Number(priceInput.value).toFixed(2) : "0.00");
 
     charCount.textContent = `${descriptionInput ? descriptionInput.value.length : 0} / 500`;
 }
@@ -98,35 +100,32 @@ if (titleInput || categoryInput || priceInput || descriptionInput) {
 
 /* ITEM PAGE GALLERY */
 
+const galleryImages    = window.galleryImages || [];
 const mainProductImage = document.getElementById("mainProductImage");
-const prevImageBtn = document.getElementById("prevImage");
-const nextImageBtn = document.getElementById("nextImage");
-const thumbnails = document.querySelectorAll(".item-thumb");
+const prevImageBtn     = document.getElementById("prevImage");
+const nextImageBtn     = document.getElementById("nextImage");
+const thumbnails       = document.querySelectorAll(".item-thumb");
+let currentImageIndex  = 0;
 
-// Read images from the src attributes PHP has already set
-const productImages = Array.from(thumbnails).map(t => t.getAttribute("src"));
-
-let currentImageIndex = 0;
 
 function renderItemGallery() {
-    if (!mainProductImage || !thumbnails.length) return;
+    if (!mainProductImage || !galleryImages.length) return;
 
-    mainProductImage.src = productImages[currentImageIndex];
+    mainProductImage.src = galleryImages[currentImageIndex];
 
     thumbnails.forEach((thumb, index) => {
-        thumb.src = productImages[index];
         thumb.classList.toggle("active-thumb", index === currentImageIndex);
     });
 }
 
-if (mainProductImage && prevImageBtn && nextImageBtn && thumbnails.length) {
+if (mainProductImage && prevImageBtn && nextImageBtn) {
     prevImageBtn.addEventListener("click", () => {
-        currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+        currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
         renderItemGallery();
     });
 
     nextImageBtn.addEventListener("click", () => {
-        currentImageIndex = (currentImageIndex + 1) % productImages.length;
+        currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
         renderItemGallery();
     });
 
@@ -140,7 +139,7 @@ if (mainProductImage && prevImageBtn && nextImageBtn && thumbnails.length) {
     renderItemGallery();
 }
 
-/* SEARCH PAGE URL PARAMS + FILTERING */
+/* SEARCH PAGE */
 
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
@@ -152,19 +151,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const postage = params.get("postage") || "";
     const postcode = (params.get("postcode") || "").trim().toLowerCase();
 
-    const headerSearchInputs = document.querySelectorAll('.search-form input[name="q"]');
-    const pageSearchInput = document.querySelector('.search-page-form input[name="q"]');
-    const keywordInput = document.getElementById("searchKeyword");
+    const headerSearchInputs  = document.querySelectorAll('.search-form input[name="q"]');
+    const pageSearchInput     = document.querySelector('.search-page-form input[name="q"]');
+    const keywordInput        = document.getElementById("searchKeyword");
     const categorySearchInput = document.getElementById("searchCategory");
-    const minPriceInput = document.getElementById("minPrice");
-    const maxPriceInput = document.getElementById("maxPrice");
-    const postageInput = document.getElementById("postage");
-    const postcodeInput = document.getElementById("postcodeArea");
-    const sortSelect = document.getElementById("sortBy");
-    const resultsGrid = document.getElementById("searchResultsGrid");
-    const resultCards = resultsGrid ? Array.from(resultsGrid.querySelectorAll(".search-item-card")) : [];
-    const resultsCount = document.getElementById("resultsCount");
-    const clearFiltersButton = document.getElementById("clearFiltersButton");
+    const minPriceInput       = document.getElementById("minPrice");
+    const maxPriceInput       = document.getElementById("maxPrice");
+    const postageInput        = document.getElementById("postage");
+    const postcodeInput       = document.getElementById("postcodeArea");
+    const sortSelect          = document.getElementById("sortBy");
+    const clearFiltersButton  = document.getElementById("clearFiltersButton");
 
     headerSearchInputs.forEach(input => {
         input.value = params.get("q") || "";
@@ -178,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (postageInput) postageInput.value = postage;
     if (postcodeInput) postcodeInput.value = params.get("postcode") || "";
 
+    /*
     function applySearchFilters() {
         if (!resultCards.length || !resultsGrid) return;
 
@@ -235,22 +232,22 @@ document.addEventListener("DOMContentLoaded", () => {
             resultsCount.textContent = `Showing ${visibleCards.length} result${visibleCards.length === 1 ? "" : "s"}`;
         }
     }
+    */
 
     if (sortSelect) {
-        sortSelect.addEventListener("change", applySearchFilters);
+        sortSelect.addEventListener("change", () => sortSelect.form && sortSelect.form.submit());
     }
 
     if (clearFiltersButton) {
         clearFiltersButton.addEventListener("click", e => {
             e.preventDefault();
-            window.location.href = "search.html";
+            window.location.href = "search.php";
         });
     }
-
-    applySearchFilters();
 });
 
-console.log('main.js loaded');
+
+/* LOGIN PAGE TOGGLE */
 
 document.addEventListener("DOMContentLoaded", () => {
     const toggleEmail = document.getElementById("toggleLoginType");
@@ -282,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// -- Star rating --
+/* Star rating */
 document.querySelectorAll('.star-rating').forEach(container => {
     const labels = Array.from(container.querySelectorAll('label'));
     const inputs = Array.from(container.querySelectorAll('input'));
@@ -297,19 +294,23 @@ document.querySelectorAll('.star-rating').forEach(container => {
     highlight(inputs.findIndex(inp => inp.checked));
 });
 
-// -- Chatbot --
+/* Chatbot */
 function toggleChat() {
     const win = document.getElementById('chat-window');
     if (win) {
         win.classList.toggle('open');
-        if (win.classList.contains('open')) document.getElementById('chat-input').focus();
+        if (win.classList.contains('open')) {
+            const input = document.getElementById('chat-input');
+            if (input) input.focus();
+        }
     }
 }
 
 async function sendChat() {
     const input    = document.getElementById('chat-input');
     const messages = document.getElementById('chat-messages');
-    const text     = input.value.trim();
+    if (!input || !messages) return;
+    const text = input.value.trim();
     if (!text) return;
 
     const userMsg = document.createElement('div');

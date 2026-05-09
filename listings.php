@@ -101,9 +101,8 @@ $result = mysqli_query($conn, $sql);
     </section>
 </main>
 
-<footer class="site-footer">
-    <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
-</footer>
+<?php include("includes/footer.php"); ?>
+
 
 </body>
 </html>

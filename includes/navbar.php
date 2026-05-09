@@ -6,12 +6,14 @@
     </div>
 
     <nav class="top-nav">
-        <?php if ($is_logged_in = isset($_SESSION['email'])): ?>
+        <?php if (isset($_SESSION['email'])): ?>
             <a href="sell.php">Sell</a>
+            <a href="account.php">Account</a>
+            <a href="logout.php">Logout</a>
         <?php else: ?>
             <a href="signup.php">Signup</a>
             <a href="login.php">Login</a>
-        <?php endif; ?> 
+        <?php endif; ?>
     </nav>
 
     <div class="header-actions">
@@ -19,12 +21,15 @@
             <input type="text" name="q" placeholder="Search for items">
             <button type="submit" class="search-submit-button">Search</button>
         </form>
-        <?php if ($is_logged_in = isset($_SESSION['email'])): ?>
-            <a href="account.php" class="icon-button">👤</a>
-            <a href="basket.php" class="icon-button">🛒</a>
+        <?php if (isset($_SESSION['email'])): ?>
+            <a href="account.php" class="icon-button"><i class="fa-solid fa-user"></i></a>
+            <a href="basket.php" class="icon-button"><i class="fa-solid fa-basket-shopping"></i></a>
         <?php else: ?>
-            <a href="login.php" class="icon-button">👤</a>
-            <a href="login.php" class="icon-button">🛒</a>
-        <?php endif; ?>   
+            <a href="login.php" class="icon-button"><i class="fa-solid fa-user"></i></a>
+            <a href="login.php" class="icon-button"><i class="fa-solid fa-basket-shopping"></i></a>
+        <?php endif; ?>
     </div>
 </div>
+
+
+

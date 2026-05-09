@@ -61,6 +61,8 @@ $user = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM iBayMembers WHERE 
 </header>
 
 <main class="account-page">
+    <div style="max-width:700px; margin:0 auto; padding:28px 0;">
+
     <div style="max-width:700px; margin:0 auto; padding:14px 0;">
 
         <div style="display:flex; align-items:center; gap:16px; margin-bottom:12px;">
@@ -94,7 +96,7 @@ $user = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM iBayMembers WHERE 
                 ];
                 foreach ($fields as $key => $info):
                     $val     = htmlspecialchars($user[$key] ?? '');
-                    $display = ($val !== '') ? $val : '<span style="color:#aaa;">Not set</span>';
+                    $display = $val ?: '<span style="color:#aaa;">Not set</span>';
                 ?>
                 <div class="detail-row" id="row-<?= $key ?>">
                     <span class="detail-label"><?= $info['label'] ?></span>

@@ -2,76 +2,96 @@
 include("includes/check.php");
 require("includes/db.php");
 
-$where = "WHERE sold = 0";
+$excludeUser = isset($_SESSION['userId']) ? "AND i.userId != " . (int)$_SESSION['userId'] : "";
+
+$where = "WHERE i.sold = 0 $excludeUser";
 
 if (!empty($_GET['q'])) {
     $q = mysqli_real_escape_string($conn, $_GET['q']);
-    $where .= " AND title LIKE '%$q%'";
+    $where .= " AND i.title LIKE '%$q%'";
 }
 
 if (!empty($_GET['category'])) {
     $cat = mysqli_real_escape_string($conn, $_GET['category']);
-    $where .= " AND category = '$cat'";
+    $where .= " AND i.category = '$cat'";
 }
 
-if (!empty($_GET['minPrice'])) {
+if (!empty($_GET['minPrice']) && is_numeric($_GET['minPrice'])) {
     $min = (float)$_GET['minPrice'];
-    $where .= " AND price >= $min";
+    $where .= " AND i.price >= $min";
 }
 
-if (!empty($_GET['maxPrice'])) {
+if (!empty($_GET['maxPrice']) && is_numeric($_GET['maxPrice'])) {
     $max = (float)$_GET['maxPrice'];
-    $where .= " AND price <= $max";
+    $where .= " AND i.price <= $max";
 }
 
 if (!empty($_GET['postage'])) {
     $postage = mysqli_real_escape_string($conn, $_GET['postage']);
-    $where .= " AND postage = '$postage'";
+    $where .= " AND i.postage = '$postage'";
 }
 
 if (!empty($_GET['postcode'])) {
     $pc = mysqli_real_escape_string($conn, $_GET['postcode']);
-    $where .= " AND postcode LIKE '$pc%'";
+    $where .= " AND i.postcode LIKE '$pc%'";
 }
 
-$sql = "SELECT * FROM iBayItems $where";
-$count_sql = "SELECT COUNT(*) as total FROM iBayItems $where";
+// Sort
+$sort = $_GET['sortBy'] ?? 'newest';
+switch ($sort) {
+    case 'low-high': $orderBy = 'i.price ASC';  break;
+    case 'high-low': $orderBy = 'i.price DESC'; break;
+    case 'title':    $orderBy = 'i.title ASC';  break;
+    default:         $orderBy = 'i.start DESC'; break;
+}
+
+$count_sql    = "SELECT COUNT(*) as total FROM iBayItems i $where";
 $count_result = mysqli_query($conn, $count_sql);
-$count_row = mysqli_fetch_assoc($count_result);
-$total_items = $count_row['total'];
+$count_row    = mysqli_fetch_assoc($count_result);
+$total_items  = (int)$count_row['total'];
 
 $items_per_page = 8;
-$total_pages = ceil($total_items / $items_per_page);
-$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$total_pages    = max(1, ceil($total_items / $items_per_page));
+$current_page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($current_page < 1) $current_page = 1;
 if ($current_page > $total_pages) $current_page = $total_pages;
 $offset = ($current_page - 1) * $items_per_page;
 
-$sql = "SELECT i.*, m.username, img.image FROM iBayItems i JOIN iBayMembers m ON i.userId = m.userId LEFT JOIN iBayImages img ON i.itemId = img.itemId $where GROUP BY i.itemId LIMIT $items_per_page OFFSET $offset";
-
-
-
-
+$sql    = "SELECT i.*, m.username, img.image
+           FROM iBayItems i
+           JOIN iBayMembers m ON i.userId = m.userId
+           LEFT JOIN iBayImages img ON i.itemId = img.itemId
+           $where
+           GROUP BY i.itemId
+           ORDER BY $orderBy
+           LIMIT $items_per_page OFFSET $offset";
 $result = mysqli_query($conn, $sql);
+
+// Build query string for pagination links
+$queryParams = http_build_query(array_filter([
+    'q'        => $_GET['q']        ?? '',
+    'category' => $_GET['category'] ?? '',
+    'minPrice' => $_GET['minPrice'] ?? '',
+    'maxPrice' => $_GET['maxPrice'] ?? '',
+    'postage'  => $_GET['postage']  ?? '',
+    'postcode' => $_GET['postcode'] ?? '',
+    'sortBy'   => $_GET['sortBy']   ?? '',
+]));
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBay - Home</title>
+    <title>iBay - Search Results</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="js/main.js" defer></script>
 </head>
 <body>
 
     <header class="site-header">
-
         <?php include("includes/navbar.php"); ?>
-        
-        </div>
     </header>
 
     <main class="search-page">
@@ -82,8 +102,8 @@ $result = mysqli_query($conn, $sql);
             </div>
 
             <form action="search.php" method="get" class="search-page-form">
-                <input type="text" name="q" placeholder="Search for items...">
-                <button type="submit" class="primary-button search-page-button" >Search</button>
+                <input type="text" name="q" placeholder="Search for items..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
+                <button type="submit" class="primary-button search-page-button">Search</button>
             </form>
         </section>
 
@@ -94,33 +114,31 @@ $result = mysqli_query($conn, $sql);
                 <form class="advanced-search-form" action="search.php" method="get">
                     <div class="form-group">
                         <label for="searchKeyword">Keyword</label>
-                        <input type="text" id="searchKeyword" name="q" placeholder="e.g. headphones">
+                        <input type="text" id="searchKeyword" name="q" placeholder="e.g. headphones" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
                     </div>
 
                     <div class="form-group">
                         <label for="searchCategory">Category</label>
                         <select id="searchCategory" name="category">
                             <option value="">All categories</option>
-                            <option value="Technology">Technology</option>
-                            <option value="Clothing">Clothing</option>
-                            <option value="Trading Cards">Trading Cards</option>
-                            <option value="Gardening">Gardening</option>
-                            <option value="Home">Home</option>
-                            <option value="Collectables">Collectables</option>
-                            <option value="Sports">Sports</option>
-                            <option value="Books">Books</option>
+                            <?php
+                            $cats = ['Technology','Clothing','Trading Cards','Gardening','Home','Collectables','Sports','Books'];
+                            foreach ($cats as $c) {
+                                $selected = (($_GET['category'] ?? '') === $c) ? 'selected' : '';
+                                echo "<option value=\"$c\" $selected>$c</option>";
+                            }
+                            ?>
                         </select>
                     </div>
 
                     <div class="search-price-row">
                         <div class="form-group">
                             <label for="minPrice">Min Price (£)</label>
-                            <input type="number" id="minPrice" name="minPrice" step="0.01" min="0" placeholder="0">
+                            <input type="number" id="minPrice" name="minPrice" step="0.01" min="0" placeholder="0" value="<?= htmlspecialchars($_GET['minPrice'] ?? '') ?>">
                         </div>
-
                         <div class="form-group">
                             <label for="maxPrice">Max Price (£)</label>
-                            <input type="number" id="maxPrice" name="maxPrice" step="0.01" min="0" placeholder="100">
+                            <input type="number" id="maxPrice" name="maxPrice" step="0.01" min="0" placeholder="1000" value="<?= htmlspecialchars($_GET['maxPrice'] ?? '') ?>">
                         </div>
                     </div>
 
@@ -128,105 +146,111 @@ $result = mysqli_query($conn, $sql);
                         <label for="postage">Postage</label>
                         <select id="postage" name="postage">
                             <option value="">Any</option>
-                            <option value="Free postage">Free postage</option>
-                            <option value="Collection only">Collection only</option>
-                            <option value="Paid postage">Paid postage</option>
+                            <option value="Free postage"    <?= (($_GET['postage'] ?? '') === 'Free postage')    ? 'selected' : '' ?>>Free postage</option>
+                            <option value="Collection only" <?= (($_GET['postage'] ?? '') === 'Collection only') ? 'selected' : '' ?>>Collection only</option>
+                            <option value="£1.99"           <?= (($_GET['postage'] ?? '') === '£1.99')           ? 'selected' : '' ?>>£1.99</option>
+                            <option value="£2.99"           <?= (($_GET['postage'] ?? '') === '£2.99')           ? 'selected' : '' ?>>£2.99</option>
+                            <option value="£4.99"           <?= (($_GET['postage'] ?? '') === '£4.99')           ? 'selected' : '' ?>>£4.99</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="postcodeArea">Postcode Area</label>
-                        <input type="text" id="postcodeArea" name="postcode" placeholder="e.g. LE11">
+                        <input type="text" id="postcodeArea" name="postcode" placeholder="e.g. LE11" value="<?= htmlspecialchars($_GET['postcode'] ?? '') ?>">
                     </div>
 
                     <div class="search-filter-buttons">
                         <button type="submit" class="primary-button">Apply Filters</button>
-                        <button type="reset" class="secondary-button" id="clearFiltersButton">Clear</button>
+                        <a href="search.php" class="secondary-button">Clear</a>
                     </div>
                 </form>
             </aside>
 
             <section class="search-results-card">
                 <div class="search-results-header">
-                <p class="results-count" id="resultsCount">Showing <?= mysqli_num_rows($result) ?> of <?= $total_items ?> results (Page <?= $current_page ?> of <?= $total_pages ?>)</p>
+                    <p class="results-count" id="resultsCount">Showing <?= mysqli_num_rows($result) ?> of <?= $total_items ?> results (Page <?= $current_page ?> of <?= $total_pages ?>)</p>
 
                     <div class="sort-box">
                         <label for="sortBy">Sort by</label>
-                        <select id="sortBy" name="sortBy">
-                            <option value="low-high">Price: Low to High</option>
-                            <option value="high-low">Price: High to Low</option>
-                            <option value="title">Title</option>
+                        <select id="sortBy" name="sortBy" onchange="this.form.submit()" form="sortForm">
+                            <option value="newest"   <?= ($sort === 'newest')   ? 'selected' : '' ?>>Newest</option>
+                            <option value="low-high" <?= ($sort === 'low-high') ? 'selected' : '' ?>>Price: Low to High</option>
+                            <option value="high-low" <?= ($sort === 'high-low') ? 'selected' : '' ?>>Price: High to Low</option>
+                            <option value="title"    <?= ($sort === 'title')    ? 'selected' : '' ?>>Title</option>
                         </select>
+                        <form id="sortForm" action="search.php" method="get">
+                            <?php foreach ($_GET as $key => $val): ?>
+                                <?php if ($key !== 'sortBy' && $key !== 'page'): ?>
+                                    <input type="hidden" name="<?= htmlspecialchars($key) ?>" value="<?= htmlspecialchars($val) ?>">
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </form>
                     </div>
                 </div>
 
-                <div class="search-results-grid">
+                <?php if ($total_items === 0): ?>
+                    <div style="text-align:center; padding:60px 20px;">
+                        <i class="fa-solid fa-magnifying-glass" style="font-size:3rem;color:#ccc;margin-bottom:16px;display:block;"></i>
+                        <h3>No results found</h3>
+                        <p style="color:#666;margin-top:8px;">Try different keywords or adjust your filters</p>
+                        <a href="search.php" class="primary-button" style="width:auto;display:inline-block;margin-top:20px;padding:12px 24px;">Clear Search</a>
+                    </div>
+                <?php else: ?>
+                    <div class="search-results-grid">
+                        <?php while ($item = mysqli_fetch_assoc($result)): ?>
+                            <?php
+                                $img = $item['image'] ?? '';
+                                if ($img && str_starts_with($img, 'http')) {
+                                    $src = preg_replace('/s-l\d+/', 's-l400', $img);
+                                } else {
+                                    $src = $img ? 'images/products/' . htmlspecialchars($img) : '';
+                                }
+                            ?>
+                            <a href="item.php?id=<?= $item['itemId'] ?>" class="search-item-card">
+                                <div class="search-item-image">
+                                    <?php if ($src): ?>
+                                        <img src="<?= $src ?>" alt="<?= htmlspecialchars($item['title']) ?>">
+                                    <?php else: ?>
+                                        📦
+                                    <?php endif; ?>
+                                </div>
+                                <div class="search-item-content">
+                                    <h3><?= htmlspecialchars($item['title']) ?></h3>
+                                    <p>Seller: <?= htmlspecialchars($item['username']) ?></p>
+                                    <p>Postage: <?= htmlspecialchars($item['postage']) ?></p>
+                                    <strong>£<?= number_format($item['price'], 2) ?></strong>
+                                </div>
+                            </a>
+                        <?php endwhile; ?>
+                    </div>
 
-                <?php while ($item = mysqli_fetch_assoc($result)): ?>
-
-                    <a href="item.php?id=<?= $item['itemId'] ?>" class="search-item-card">
-
-                        <?php
-                            $img = $item['image'] ?? '';
-                            if ($img && str_starts_with($img, 'http')) {
-                                $src = preg_replace('/s-l\d+/', 's-l400', $img);
-                            } else {
-                                $src = $img ? 'images/products/' . htmlspecialchars($img) : '';
-                            }
-                        ?>
-                        <div class="search-item-image">
-                            <?php if ($src): ?>
-                                <img src="<?= $src ?>" alt="<?= htmlspecialchars($item['title']) ?>">
-                            <?php else: ?>
-                                📦
-                            <?php endif; ?>
-                        </div>
-
-                        <div class="search-item-content">
-                            <h3><?= $item['title'] ?></h3>
-
-                            <p>Seller: <?= $item['username'] ?></p>
-
-                            <p>Postage: <?= $item['postage'] ?></p>
-
-                            <strong>£<?= $item['price'] ?></strong>
-                        </div>
-
-                    </a>
-
-                <?php endwhile; ?>
-
-                </div>
-
-                <div class="pagination-bar">
-                    <?php if ($current_page > 1): ?>
-                        <a href="?page=<?= $current_page - 1 ?>&q=<?= urlencode($_GET['q'] ?? '') ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&minPrice=<?= urlencode($_GET['minPrice'] ?? '') ?>&maxPrice=<?= urlencode($_GET['maxPrice'] ?? '') ?>" class="secondary-button pagination-button">Previous</a>
-                    <?php else: ?>
-                        <button class="secondary-button pagination-button" disabled>Previous</button>
-                    <?php endif; ?>
-
-                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                        <?php if ($i == $current_page): ?>
-                            <button class="pagination-number active-page"><?= $i ?></button>
+                    <div class="pagination-bar">
+                        <?php if ($current_page > 1): ?>
+                            <a href="?page=<?= $current_page - 1 ?>&<?= $queryParams ?>" class="secondary-button pagination-button">Previous</a>
                         <?php else: ?>
-                            <a href="?page=<?= $i ?>&q=<?= urlencode($_GET['q'] ?? '') ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&minPrice=<?= urlencode($_GET['minPrice'] ?? '') ?>&maxPrice=<?= urlencode($_GET['maxPrice'] ?? '') ?>" class="pagination-number"><?= $i ?></a>
+                            <button class="secondary-button pagination-button" disabled>Previous</button>
                         <?php endif; ?>
-                    <?php endfor; ?>
 
-                    <?php if ($current_page < $total_pages): ?>
-                        <a href="?page=<?= $current_page + 1 ?>&q=<?= urlencode($_GET['q'] ?? '') ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&minPrice=<?= urlencode($_GET['minPrice'] ?? '') ?>&maxPrice=<?= urlencode($_GET['maxPrice'] ?? '') ?>" class="secondary-button pagination-button">Next</a>
-                    <?php else: ?>
-                        <button class="secondary-button pagination-button" disabled>Next</button>
-                    <?php endif; ?>
-                </div>
+                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                            <?php if ($i == $current_page): ?>
+                                <button class="pagination-number active-page"><?= $i ?></button>
+                            <?php else: ?>
+                                <a href="?page=<?= $i ?>&<?= $queryParams ?>" class="pagination-number"><?= $i ?></a>
+                            <?php endif; ?>
+                        <?php endfor; ?>
 
+                        <?php if ($current_page < $total_pages): ?>
+                            <a href="?page=<?= $current_page + 1 ?>&<?= $queryParams ?>" class="secondary-button pagination-button">Next</a>
+                        <?php else: ?>
+                            <button class="secondary-button pagination-button" disabled>Next</button>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
             </section>
         </section>
     </main>
 
-    <footer class="site-footer">
-        <p>&copy; 2026 iBay Marketplace. All rights reserved.</p>
-    </footer>
+    <?php include("includes/footer.php"); ?>
 
 </body>
 </html>
