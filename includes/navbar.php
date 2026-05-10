@@ -2,7 +2,9 @@
 
 <div class="top-header">
     <div class="logo">
-        <a href="index.php">iBay</a>
+        <a href="main-G01.php" class="logo-link" aria-label="iBay home">
+            <img src="images/ibay-logo-header.png?v=4" alt="iBay" class="header-logo-img" style="width:130px; height:52px; max-width:130px; max-height:52px; object-fit:contain; display:block;">
+        </a>
     </div>
 
     <nav class="top-nav">

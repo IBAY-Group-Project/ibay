@@ -100,7 +100,7 @@ $result = mysqli_query($conn, $sql);
                         <i class="fa-solid fa-basket-shopping" style="font-size:3rem;color:#ccc;margin-bottom:16px;display:block;"></i>
                         <h3>Your basket is empty</h3>
                         <p style="color:#666;margin-top:8px;">Browse listings and add items to your basket</p>
-                        <a href="index.php" class="primary-button" style="width:auto;display:inline-block;margin-top:20px;padding:12px 24px;">Continue Shopping</a>
+                        <a href="main-G01.php" class="primary-button" style="width:auto;display:inline-block;margin-top:20px;padding:12px 24px;">Continue Shopping</a>
                     </div>
                 <?php endif; ?>
             </div>
@@ -126,7 +126,7 @@ $result = mysqli_query($conn, $sql);
                 </div>
  
                 <a href="checkout.php" class="primary-button">Proceed to Checkout</a>
-                <a href="index.php" class="secondary-button" >Continue Shopping</a>
+                <a href="main-G01.php" class="secondary-button" >Continue Shopping</a>
             </aside>
             <?php endif; ?>
         </section>

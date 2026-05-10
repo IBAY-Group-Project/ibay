@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['email']     = $row['email'];
             $_SESSION['is_admin']  = $row['is_admin'];
 
-            header("Location: index.php");
+            header("Location: main-G01.php");
             exit();
         } else {
             $loginError = "Incorrect login details. Please try again.";
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="alert-error"><?php echo htmlspecialchars($loginError); ?></div>
             <?php endif; ?>
 
-            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=420551119650-1vo8vduihfvnq3jrs0ii3etbl60kamr8.apps.googleusercontent.com&redirect_uri=http://localhost/ibay/google_callback.php&response_type=code&scope=email%20profile" class="google-button">
+            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=420551119650-1vo8vduihfvnq3jrs0ii3etbl60kamr8.apps.googleusercontent.com&redirect_uri=http://localhost/iBay/google_callback.php&response_type=code&scope=email%20profile" class="google-button">
                 <img src="https://developers.google.com/identity/images/g-logo.png" alt="G" width="18" height="18">
                 Sign in with Google
             </a>

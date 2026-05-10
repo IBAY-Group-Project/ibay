@@ -18,7 +18,7 @@ $stmt = mysqli_prepare($conn,
      WHERE i.sold = 0 AND i.category = ? $excludeUser
      GROUP BY i.itemId
      ORDER BY i.start DESC
-     LIMIT 4"
+     LIMIT 8"
 );
 mysqli_stmt_bind_param($stmt, "s", $category);
 mysqli_stmt_execute($stmt);

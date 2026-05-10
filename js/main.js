@@ -13,6 +13,8 @@ const featuredTitle  = document.getElementById("featuredTitle");
 const carouselFooter = document.getElementById("carouselFooter");
 const viewMoreBtn    = document.getElementById("viewMoreBtn");
 const categoryNavLinks = document.querySelectorAll(".category-nav a[data-category]");
+
+const originalCarouselHTML = carouselTrack ? carouselTrack.innerHTML : "";
  
 categoryNavLinks.forEach(link => {
     link.addEventListener("click", e => {
@@ -21,6 +23,13 @@ categoryNavLinks.forEach(link => {
  
         categoryNavLinks.forEach(l => l.classList.remove("active"));
         link.classList.add("active");
+
+        if (category === "recent") {
+            if (featuredTitle)  featuredTitle.textContent = "Recently Listed";
+            if (carouselFooter) carouselFooter.style.display = "none";
+            if (carouselTrack)  carouselTrack.innerHTML = originalCarouselHTML;
+            return;
+        }
  
         if (featuredTitle) featuredTitle.textContent = category;
         if (viewMoreBtn)    viewMoreBtn.href = "search.php?category=" + encodeURIComponent(category);

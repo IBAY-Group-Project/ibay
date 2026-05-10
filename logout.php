@@ -1,6 +1,6 @@
 <?php
 session_start();
 session_destroy();
-header("Location: /ibay/index.php");
+header("Location: /iBay/main-G01.php");
 exit();
 ?>

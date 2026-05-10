@@ -25,15 +25,39 @@ a {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    padding: 16px 36px;
+    padding: 14px 36px;
     gap: 20px;
-    min-height: 82px;
+    min-height: 78px;
 }
 
-.logo a {
-    font-size: 2.4rem;
-    font-weight: bold;
-    color: #1d2d50;
+.logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 130px;
+    max-width: 130px;
+    height: 52px;
+    overflow: hidden;
+}
+
+.logo-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 130px;
+    height: 52px;
+    line-height: 0;
+    text-decoration: none;
+}
+
+.top-header .logo img.header-logo-img,
+.header-logo-img {
+    width: 130px !important;
+    height: 52px !important;
+    max-width: 130px !important;
+    max-height: 52px !important;
+    display: block !important;
+    object-fit: contain !important;
 }
 
 .top-nav {
@@ -53,14 +77,6 @@ a {
     justify-content: flex-end;
     align-items: center;
     gap: 12px;
-}
-
-.search-bar input {
-    width: 280px;
-    padding: 12px 16px;
-    border: 1px solid #cccccc;
-    border-radius: 10px;
-    font-size: 1rem;
 }
 
 .icon-button {
@@ -84,7 +100,14 @@ a {
     padding: 14px 20px;
     border-top: 1px solid #e5e5e5;
     background-color: #ffffff;
+    position:relative;
 }
+
+.category-nav-recent {
+    position:absolute;
+    left: 20px;
+}
+	
 
 .category-nav a {
     font-size: 1.05rem;
@@ -183,17 +206,6 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-.product-card-image {
-    height: 120px;
-    border-radius: 10px;
-    background-color: #f0f0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    margin-bottom: 14px;
 }
 
 .product-card h3 {
@@ -428,108 +440,9 @@ a {
     font-weight: 600;
 }
 
-.product-page {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 28px 36px;
-}
-
-.product-top {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 28px;
-    align-items: start;
-}
-
-.product-gallery,
-.product-info,
-.details-card {
-    background: #fff;
-    border: 1px solid #e6e6e6;
-    border-radius: 12px;
-    padding: 20px;
-}
-
-.main-image img {
-    width: 100%;
-    max-height: 420px;
-    object-fit: contain;
-    border-radius: 8px;
-    background-color: #f5f5f5;
-}
-
-.thumbnail-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 16px;
-}
-
-.thumbnail {
-    width: 90px;
-    height: 90px;
-    object-fit: cover;
-    background-color: #f0f0f0;
-    border: 2px solid transparent;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.thumbnail.active {
-    border-color: #1f3f8f;
-}
-
-.product-category {
-    color: #666;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-
-.product-info h1 {
-    font-size: 2rem;
-    margin-bottom: 18px;
-}
-
-.seller-meta,
-.auction-meta {
-    display: grid;
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.price-box {
-    background-color: #f8f9fc;
-    border: 1px solid #d9e0f2;
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 20px;
-}
-
 .label {
     color: #666;
     margin-bottom: 6px;
-}
-
-.product-price {
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.product-actions {
-    display: flex;
-    gap: 12px;
-}
-
-.product-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-top: 28px;
-}
-
-.mapping-list {
-    padding-left: 18px;
-    display: grid;
-    gap: 8px;
 }
 
 /* SELL PAGE */
@@ -824,7 +737,6 @@ a {
     flex:1;
     border:none;
 }
-
 
 
 /* ITEM PAGE */
@@ -1407,13 +1319,6 @@ a {
     color: #333;
 }
 
-.total-row {
-    padding-top: 16px;
-    border-top: 1px solid #e5e5e5;
-    font-weight: 700;
-    font-size: 1.1rem;
-}
-
 .primary-button {
     margin-top: 14px;
 }
@@ -1437,7 +1342,6 @@ a {
     width: auto;
     margin: 0;
 }
-
 
 
 /* SEARCH PAGE */
@@ -1500,7 +1404,6 @@ a {
     gap: 24px;
     align-items: start;
 }
-
 
 
 .search-filters-card h2 {
@@ -1840,16 +1743,6 @@ a {
     margin-bottom: 8px;
 }
 
-.order-rating-section {
-    margin-top: 24px;
-}
-
-.order-rating-section h2 {
-    font-size: 1.2rem;
-    margin-bottom: 4px;
-    color: #1f1f1f;
-}
-
 .order-card-wrapper {
     display: flex;
     flex-direction: column;
@@ -1893,10 +1786,6 @@ a {
         flex-wrap: wrap;
     }
 
-    .search-bar input {
-        width: 240px;
-    }
-
     .category-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1905,8 +1794,6 @@ a {
         flex: 0 0 calc(50% - 9px);
     }
 
-    .product-top,
-    .product-details,
     .form-row {
         grid-template-columns: 1fr;
     }
@@ -1977,6 +1864,22 @@ a {
 }
 
 @media (max-width: 600px) {
+    .logo,
+    .logo-link {
+        width: 115px;
+        min-width: 115px;
+        max-width: 115px;
+        height: 46px;
+    }
+
+    .top-header .logo img.header-logo-img,
+    .header-logo-img {
+        width: 115px !important;
+        height: 46px !important;
+        max-width: 115px !important;
+        max-height: 46px !important;
+    }
+
     .auth-card {
         padding: 24px;
     }
@@ -1987,7 +1890,6 @@ a {
     }
 
     .homepage,
-    .product-page,
     .seller-page,
     .item-page,
     .basket-page,
@@ -2211,8 +2113,7 @@ a {
     font-weight: 600;
 }
 
-.order-card-address,
-.order-card-phone {
+.order-card-address {
     color: #666;
     font-size: 0.82rem;
 }
@@ -2235,7 +2136,6 @@ a {
     align-items: center;
     justify-content: center;
 }
-
 
 
 /* -- Chatbot -- */
@@ -2324,31 +2224,6 @@ a {
     color: white;
     align-self: flex-end;
 }
-
-#chat-questions {
-    padding: 10px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    border-top: 1px solid #eee;
-    max-height: 220px;
-    overflow-y: auto;
-}
-
-.chat-q {
-    background-color: #f5f7ff;
-    border: 1px solid #d0d9f5;
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 0.88rem;
-    text-align: left;
-    cursor: pointer;
-    color: #1f3f8f;
-    font-weight: 500;
-    transition: background-color 0.15s ease;
-}
-
-.chat-q:hover { background-color: #e0e8ff; }
 
 #chat-input-row {
     display: flex;

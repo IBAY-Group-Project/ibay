@@ -52,7 +52,7 @@ if (mysqli_num_rows($existing) === 1) {
     $_SESSION['firstname'] = $row['firstname'];
     $_SESSION['email']     = $row['email'];
     $_SESSION['is_admin']  = $row['is_admin'];
-    header("Location: /ibay/index.php");
+    header("Location: /iBay/main-G01.php");
     exit();
 }
 
@@ -72,7 +72,7 @@ if (mysqli_query($conn, $sql)) {
     $_SESSION['firstname'] = $user['given_name'] ?? '';
     $_SESSION['email']     = $user['email'];
     $_SESSION['is_admin']  = 0;
-    header("Location: /ibay/index.php");
+    header("Location: /iBay/main-G01.php");
     exit();
 } else {
     die("Error creating account: " . mysqli_error($conn));

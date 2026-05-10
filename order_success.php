@@ -5,7 +5,7 @@ include("includes/db.php");
 $orderId = $_GET['orderId'] ?? null;
 
 if (!$orderId) {
-    header("Location: index.php");
+    header("Location: main-G01.php");
     exit();
 }
 
@@ -23,7 +23,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    header("Location: index.php");
+    header("Location: main-G01.php");
     exit();
 }
 
@@ -37,7 +37,7 @@ $orderResult = $stmt->get_result();
 $order = $orderResult->fetch_assoc();
 
 if (!$order) {
-    header("Location: index.php");
+    header("Location: main-G01.php");
     exit();
 }
 ?>
@@ -138,7 +138,7 @@ if (!$order) {
 
         <div class="success-actions">
             <a href="orders.php" class="secondary-button" id="view-orders-btn">View All Orders</a>
-            <a href="index.php" class="primary-button" id="continue-shopping-btn">Continue Shopping</a>
+            <a href="main-G01.php" class="primary-button" id="continue-shopping-btn">Continue Shopping</a>
         </div>
 
     </div>

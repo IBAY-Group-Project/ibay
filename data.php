@@ -28,6 +28,6 @@
         <?php endforeach; ?>
     </table>
     <br>
-    <a href="../index.php">Upload Image File</a>
+    <a href="../main-G01.php">Upload Image File</a>
 </body>
 </html>
